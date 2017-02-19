@@ -30,5 +30,11 @@
 
    <!-- List of Class mapping -->
     <mapping class="py.edu.facitec.rfidsystem.entidad.Institucion"/>
+    <mapping class="py.edu.facitec.rfidsystem.entidad.Bloque"/>
+    <mapping class="py.edu.facitec.rfidsystem.entidad.Funcionario"/>
+    <mapping class="py.edu.facitec.rfidsystem.entidad.Movimiento"/>
+    <mapping class="py.edu.facitec.rfidsystem.entidad.Oficina"/>
+    <mapping class="py.edu.facitec.rfidsystem.entidad.PermisoAcceso"/>
+    <mapping class="py.edu.facitec.rfidsystem.entidad.Puerta"/>
 </session-factory>
 </hibernate-configuration>
