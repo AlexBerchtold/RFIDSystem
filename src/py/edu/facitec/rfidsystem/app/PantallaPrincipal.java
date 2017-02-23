@@ -15,6 +15,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JToolBar;
 import javax.swing.JButton;
+import py.edu.facitec.rfidsystem.contenedores.JMenuItemPersonalizado;
+import javax.swing.JLabel;
+import java.awt.Color;
 
 public class PantallaPrincipal extends JFrame {
 
@@ -40,10 +43,11 @@ public class PantallaPrincipal extends JFrame {
 	 * Create the frame.
 	 */
 	public PantallaPrincipal() {
+		setTitle("RFID System  1.0");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1024, 680);
 		setLocationRelativeTo(this);
-		//setExtendedState(MAXIMIZED_BOTH);
+		setExtendedState(MAXIMIZED_BOTH);
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -51,54 +55,78 @@ public class PantallaPrincipal extends JFrame {
 		JMenu mnMovimientos = new JMenu("Movimientos");
 		menuBar.add(mnMovimientos);
 		
-		JMenuItem mntmAccesos = new JMenuItem("Accesos");
-		mnMovimientos.add(mntmAccesos);
+		JMenuItemPersonalizado mntmprsnlzdAcceso = new JMenuItemPersonalizado();
+		mntmprsnlzdAcceso.setText("Acceso");
+		mntmprsnlzdAcceso.setIcon("accesos");
+		mnMovimientos.add(mntmprsnlzdAcceso);
 		
-		JMenuItem mntmMovimientos = new JMenuItem("Movimientos");
-		mnMovimientos.add(mntmMovimientos);
+		JMenuItemPersonalizado mntmprsnlzdMovimiento = new JMenuItemPersonalizado();
+		mntmprsnlzdMovimiento.setText("Movimiento");
+		mntmprsnlzdMovimiento.setIcon("movimientos");
+		mnMovimientos.add(mntmprsnlzdMovimiento);
 		
 		JMenu mnTablas = new JMenu("Tablas");
 		menuBar.add(mnTablas);
 		
-		JMenuItem mntmEmpleados = new JMenuItem("Empleados");
-		mnTablas.add(mntmEmpleados);
+		JMenuItemPersonalizado mntmprsnlzdEmpleado = new JMenuItemPersonalizado();
+		mntmprsnlzdEmpleado.setText("Empleados");
+		mntmprsnlzdEmpleado.setIcon("empleados");
+		mnTablas.add(mntmprsnlzdEmpleado);
 		
-		JMenuItem mntmOficinas = new JMenuItem("Oficinas");
-		mnTablas.add(mntmOficinas);
+		JMenuItemPersonalizado mntmprsnlzdOficina = new JMenuItemPersonalizado();
+		mntmprsnlzdOficina.setText("Oficinas");
+		mntmprsnlzdOficina.setIcon("oficinas");
+		mnTablas.add(mntmprsnlzdOficina);
 		
-		JMenuItem mntmPuertas = new JMenuItem("Puertas");
-		mnTablas.add(mntmPuertas);
+		JMenuItemPersonalizado mntmprsnlzdPuerta = new JMenuItemPersonalizado();
+		mntmprsnlzdPuerta.setText("Puertas");
+		mntmprsnlzdPuerta.setIcon("puertas");
+		mnTablas.add(mntmprsnlzdPuerta);
 		
 		JMenu mnInformes = new JMenu("Informes");
 		menuBar.add(mnInformes);
 		
-		JMenuItem mntmListadoDeEmpleado = new JMenuItem("Listado de Empleado");
-		mnInformes.add(mntmListadoDeEmpleado);
+		JMenuItemPersonalizado mntmprsnlzdListadoDeEmpleados = new JMenuItemPersonalizado();
+		mntmprsnlzdListadoDeEmpleados.setText("Listado de Empleado");
+		mntmprsnlzdListadoDeEmpleados.setIcon("listaempleado");
+		mnInformes.add(mntmprsnlzdListadoDeEmpleados);
 		
-		JMenuItem mntmListadoDePuerta = new JMenuItem("Listado de Puerta");
-		mnInformes.add(mntmListadoDePuerta);
+		JMenuItemPersonalizado mntmprsnlzdListadoDePuerta = new JMenuItemPersonalizado();
+		mntmprsnlzdListadoDePuerta.setText("Listado de Puerta");
+		mntmprsnlzdListadoDePuerta.setIcon("listapuerta");
+		mnInformes.add(mntmprsnlzdListadoDePuerta);
 		
-		JMenuItem mntmInformeDeAcceso = new JMenuItem("Informe de Acceso");
-		mnInformes.add(mntmInformeDeAcceso);
+		JMenuItemPersonalizado mntmprsnlzdInformesDeAcceso = new JMenuItemPersonalizado();
+		mntmprsnlzdInformesDeAcceso.setText("Informe de Acceso");
+		mntmprsnlzdInformesDeAcceso.setIcon("listaacceso");
+		mnInformes.add(mntmprsnlzdInformesDeAcceso);
 		
-		JMenuItem mntmInformeDeMovimiento = new JMenuItem("Informe de Movimiento");
-		mnInformes.add(mntmInformeDeMovimiento);
+		JMenuItemPersonalizado mntmprsnlzdInformeDeMovimiento = new JMenuItemPersonalizado();
+		mntmprsnlzdInformeDeMovimiento.setText("Informe de Movimiento");
+		mntmprsnlzdInformeDeMovimiento.setIcon("listamovimiento");
+		mnInformes.add(mntmprsnlzdInformeDeMovimiento);
 		
 		JMenu mnUtilidades = new JMenu("Utilidades");
 		menuBar.add(mnUtilidades);
 		
-		JMenuItem mntmInicializacionDeDatos = new JMenuItem("Inicializacion de Datos");
-		mnUtilidades.add(mntmInicializacionDeDatos);
+		JMenuItemPersonalizado mntmprsnlzdInicializacionDeDatos = new JMenuItemPersonalizado();
+		mntmprsnlzdInicializacionDeDatos.setText("Inicializaci\u00F3n de Datos");
+		mntmprsnlzdInicializacionDeDatos.setIcon("database");
+		mnUtilidades.add(mntmprsnlzdInicializacionDeDatos);
 		
-		JMenuItem mntmConfiguraciones = new JMenuItem("Configuraciones");
-		mnUtilidades.add(mntmConfiguraciones);
+		JMenuItemPersonalizado mntmprsnlzdConfiguraciones = new JMenuItemPersonalizado();
+		mntmprsnlzdConfiguraciones.setText("Configuraciones");
+		mntmprsnlzdConfiguraciones.setIcon("configuracion");
+		mnUtilidades.add(mntmprsnlzdConfiguraciones);
 		contentPane = new PanelFondo();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		
 		JToolBar toolBar = new JToolBar();
-		toolBar.setBorderPainted(false);//quitar el borde
+		toolBar.setBorderPainted(false);
+		toolBar.setEnabled(false);
+		toolBar.setForeground(new Color(240, 240, 240));
 		toolBar.setOpaque(false);//dejar transparente
 		toolBar.setFloatable(false);//para que no sea movible
 		contentPane.add(toolBar, BorderLayout.NORTH);
