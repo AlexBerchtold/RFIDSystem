@@ -25,6 +25,9 @@ public class GenericDao <T>{
 	}
 	
 	public void insertarOModificar(T entity){
+		if(entity == null){
+			System.out.println("entidad nula");
+		}
 		session.beginTransaction();
 		session.saveOrUpdate(entity);
 	}

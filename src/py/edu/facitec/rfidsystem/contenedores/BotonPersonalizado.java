@@ -15,7 +15,7 @@ public class BotonPersonalizado extends JButton{
 		setHorizontalTextPosition(SwingConstants.CENTER);
 		setVerticalTextPosition(SwingConstants.BOTTOM);
 		setBorderPainted(false);
-		//setBackground(Color.YELLOW);
+		setBackground(new Color(240, 240, 240));
 		setOpaque(false);
 		
 	}
