@@ -21,7 +21,7 @@ public class TablaFuncionario extends AbstractTableModel {
 			datos[i][0] = lista.get(i).getNombre();
 			datos[i][1] = lista.get(i).getApellido();
 			datos[i][2] = FechaUtil.fechaAString(lista.get(i).getFechaIncorporacion());
-			datos[i][3] = lista.get(i).getNoDocumento();
+			datos[i][3] = lista.get(i).getTarjeta();
 		}
 	}
 

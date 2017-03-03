@@ -43,8 +43,10 @@ public abstract class GenericABM extends JDialog {
 		table = new JTable();
 		table.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				cargarFormulario(table.getSelectedRow());
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount()==2) {
+					cargarFormulario(table.getSelectedRow());
+				}
 			}
 		});
 		scrollPane.setViewportView(table);

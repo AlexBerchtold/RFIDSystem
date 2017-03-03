@@ -11,6 +11,7 @@ import javax.swing.border.EmptyBorder;
 import py.edu.facitec.rfidsystem.abm.FuncionarioABM;
 import py.edu.facitec.rfidsystem.contenedores.BotonPersonalizado;
 import py.edu.facitec.rfidsystem.contenedores.PanelFondo;
+import py.edu.facitec.rfidsystem.util.Factory;
 
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -25,6 +26,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Toolkit;
 
 public class PantallaPrincipal extends JFrame implements KeyEventDispatcher {
 
@@ -37,6 +39,7 @@ public class PantallaPrincipal extends JFrame implements KeyEventDispatcher {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					Factory.setUp();
 					PantallaPrincipal frame = new PantallaPrincipal();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -50,9 +53,10 @@ public class PantallaPrincipal extends JFrame implements KeyEventDispatcher {
 	 * Create the frame.
 	 */
 	public PantallaPrincipal() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(PantallaPrincipal.class.getResource("/py/edu/facitec/rfidsystem/img/Icono.ico")));
         DefaultKeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(this); 
 		
-		setTitle("RFID System  1.1");
+		setTitle("RFID System  1.3");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1024, 680);
 		setLocationRelativeTo(this);

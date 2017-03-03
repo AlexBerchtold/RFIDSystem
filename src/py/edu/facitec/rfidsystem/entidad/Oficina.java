@@ -19,8 +19,8 @@ public class Oficina {
 	@JoinColumn(name="Bloqueid", referencedColumnName="id")
 	private Bloque bloque;
 	
-	@Column(name="Oficina", nullable=false )
-	private String descripcionOficina;
+	@Column(name="Descripcion", nullable=false )
+	private String descripcion;
 	
 	@Column(name="Estado", nullable=false)
 	private Boolean estado;
@@ -47,12 +47,12 @@ public class Oficina {
 		this.bloque = bloque;
 	}
 
-	public String getDescripcionOficina() {
-		return descripcionOficina;
+	public String getDescripcion() {
+		return descripcion;
 	}
 
-	public void setDescripcionOficina(String descripcionOficina) {
-		this.descripcionOficina = descripcionOficina;
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
 
 	public Boolean getEstado() {

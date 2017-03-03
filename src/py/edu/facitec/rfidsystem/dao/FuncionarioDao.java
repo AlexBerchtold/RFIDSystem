@@ -11,18 +11,18 @@ public class FuncionarioDao extends GenericDao<Funcionario> {
 	}
 	
 	public List<Funcionario> recuperarPorFiltro(String filtro){
-		int filtroId = 0;
-		try {
-			filtroId = Integer.parseInt(filtro);
-		} catch (NumberFormatException e) {
-			
-		}
+//		int filtroId = 0;
+//		try {
+//			filtroId = Integer.parseInt(filtro);
+//		} catch (NumberFormatException e) {
+//			
+//		}
 		instanciarCriteria();
 		criteriaQuery.where(
 				builder.or(
 						builder.like(builder.lower(root.<String>get("nombre")), "%"+filtro.toLowerCase()+"%"),
 						builder.like(builder.lower(root.<String>get("apellido")), "%"+filtro.toLowerCase()+"%"),
-						builder.equal(root.<Integer>get("id"), filtroId))
+						builder.like(builder.lower(root.<String>get("tarjeta")), "%"+filtro.toLowerCase()+"%"))
 				);
 		lista = session.createQuery(criteriaQuery).getResultList();
 		cerrar();
