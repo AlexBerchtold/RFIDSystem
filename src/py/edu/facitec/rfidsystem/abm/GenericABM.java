@@ -22,6 +22,8 @@ public abstract class GenericABM extends JDialog {
 	protected BotonPersonalizadoABM btnSalir;
 	protected BotonPersonalizadoABM btnGuardar;
 	protected BotonPersonalizadoABM btnCancelar;
+	protected boolean modificar;
+	protected JScrollPane scrollPane;
 
 
 	/**
@@ -29,14 +31,13 @@ public abstract class GenericABM extends JDialog {
 	 */
 	public GenericABM() {
 		setTitle("Formulario");
-		setMinimumSize(new Dimension(600, 400));
-		setMaximumSize(new Dimension(800, 600));
 		setResizable(false);
-		setBounds(100, 100, 800, 530);
+		//setBounds(100, 100, 800, 530);
 		getContentPane().setLayout(null);
 		setModal(true);
+		setLocationRelativeTo(this);
 		
-		JScrollPane scrollPane = new JScrollPane();
+		scrollPane = new JScrollPane();
 		scrollPane.setBounds(400, 131, 384, 355);
 		getContentPane().add(scrollPane);
 		
@@ -53,14 +54,30 @@ public abstract class GenericABM extends JDialog {
 		
 		JToolBar toolBar = new JToolBar();
 		toolBar.setFloatable(false);
-		toolBar.setBounds(10, 93, 377, 27);
+		toolBar.setBounds(10, 93, 325, 27);
 		getContentPane().add(toolBar);
 		
 		btnNuevo = new BotonPersonalizadoABM();
+		btnNuevo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				modificar=false;
+				limpiar();
+				accionesSecundarias(true, false);
+				fechaActual();
+				habilitarCampos(true);
+			}
+		});
 		btnNuevo.setText("Nuevo");
 		toolBar.add(btnNuevo);
 		
 		btnModificar = new BotonPersonalizadoABM();
+		btnModificar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				modificar=true;
+				habilitarCampos(true);
+				accionesSecundarias(true, true);
+			}
+		});
 		btnModificar.setEnabled(false);
 		btnModificar.setText("Modificar");
 		toolBar.add(btnModificar);
@@ -71,21 +88,76 @@ public abstract class GenericABM extends JDialog {
 		toolBar.add(btnEliminar);
 		
 		btnSalir = new BotonPersonalizadoABM();
+		btnSalir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				dispose();
+			}
+		});
 		btnSalir.setText("Salir");
 		toolBar.add(btnSalir);
 		
 		btnGuardar = new BotonPersonalizadoABM();
 		btnGuardar.setVisible(false);
+		btnGuardar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				guardar();
+			}
+		});
 		btnGuardar.setText("Guardar");
 		btnGuardar.setBounds(10, 459, 80, 27);
 		getContentPane().add(btnGuardar);
 		
 		btnCancelar = new BotonPersonalizadoABM();
 		btnCancelar.setVisible(false);
+		btnCancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				modificar=false;
+				limpiar();
+				habilitarCampos(false);
+				accionesPrimarias(true);
+				
+			}
+		});
 		btnCancelar.setText("Cancelar");
 		btnCancelar.setBounds(239, 459, 80, 27);
 		getContentPane().add(btnCancelar);
 	}
 	
+	protected void accionesPrimarias(boolean a){
+		if(a == true){
+			btnNuevo.setEnabled(a);
+			btnModificar.setEnabled(!a);
+			btnEliminar.setEnabled(!a);
+			accionesSecundarias(false, false);
+		}else {
+			btnNuevo.setEnabled(a);
+			btnModificar.setEnabled(!a);
+			btnEliminar.setEnabled(!a);
+			btnCancelar.setVisible(!a);
+			btnGuardar.setVisible(a);
+			
+		}
+	}
+	protected void accionesSecundarias(boolean a,boolean e){
+		if (a==true) {
+			btnNuevo.setEnabled(!a);
+			btnModificar.setEnabled(!a);
+			btnEliminar.setEnabled(!a);
+			if(e==true){
+				btnGuardar.setText("Actualizar");
+			}
+			btnGuardar.setVisible(a);
+			btnCancelar.setVisible(a);
+		}else {
+			btnGuardar.setVisible(a);
+			btnCancelar.setVisible(a);
+			btnGuardar.setText("Guardar");
+		}
+	}
+	protected abstract void limpiar();
+	protected abstract void habilitarCampos(boolean e);
+	protected abstract void guardar();
+	protected abstract void fechaActual();
 	protected abstract void cargarFormulario(int index);
+	
 }

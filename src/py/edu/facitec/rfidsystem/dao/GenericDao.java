@@ -47,8 +47,6 @@ public class GenericDao <T>{
 		String hql = "FROM "+entity.getName()+" ORDER BY id";
 		Query query = session.createQuery(hql);
 		lista = query.getResultList();
-		//criteriaQuery.orderBy(builder.asc(root.get("id")));
-		//lista = session.createQuery(criteriaQuery).getResultList();
 		cerrar();
 		return lista;
 	}
@@ -76,5 +74,14 @@ public class GenericDao <T>{
 		root = criteriaQuery.from( entity );
 		criteriaQuery.select( root );
 	}
+	
+	//Para inicializar la db
+	public void eliminarTodos(String tabla){
+		session.getTransaction().begin();
+		String deleteAll= "TRUNCATE table "+tabla+ " cascade";
+		Query query = session.createNativeQuery(deleteAll);
+		query.executeUpdate();
+	}
+	
 	
 }

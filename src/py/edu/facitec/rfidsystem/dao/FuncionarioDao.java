@@ -11,12 +11,6 @@ public class FuncionarioDao extends GenericDao<Funcionario> {
 	}
 	
 	public List<Funcionario> recuperarPorFiltro(String filtro){
-//		int filtroId = 0;
-//		try {
-//			filtroId = Integer.parseInt(filtro);
-//		} catch (NumberFormatException e) {
-//			
-//		}
 		instanciarCriteria();
 		criteriaQuery.where(
 				builder.or(

@@ -21,9 +21,9 @@ import javax.swing.JTextField;
 
 import py.edu.facitec.rfidsystem.contenedores.BotonPersonalizadoABM;
 import py.edu.facitec.rfidsystem.dao.FuncionarioDao;
+import py.edu.facitec.rfidsystem.dao.PermisoAccesoDao;
 import py.edu.facitec.rfidsystem.entidad.Funcionario;
 import py.edu.facitec.rfidsystem.entidad.PermisoAcceso;
-import py.edu.facitec.rfidsystem.entidad.PermisoAccesoDao;
 import py.edu.facitec.rfidsystem.tablas.TablaFuncionario;
 import py.edu.facitec.rfidsystem.util.FechaUtil;
 import java.awt.event.FocusAdapter;
@@ -47,45 +47,16 @@ public class FuncionarioABM extends GenericABM {
 	private TablaFuncionario tablaFuncionario;
 	private List<Funcionario> funcionarios;
 	private List<PermisoAcceso> permisoAccesos;
-	private boolean modificar;
-	private short bandera;
+	private byte bandera;
 
 	/**
 	 * Create the dialog.
 	 */
 	public FuncionarioABM() {
-		btnCancelar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				cancelar();
-				limpiarCampos();
-			}
-		});
-		btnModificar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				modificar(true);
-			}
-		});
+		setTitle("Registro de Funcionario");
 		btnEliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				verificarRelacion();
-			}
-		});
-		btnNuevo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				nuevo(true);
-				limpiarCampos();
-				FechaActual();
-			}
-		});
-		btnSalir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				dispose();
-			}
-		});
-		
-		btnGuardar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				guardar();
+				eliminar();
 			}
 		});
 		
@@ -115,6 +86,15 @@ public class FuncionarioABM extends GenericABM {
 		getContentPane().add(btnBuscar);
 		
 		tfBuscar = new JTextField();
+		tfBuscar.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (c== e.VK_ENTER) {
+					buscarFuncionarios();
+				}
+			}
+		});
 		tfBuscar.setBounds(529, 98, 228, 20);
 		getContentPane().add(tfBuscar);
 		tfBuscar.setColumns(10);
@@ -131,10 +111,17 @@ public class FuncionarioABM extends GenericABM {
 				char c = e.getKeyChar();
 				if (!Character.isDigit(c)) {
 					e.consume();
-					if(bandera==0 & c!= e.VK_BACK_SPACE){
+					if(bandera!=1 & c!= e.VK_BACK_SPACE & c!= e.VK_ENTER){
 						JOptionPane.showMessageDialog(null, "Solo se permiten numeros enteros");
 						bandera=1;
 					}
+				}
+			}
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (c == e.VK_ENTER) {
+					tfDocumento.requestFocus();
 				}
 			}
 		});
@@ -175,10 +162,17 @@ public class FuncionarioABM extends GenericABM {
 				char c = e.getKeyChar();
 				if (!Character.isDigit(c)) {
 					e.consume();
-					if(bandera==1 & c!= e.VK_BACK_SPACE){
+					if(bandera!=2 & c!= e.VK_BACK_SPACE & c!= e.VK_ENTER){
 						JOptionPane.showMessageDialog(null, "Solo se permiten numeros enteros");
 						bandera=2;
 					}
+				}
+			}
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (c == e.VK_ENTER) {
+					tfNombre.requestFocus();
 				}
 			}
 		});
@@ -201,6 +195,26 @@ public class FuncionarioABM extends GenericABM {
 		getContentPane().add(lblNombre);
 		
 		tfNombre = new JTextField();
+		tfNombre.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (Character.isDigit(c)) {
+					e.consume();
+					if(bandera!=3){
+						JOptionPane.showMessageDialog(null, "No se permiten Numeros");
+						bandera=3;
+					}
+				}
+			}
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (c == e.VK_ENTER) {
+					tfApellido.requestFocus();
+				}
+			}
+		});
 		tfNombre.setEnabled(false);
 		tfNombre.setBounds(133, 223, 228, 20);
 		getContentPane().add(tfNombre);
@@ -212,6 +226,26 @@ public class FuncionarioABM extends GenericABM {
 		getContentPane().add(lblApellido);
 		
 		tfApellido = new JTextField();
+		tfApellido.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (Character.isDigit(c)) {
+					e.consume();
+					if(bandera!=4){
+						JOptionPane.showMessageDialog(null, "No se permiten Numeros");
+						bandera=4;
+					}
+				}
+			}
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (c == e.VK_ENTER) {
+					tfFechaNacimiento.requestFocus();
+				}
+			}
+		});
 		tfApellido.setEnabled(false);
 		tfApellido.setBounds(133, 263, 228, 20);
 		getContentPane().add(tfApellido);
@@ -223,6 +257,15 @@ public class FuncionarioABM extends GenericABM {
 		getContentPane().add(lblFechaNacimiento);
 		
 		tfFechaNacimiento = new JFormattedTextField(FechaUtil.getFormato());
+		tfFechaNacimiento.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (c == e.VK_ENTER) {
+					tfFechaIncorporacion.requestFocus();
+				}
+			}
+		});
 		tfFechaNacimiento.setEnabled(false);
 		tfFechaNacimiento.setBounds(133, 303, 102, 20);
 		getContentPane().add(tfFechaNacimiento);
@@ -233,6 +276,15 @@ public class FuncionarioABM extends GenericABM {
 		getContentPane().add(lblFechaIncorporacion);
 		
 		tfFechaIncorporacion = new JFormattedTextField(FechaUtil.getFormato());
+		tfFechaIncorporacion.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (c == e.VK_ENTER) {
+					tfTarjeta.requestFocus();
+				}
+			}
+		});
 		tfFechaIncorporacion.setEnabled(false);
 		tfFechaIncorporacion.setBounds(133, 343, 102, 20);
 		getContentPane().add(tfFechaIncorporacion);
@@ -259,8 +311,105 @@ public class FuncionarioABM extends GenericABM {
 		consultarFuncionarios();
 		funcionario=null;
 		
-	}//Fin del metodo constructor**********************************************************
+	}
 	
+	//----------------Metodos Genericos---------------
+	@Override
+	protected void limpiar() {
+		tfCodigo.setText("");
+		tfDocumento.setText("");
+		tfNombre.setText("");
+		tfApellido.setText("");
+		tfFechaNacimiento.setText("");
+		tfFechaIncorporacion.setText("");
+		tfTarjeta.setText("");
+	}
+	
+	@Override
+	protected void habilitarCampos(boolean e) {
+		if (modificar==true) {
+			tfCodigo.setEnabled(!e);
+		}else {
+			tfCodigo.setEnabled(e);
+		}
+		tfDocumento.setEnabled(e);
+		tfNombre.setEnabled(e);
+		tfApellido.setEnabled(e);
+		tfFechaNacimiento.setEnabled(e);
+		tfFechaIncorporacion.setEnabled(e);
+		tfTarjeta.setEnabled(e);
+		cbSexo.setEnabled(e);
+	}
+	
+	@Override
+	protected void guardar() {
+		if (campoObligatorio()==true) return;
+		if(validarFecha()==false) return;
+		cargarDatos();
+		dao = new FuncionarioDao();
+		dao.insertarOModificar(funcionario);
+		try {
+			dao.ejecutar();
+		} catch (Exception e) {
+			dao.cancelar();
+		}
+		modificar=false;
+		consultarFuncionarios();
+		habilitarCampos(false);
+		limpiar();
+		accionesPrimarias(true);
+		funcionario=null;
+	}
+	
+	@Override
+	protected void fechaActual() {
+		Date date = new Date();
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		tfFechaIncorporacion.setText(""+dateFormat.format(date));
+	}
+	
+	//Carag en el formulario el dato que se selecciono en la tabla
+	protected void cargarFormulario(int index) {
+		if (index < 0) return;
+		funcionario = funcionarios.get(index);
+		tfCodigo.setText(funcionario.getId()+"");
+		tfDocumento.setText(funcionario.getNoDocumento()+"");
+		tfNombre.setText(funcionario.getNombre());
+		tfApellido.setText(funcionario.getApellido());
+		tfTarjeta.setText(funcionario.getTarjeta());
+		tfFechaIncorporacion.setValue(FechaUtil.fechaAString(funcionario.getFechaIncorporacion()));
+		tfFechaNacimiento.setValue(FechaUtil.fechaAString(funcionario.getFechaNacimiento()));
+		if (funcionario.getSexo().equals("F")) {
+			cbSexo.setSelectedIndex(1);
+		}else{
+			cbSexo.setSelectedIndex(0);
+		}
+		modificar=false;
+		habilitarCampos(false);
+		accionesPrimarias(false);
+	}
+		
+	//Metodo para eliminar 
+	public void eliminar(){
+		if(verificarRelacion()==false) return;
+		if (table.getSelectedRow()<0) return;
+		int respuesta = JOptionPane.showConfirmDialog(null, 
+				"Esta seguro que desea eliminar el funcionario "+funcionario.getNombre(),
+				"Atención",
+				JOptionPane.YES_NO_OPTION);
+		if(respuesta == JOptionPane.YES_OPTION){
+			dao = new FuncionarioDao();
+			dao.eliminar(funcionario);
+			try {
+				dao.ejecutar();
+			} catch (Exception e) {
+				dao.cancelar();
+			}
+			consultarFuncionarios();
+		}
+		limpiar();
+		accionesPrimarias(true);
+	}
 	
 	//Metodo para cargargar los datos en el funcionario
 	public void cargarDatos(){
@@ -281,25 +430,6 @@ public class FuncionarioABM extends GenericABM {
 		funcionario.setTarjeta(tfTarjeta.getText());
 	}
 	
-	//Metodo Para guardar el funcinario
-	public void guardar(){
-		if (campoObligatorio()==true) return;
-		cargarDatos();
-		dao = new FuncionarioDao();
-		dao.insertarOModificar(funcionario);
-		try {
-			dao.ejecutar();
-		} catch (Exception e) {
-			dao.cancelar();
-		}
-		consultarFuncionarios();
-		nuevo(false);
-		cancelar();
-		btnNuevo.setEnabled(true);
-		funcionario=null;
-	}
-	
-	
 	//Carga la tabla
 	public void consultarFuncionarios(){
 		dao = new FuncionarioDao();
@@ -308,52 +438,6 @@ public class FuncionarioABM extends GenericABM {
 		tablaFuncionario.fireTableDataChanged();
 	}
 
-	//Carag en el formulario el dato que se selecciono en la tabla
-	protected void cargarFormulario(int index) {
-		if (index < 0) return;
-		funcionario = funcionarios.get(index);
-		tfCodigo.setText(funcionario.getId()+"");
-		tfDocumento.setText(funcionario.getNoDocumento()+"");
-		tfNombre.setText(funcionario.getNombre());
-		tfApellido.setText(funcionario.getApellido());
-		tfTarjeta.setText(funcionario.getTarjeta());
-		tfFechaIncorporacion.setValue(FechaUtil.fechaAString(funcionario.getFechaIncorporacion()));
-		tfFechaNacimiento.setValue(FechaUtil.fechaAString(funcionario.getFechaNacimiento()));
-		if (funcionario.getSexo().equals("F")) {
-			cbSexo.setSelectedIndex(1);
-		}else{
-			cbSexo.setSelectedIndex(0);
-		}
-		campos(false);
-		btnModificar.setEnabled(true);
-		btnEliminar.setEnabled(true);
-		btnNuevo.setEnabled(true);
-		btnGuardar.setVisible(false);
-		btnCancelar.setVisible(false);
-	}
-	
-	//Metodo para eliminar 
-	public void eliminar(){
-		if (table.getSelectedRow()<0) {
-			return;
-		}
-		int respuesta = JOptionPane.showConfirmDialog(null, 
-				"Esta seguro que desea eliminar el funcionario "+funcionario.getNombre(),
-				"Atención",
-				JOptionPane.YES_NO_OPTION);
-		if(respuesta == JOptionPane.YES_OPTION){
-			dao = new FuncionarioDao();
-			dao.eliminar(funcionario);
-			try {
-				dao.ejecutar();
-			} catch (Exception e) {
-				dao.cancelar();
-			}
-			consultarFuncionarios();
-		}
-		limpiarCampos();
-	}
-	
 	private void buscarFuncionarios() {
 		dao = new FuncionarioDao();
 		funcionarios = dao.recuperarPorFiltro(tfBuscar.getText());
@@ -363,68 +447,6 @@ public class FuncionarioABM extends GenericABM {
 	
 	//***********************VALIDACIONES Y REQUISITOS********************
 	
-	//Habilitando botones y jtext
-	public void nuevo(boolean e){
-			btnGuardar.setVisible(e);
-			btnCancelar.setVisible(e);
-			modificar=!e;
-			btnGuardar.setText("Guardar");
-			btnNuevo.setEnabled(false);
-			btnModificar.setEnabled(false);
-			btnEliminar.setEnabled(false);
-			campos(e);
-	}
-	public void modificar(boolean e){
-		tfDocumento.setEnabled(e);
-		tfNombre.setEnabled(e);
-		tfApellido.setEnabled(e);
-		tfFechaIncorporacion.setEnabled(e);
-		tfFechaNacimiento.setEnabled(e);
-		tfTarjeta.setEnabled(e);
-		cbSexo.setEnabled(e);
-		modificar= e;
-		btnGuardar.setText("Actualizar");
-		btnGuardar.setVisible(e);
-		btnCancelar.setVisible(true);
-	}
-	private void cancelar() {
-		btnModificar.setEnabled(false);
-		btnEliminar.setEnabled(false);
-		btnNuevo.setEnabled(true);
-		nuevo(false);
-		limpiarCampos();
-	}
-	
-	//Metodo para traer la fecha del sistema
-	public void FechaActual(){
-		Date date = new Date();
-		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		tfFechaIncorporacion.setText(""+dateFormat.format(date));
-	}
-	
-	//Metodo para habilitar y desabilitar campos
-	private void campos(boolean e) {
-		tfCodigo.setEnabled(e);
-		tfDocumento.setEnabled(e);
-		tfNombre.setEnabled(e);
-		tfApellido.setEnabled(e);
-		tfFechaIncorporacion.setEnabled(e);
-		tfFechaNacimiento.setEnabled(e);
-		tfTarjeta.setEnabled(e);
-		cbSexo.setEnabled(e);
-	}
-	
-	//Metodo pata limpiar los campos
-	public void limpiarCampos(){
-		tfCodigo.setText("");
-		tfDocumento.setText("");
-		tfNombre.setText("");
-		tfApellido.setText("");
-		tfFechaIncorporacion.setText("");
-		tfFechaNacimiento.setText("");
-		tfTarjeta.setText("");
-	}
-	
 	//Metodos para verificar los campos unicos 
 	private void verificarCi() {
 		if (tfDocumento.getText().isEmpty()) {
@@ -432,7 +454,7 @@ public class FuncionarioABM extends GenericABM {
 		}
 		for (int i = 0; i < funcionarios.size(); i++) {
 			if (Integer.parseInt(tfDocumento.getText())==funcionarios.get(i).getNoDocumento()) {
-				JOptionPane.showMessageDialog(null, "Documento duplicado", "Atencion",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Documento duplicado", "Atención",JOptionPane.ERROR_MESSAGE);
 				tfDocumento.requestFocus();
 				tfDocumento.selectAll();
 			}
@@ -444,7 +466,7 @@ public class FuncionarioABM extends GenericABM {
 		}
 		for (int i = 0; i < funcionarios.size(); i++) {
 			if (Integer.parseInt(tfCodigo.getText())==funcionarios.get(i).getId()) {
-				JOptionPane.showMessageDialog(null, "Codigo duplicado", "Atencion",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Codigo duplicado", "Atención",JOptionPane.ERROR_MESSAGE);
 				tfCodigo.requestFocus();
 				tfCodigo.selectAll();
 			}
@@ -455,16 +477,17 @@ public class FuncionarioABM extends GenericABM {
 			return;
 		}
 		for (int i = 0; i < funcionarios.size(); i++) {
-			if (tfTarjeta.getText()==funcionarios.get(i).getTarjeta()) {
-				JOptionPane.showMessageDialog(null, "Tarjeta duplicado", "Atencion",JOptionPane.ERROR_MESSAGE);
+			if (funcionarios.get(i).getTarjeta().equals(tfTarjeta.getText())) {
+				JOptionPane.showMessageDialog(null, "Tarjeta duplicada", "Atención",JOptionPane.ERROR_MESSAGE);
 				tfTarjeta.requestFocus();
 				tfTarjeta.selectAll();
 			}
 		}
 	}
+	
 	private boolean campoObligatorio() {
 		if(tfCodigo.getText().isEmpty()){
-			JOptionPane.showMessageDialog(null, "Codiogo es un campo obligatorio");
+			JOptionPane.showMessageDialog(null, "Codigo es un campo obligatorio");
 			tfCodigo.requestFocus();
 			return true;
 		}
@@ -502,16 +525,40 @@ public class FuncionarioABM extends GenericABM {
 	}
 	
 	//verifica si el funcionario esta siendo utilizado en otra tabla
-	private void verificarRelacion() {
+	private boolean verificarRelacion() {
 		permisoAccesoDao = new PermisoAccesoDao();
 		permisoAccesos = permisoAccesoDao.recuperarTodo();
 		for (int i = 0; i < permisoAccesos.size(); i++) {
 			if (Integer.parseInt(tfCodigo.getText())==permisoAccesos.get(i).getFuncionario().getId()) {
 				JOptionPane.showMessageDialog(null, "Funcionario Con Permisos de Acceso", "Atencion",JOptionPane.ERROR_MESSAGE);
-				return;
+				return false;
 			}
 		}
-		eliminar();
+		return true;
+	}
+
+	//valida si la fecha no es del dia de hoy
+	private boolean validarFecha() {
+		Date fecha1, fecha2;
+		fecha1 = FechaUtil.stringAFecha(tfFechaNacimiento.getText());
+		fecha2 = FechaUtil.stringAFecha(tfFechaIncorporacion.getText());
+		if (fecha1.compareTo(fecha2)>=0) {
+			JOptionPane.showMessageDialog(null, "Fecha de Nacimiento Invalida");
+			return false;
+		}
+		return true;
 	}
 	
+	//Metodo para Inicializar los datos
+	public void inicializarFuncionario() {
+		String tabla= "Funcionario";
+		dao = new FuncionarioDao();
+		dao.eliminarTodos(tabla);
+		try {
+			dao.ejecutar();
+		} catch (Exception e) {
+			dao.cancelar();
+		}
+
+	}
 }
