@@ -17,7 +17,7 @@ public class BotonPersonalizado extends JButton{
 		setBorderPainted(false);
 		setBackground(new Color(240, 240, 240));
 		setOpaque(false);
-		
+		setFocusable(false);
 	}
 	public void setIcon(String icono) {
 		setIcon(new ImageIcon(BotonPersonalizado.class.getResource("/py/edu/facitec/rfidsystem/img/"+icono+".png")));

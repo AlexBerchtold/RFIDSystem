@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.Toolkit;
 
 public abstract class GenericABM extends JDialog {
 	protected JTable table;
@@ -30,6 +31,7 @@ public abstract class GenericABM extends JDialog {
 	 * Create the dialog.
 	 */
 	public GenericABM() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(GenericABM.class.getResource("/py/edu/facitec/rfidsystem/img/icono.png")));
 		setTitle("Formulario");
 		setResizable(false);
 		//setBounds(100, 100, 800, 530);

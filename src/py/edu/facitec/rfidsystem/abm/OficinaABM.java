@@ -15,9 +15,11 @@ import py.edu.facitec.rfidsystem.buscadores.BuscadorBloque;
 import py.edu.facitec.rfidsystem.contenedores.BotonPersonalizadoABM;
 import py.edu.facitec.rfidsystem.dao.BloqueDao;
 import py.edu.facitec.rfidsystem.dao.OficinaDao;
+import py.edu.facitec.rfidsystem.dao.PermisoAccesoDao;
 import py.edu.facitec.rfidsystem.dao.PuertaDao;
 import py.edu.facitec.rfidsystem.entidad.Bloque;
 import py.edu.facitec.rfidsystem.entidad.Oficina;
+import py.edu.facitec.rfidsystem.entidad.PermisoAcceso;
 import py.edu.facitec.rfidsystem.entidad.Puerta;
 import py.edu.facitec.rfidsystem.interfaces.InterfazBuscadoPuerta;
 import py.edu.facitec.rfidsystem.interfaces.InterfazBuscadorBloque;
@@ -46,6 +48,8 @@ public class OficinaABM extends GenericABM implements InterfazBuscadorBloque {
 	private JCheckBox chckbxTodos;
 	private JCheckBox chckbxActivos;
 	private JCheckBox chckbxInactivos;
+	private PermisoAccesoDao permisoAccesoDao;
+	private List<PermisoAcceso> permisoAccesos;
 	
 	public OficinaABM() {
 		setTitle("Registro de Oficina");
@@ -391,8 +395,16 @@ public class OficinaABM extends GenericABM implements InterfazBuscadorBloque {
 		puertaDao = new PuertaDao();
 		puertas = puertaDao.recuperarTodo();
 		for (int i = 0; i < puertas.size(); i++) {
-			if (Integer.parseInt(tfCodigo.getText())==oficinas.get(i).getBloque().getId()) {
+			if (Integer.parseInt(tfCodigo.getText())==puertas.get(i).getOficina().getId()) {
 				JOptionPane.showMessageDialog(null, "Oficina con Puertas Registradas", "Atencion",JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+		}
+		permisoAccesoDao = new PermisoAccesoDao();
+		permisoAccesos = permisoAccesoDao.recuperarTodo();
+		for(int i =0; i<permisoAccesos.size(); i++){
+			if (Integer.parseInt(tfCodigo.getText())==permisoAccesos.get(i).getOficina().getId()) {
+				JOptionPane.showMessageDialog(null, "Oficina con Permisos Registrados", "Atencion",JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
 		}

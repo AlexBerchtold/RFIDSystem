@@ -5,11 +5,12 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 import py.edu.facitec.rfidsystem.entidad.Movimiento;
+import py.edu.facitec.rfidsystem.util.FechaUtil;
 
 public class TablaMovimiento extends AbstractTableModel {
 	
 	public String columnas[]={
-			"Codigo", "Hora"};
+			"Codigo", "Hora", "Permiso de Acceso"};
 	
 	private Object[][] datos = new Object[0][columnas.length];
 	
@@ -17,7 +18,8 @@ public class TablaMovimiento extends AbstractTableModel {
 		datos = new Object[lista.size()][columnas.length];
 		for (int i = 0; i < lista.size(); i++) {
 			datos[i][0]= lista.get(i).getId();
-			datos[i][1]= lista.get(i).getHora();
+			datos[i][1]= FechaUtil.horaAString(lista.get(i).getHora());
+			datos[i][2]= lista.get(i).getPermisoAcceso().getId();
 		}
 	}
 

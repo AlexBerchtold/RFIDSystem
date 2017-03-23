@@ -1,44 +1,40 @@
 package py.edu.facitec.rfidsystem.app;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.DefaultKeyboardFocusManager;
 import java.awt.EventQueue;
 import java.awt.KeyEventDispatcher;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
+import javax.swing.JToolBar;
 import javax.swing.border.EmptyBorder;
-
-import org.hibernate.type.YesNoType;
 
 import py.edu.facitec.rfidsystem.abm.BloqueABM;
 import py.edu.facitec.rfidsystem.abm.FuncionarioABM;
 import py.edu.facitec.rfidsystem.abm.InstitucionABM;
+import py.edu.facitec.rfidsystem.abm.MovimientoABM;
 import py.edu.facitec.rfidsystem.abm.OficinaABM;
+import py.edu.facitec.rfidsystem.abm.PermisoAccesoABM;
 import py.edu.facitec.rfidsystem.abm.PuertaABM;
 import py.edu.facitec.rfidsystem.contenedores.BotonPersonalizado;
-import py.edu.facitec.rfidsystem.contenedores.PanelFondo;
-import py.edu.facitec.rfidsystem.util.Factory;
-
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JToolBar;
-import javax.swing.JButton;
+import py.edu.facitec.rfidsystem.contenedores.BotonPersonalizadoABM;
 import py.edu.facitec.rfidsystem.contenedores.JMenuItemPersonalizado;
-import javax.swing.JLabel;
-import java.awt.Color;
-import java.awt.DefaultKeyboardFocusManager;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.Toolkit;
+import py.edu.facitec.rfidsystem.contenedores.PanelFondo;
+import py.edu.facitec.rfidsystem.entidad.PermisoAcceso;
+import py.edu.facitec.rfidsystem.util.Factory;
 
 public class PantallaPrincipal extends JFrame implements KeyEventDispatcher {
 
 	private PanelFondo contentPane;
-
 	/**
 	 * Launch the application.
 	 */
@@ -60,10 +56,10 @@ public class PantallaPrincipal extends JFrame implements KeyEventDispatcher {
 	 * Create the frame.
 	 */
 	public PantallaPrincipal() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(PantallaPrincipal.class.getResource("/py/edu/facitec/rfidsystem/img/Icono.ico")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(PantallaPrincipal.class.getResource("/py/edu/facitec/rfidsystem/img/icono.png")));
         DefaultKeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(this); 
 		
-		setTitle("RFID System  1.5");
+		setTitle("RFID System  1.6");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1024, 680);
 		setLocationRelativeTo(this);
@@ -76,13 +72,21 @@ public class PantallaPrincipal extends JFrame implements KeyEventDispatcher {
 		menuBar.add(mnMovimientos);
 		
 		JMenuItemPersonalizado mntmprsnlzdAcceso = new JMenuItemPersonalizado();
-		mntmprsnlzdAcceso.setEnabled(false);
+		mntmprsnlzdAcceso.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				abrirFormularioPermiso();
+			}
+		});
 		mntmprsnlzdAcceso.setText("Acceso");
 		mntmprsnlzdAcceso.setIcon("accesos");
 		mnMovimientos.add(mntmprsnlzdAcceso);
 		
 		JMenuItemPersonalizado mntmprsnlzdMovimiento = new JMenuItemPersonalizado();
-		mntmprsnlzdMovimiento.setEnabled(false);
+		mntmprsnlzdMovimiento.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				abrirFormularioMovimiento();
+			}
+		});
 		mntmprsnlzdMovimiento.setText("Movimiento");
 		mntmprsnlzdMovimiento.setIcon("movimientos");
 		mnMovimientos.add(mntmprsnlzdMovimiento);
@@ -225,16 +229,27 @@ public class PantallaPrincipal extends JFrame implements KeyEventDispatcher {
 		toolBar.add(btnprsnlzdOficina);
 		
 		BotonPersonalizado btnprsnlzdAcceso = new BotonPersonalizado();
+		btnprsnlzdAcceso.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				abrirFormularioPermiso();
+			}
+		});
 		btnprsnlzdAcceso.setEnabled(false);
 		btnprsnlzdAcceso.setText("Acceso");
 		btnprsnlzdAcceso.setIcon("acceso");
 		toolBar.add(btnprsnlzdAcceso);
 		
 		BotonPersonalizado btnprsnlzdMovimiento = new BotonPersonalizado();
+		btnprsnlzdMovimiento.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				abrirFormularioMovimiento();
+			}
+		});
 		btnprsnlzdMovimiento.setEnabled(false);
 		btnprsnlzdMovimiento.setText("Movimiento");
 		btnprsnlzdMovimiento.setIcon("movimiento");
 		toolBar.add(btnprsnlzdMovimiento);
+		
 	}
 
 	//Metodo para desactivar funciones no deseadas del teclado 
@@ -272,11 +287,21 @@ public class PantallaPrincipal extends JFrame implements KeyEventDispatcher {
 		oficinaABM.setVisible(true);
 	}
 	
+	private void abrirFormularioPermiso() {
+		PermisoAccesoABM acceso = new PermisoAccesoABM();
+		acceso.setVisible(true);
+	}
+	
+	private void abrirFormularioMovimiento() {
+		MovimientoABM movimientoABM = new MovimientoABM();
+		movimientoABM.setVisible(true);
+	}
+	
 	private void inicializarBaseDeDatos() {
-		//PermisoAccesoABM permisoAccesoABM = new PermisoAccesoABM();
-		//permisoAccesoABM.inicializarPermisoAcceso();
-		//MovimientoABM movimientoABM = new MovimientoABM();
-		//movimientoABM.inicializarMovimiento;
+		PermisoAccesoABM permisoAccesoABM = new PermisoAccesoABM();
+		permisoAccesoABM.inicializarPermisoAcceso();
+		MovimientoABM movimientoABM = new MovimientoABM();
+		movimientoABM.inicializarMovimiento();
 		FuncionarioABM funcionarioABM = new FuncionarioABM();
 		funcionarioABM.inicializarFuncionario();
 		OficinaABM oficinaABM = new OficinaABM();
@@ -288,4 +313,5 @@ public class PantallaPrincipal extends JFrame implements KeyEventDispatcher {
 		InstitucionABM institucionABM = new InstitucionABM();
 		institucionABM.inicializarInstitucion();
 	}
+	
 }

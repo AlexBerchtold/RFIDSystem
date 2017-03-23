@@ -11,11 +11,23 @@ import javax.swing.text.MaskFormatter;
 public class FechaUtil {
 	private static MaskFormatter formatter;
 	private static DateFormat DATE_FORTMAT = new SimpleDateFormat("dd/MM/yyyy");
+	private static DateFormat HOUR_FORMAT = new SimpleDateFormat("HH:mm:ss");
 	
 	//Metodo para pasar el formato al jtext
 	public static MaskFormatter getFormato() {
 		try {
 			formatter = new MaskFormatter("##/##/####");
+			formatter.setPlaceholderCharacter('_');
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return formatter;
+	}
+	
+	public static MaskFormatter getFormatoHora(){
+		try {
+			formatter = new MaskFormatter("##:##:##");
 			formatter.setPlaceholderCharacter('_');
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -52,4 +64,17 @@ public class FechaUtil {
 		}
 	}
 	
+	public static Date stringAHora(String text){
+		HOUR_FORMAT.setLenient(false);
+		try {
+			return HOUR_FORMAT.parse(text);
+		} catch (ParseException e) {
+			JOptionPane.showMessageDialog(null, "Formato de Hora invalido");
+			return null;
+		}
+	}
+	
+	public static String horaAString(Date fecha){
+		return HOUR_FORMAT.format(fecha);
+	}
 }

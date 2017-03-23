@@ -167,6 +167,9 @@ public class FuncionarioABM extends GenericABM {
 						bandera=2;
 					}
 				}
+				if (tfDocumento.getText().length()==10) {
+					e.consume();
+				}
 			}
 			@Override
 			public void keyPressed(KeyEvent e) {
