@@ -47,7 +47,11 @@ public class FuncionarioABM extends GenericABM {
 	private TablaFuncionario tablaFuncionario;
 	private List<Funcionario> funcionarios;
 	private List<PermisoAcceso> permisoAccesos;
-	private byte bandera;
+	private JLabel lblCodigoDuplicado;
+	private JLabel lbldocumentoDuplicado;
+	private JLabel lbltarjetaDuplicada;
+	private JLabel lblValidarNombre;
+	private JLabel lblValidarApellido;
 
 	/**
 	 * Create the dialog.
@@ -109,12 +113,12 @@ public class FuncionarioABM extends GenericABM {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
-				if (!Character.isDigit(c)) {
+				if (!Character.isDigit(c) & c!= e.VK_ENTER & c!= e.VK_BACK_SPACE) {
 					e.consume();
-					if(bandera!=1 & c!= e.VK_BACK_SPACE & c!= e.VK_ENTER){
-						JOptionPane.showMessageDialog(null, "Solo se permiten numeros enteros");
-						bandera=1;
-					}
+					lblCodigoDuplicado.setText("*Solo Numeros");
+					lblCodigoDuplicado.setVisible(true);
+				}else{
+					lblCodigoDuplicado.setVisible(false);
 				}
 			}
 			@Override
@@ -128,9 +132,9 @@ public class FuncionarioABM extends GenericABM {
 		tfCodigo.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent arg0) {
-					if (modificar==false){
-						verificarCodigo();
-					}
+				if (verificarCodigo()==false){
+					lblCodigoDuplicado.setVisible(false);
+				}
 			}
 		});
 		tfCodigo.setEnabled(false);
@@ -140,7 +144,7 @@ public class FuncionarioABM extends GenericABM {
 		
 		JLabel lblSexo = new JLabel("Sexo:");
 		lblSexo.setFont(new Font("Arial", Font.BOLD, 12));
-		lblSexo.setBounds(235, 145, 46, 14);
+		lblSexo.setBounds(245, 145, 46, 14);
 		getContentPane().add(lblSexo);
 		
 		cbSexo = new JComboBox();
@@ -152,7 +156,7 @@ public class FuncionarioABM extends GenericABM {
 		
 		JLabel lblDocumento = new JLabel("Nro. Documento:");
 		lblDocumento.setFont(new Font("Arial", Font.BOLD, 12));
-		lblDocumento.setBounds(10, 185, 102, 14);
+		lblDocumento.setBounds(10, 189, 102, 14);
 		getContentPane().add(lblDocumento);
 		
 		tfDocumento = new JTextField();
@@ -160,12 +164,12 @@ public class FuncionarioABM extends GenericABM {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
-				if (!Character.isDigit(c)) {
+				if (!Character.isDigit(c) & c!= e.VK_ENTER & c!= e.VK_BACK_SPACE) {
 					e.consume();
-					if(bandera!=2 & c!= e.VK_BACK_SPACE & c!= e.VK_ENTER){
-						JOptionPane.showMessageDialog(null, "Solo se permiten numeros enteros");
-						bandera=2;
-					}
+					lbldocumentoDuplicado.setText("*Solo Numeros");
+					lbldocumentoDuplicado.setVisible(true);
+				}else{
+					lbldocumentoDuplicado.setVisible(false);
 				}
 				if (tfDocumento.getText().length()==10) {
 					e.consume();
@@ -188,13 +192,13 @@ public class FuncionarioABM extends GenericABM {
 			}
 		});
 		tfDocumento.setEnabled(false);
-		tfDocumento.setBounds(133, 183, 158, 20);
+		tfDocumento.setBounds(133, 187, 158, 20);
 		getContentPane().add(tfDocumento);
 		tfDocumento.setColumns(10);
 		
 		JLabel lblNombre = new JLabel("Nombre:");
 		lblNombre.setFont(new Font("Arial", Font.BOLD, 12));
-		lblNombre.setBounds(10, 225, 102, 14);
+		lblNombre.setBounds(10, 229, 102, 14);
 		getContentPane().add(lblNombre);
 		
 		tfNombre = new JTextField();
@@ -202,12 +206,11 @@ public class FuncionarioABM extends GenericABM {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
-				if (Character.isDigit(c)) {
+				if (Character.isDigit(c) & c!= e.VK_ENTER) {
 					e.consume();
-					if(bandera!=3){
-						JOptionPane.showMessageDialog(null, "No se permiten Numeros");
-						bandera=3;
-					}
+					lblValidarNombre.setVisible(true);
+				}else{
+					lblValidarNombre.setVisible(false);
 				}
 			}
 			@Override
@@ -219,13 +222,13 @@ public class FuncionarioABM extends GenericABM {
 			}
 		});
 		tfNombre.setEnabled(false);
-		tfNombre.setBounds(133, 223, 228, 20);
+		tfNombre.setBounds(133, 227, 228, 20);
 		getContentPane().add(tfNombre);
 		tfNombre.setColumns(10);
 		
 		JLabel lblApellido = new JLabel("Apellido:");
 		lblApellido.setFont(new Font("Arial", Font.BOLD, 12));
-		lblApellido.setBounds(10, 265, 102, 14);
+		lblApellido.setBounds(10, 269, 102, 14);
 		getContentPane().add(lblApellido);
 		
 		tfApellido = new JTextField();
@@ -233,12 +236,11 @@ public class FuncionarioABM extends GenericABM {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
-				if (Character.isDigit(c)) {
+				if (Character.isDigit(c) & c!= e.VK_ENTER) {
 					e.consume();
-					if(bandera!=4){
-						JOptionPane.showMessageDialog(null, "No se permiten Numeros");
-						bandera=4;
-					}
+					lblValidarApellido.setVisible(true);
+				}else{
+					lblValidarApellido.setVisible(false);
 				}
 			}
 			@Override
@@ -250,13 +252,13 @@ public class FuncionarioABM extends GenericABM {
 			}
 		});
 		tfApellido.setEnabled(false);
-		tfApellido.setBounds(133, 263, 228, 20);
+		tfApellido.setBounds(133, 267, 228, 20);
 		getContentPane().add(tfApellido);
 		tfApellido.setColumns(10);
 		
 		JLabel lblFechaNacimiento = new JLabel("Fecha Nacimiento:");
 		lblFechaNacimiento.setFont(new Font("Arial", Font.BOLD, 12));
-		lblFechaNacimiento.setBounds(10, 305, 113, 14);
+		lblFechaNacimiento.setBounds(10, 309, 113, 14);
 		getContentPane().add(lblFechaNacimiento);
 		
 		tfFechaNacimiento = new JFormattedTextField(FechaUtil.getFormato());
@@ -270,12 +272,12 @@ public class FuncionarioABM extends GenericABM {
 			}
 		});
 		tfFechaNacimiento.setEnabled(false);
-		tfFechaNacimiento.setBounds(133, 303, 102, 20);
+		tfFechaNacimiento.setBounds(133, 307, 102, 20);
 		getContentPane().add(tfFechaNacimiento);
 		
 		JLabel lblFechaIncorporacion = new JLabel("Fecha Incorporaci\u00F3n:");
 		lblFechaIncorporacion.setFont(new Font("Arial", Font.BOLD, 12));
-		lblFechaIncorporacion.setBounds(10, 345, 126, 14);
+		lblFechaIncorporacion.setBounds(10, 349, 126, 14);
 		getContentPane().add(lblFechaIncorporacion);
 		
 		tfFechaIncorporacion = new JFormattedTextField(FechaUtil.getFormato());
@@ -289,12 +291,12 @@ public class FuncionarioABM extends GenericABM {
 			}
 		});
 		tfFechaIncorporacion.setEnabled(false);
-		tfFechaIncorporacion.setBounds(133, 343, 102, 20);
+		tfFechaIncorporacion.setBounds(133, 347, 102, 20);
 		getContentPane().add(tfFechaIncorporacion);
 		
 		JLabel lblTarjeta = new JLabel("Tarjeta:");
 		lblTarjeta.setFont(new Font("Arial", Font.BOLD, 12));
-		lblTarjeta.setBounds(10, 385, 102, 14);
+		lblTarjeta.setBounds(10, 389, 102, 14);
 		getContentPane().add(lblTarjeta);
 		
 		tfTarjeta = new JTextField();
@@ -307,9 +309,39 @@ public class FuncionarioABM extends GenericABM {
 			}
 		});
 		tfTarjeta.setEnabled(false);
-		tfTarjeta.setBounds(133, 383, 158, 20);
+		tfTarjeta.setBounds(133, 387, 158, 20);
 		getContentPane().add(tfTarjeta);
 		tfTarjeta.setColumns(10);
+		
+		lblCodigoDuplicado = new JLabel("*C\u00F3digo Duplicado");
+		lblCodigoDuplicado.setVisible(false);
+		lblCodigoDuplicado.setForeground(Color.RED);
+		lblCodigoDuplicado.setBounds(133, 162, 108, 14);
+		getContentPane().add(lblCodigoDuplicado);
+		
+		lbldocumentoDuplicado = new JLabel("*Documento Duplicado");
+		lbldocumentoDuplicado.setVisible(false);
+		lbldocumentoDuplicado.setForeground(Color.RED);
+		lbldocumentoDuplicado.setBounds(133, 207, 158, 14);
+		getContentPane().add(lbldocumentoDuplicado);
+		
+		lbltarjetaDuplicada = new JLabel("*Tarjeta Duplicada");
+		lbltarjetaDuplicada.setVisible(false);
+		lbltarjetaDuplicada.setForeground(Color.RED);
+		lbltarjetaDuplicada.setBounds(133, 409, 158, 14);
+		getContentPane().add(lbltarjetaDuplicada);
+		
+		lblValidarNombre = new JLabel("*No se permiten numeros");
+		lblValidarNombre.setForeground(Color.RED);
+		lblValidarNombre.setVisible(false);
+		lblValidarNombre.setBounds(133, 247, 192, 14);
+		getContentPane().add(lblValidarNombre);
+		
+		lblValidarApellido = new JLabel("*No se permiten numeros");
+		lblValidarApellido.setVisible(false);
+		lblValidarApellido.setForeground(Color.RED);
+		lblValidarApellido.setBounds(133, 286, 192, 14);
+		getContentPane().add(lblValidarApellido);
 
 		consultarFuncionarios();
 		funcionario=null;
@@ -326,6 +358,11 @@ public class FuncionarioABM extends GenericABM {
 		tfFechaNacimiento.setText("");
 		tfFechaIncorporacion.setText("");
 		tfTarjeta.setText("");
+		lblCodigoDuplicado.setVisible(false);
+		lbldocumentoDuplicado.setVisible(false);
+		lbltarjetaDuplicada.setVisible(false);
+		lblValidarApellido.setVisible(false);
+		lblValidarNombre.setVisible(false);
 	}
 	
 	@Override
@@ -347,6 +384,11 @@ public class FuncionarioABM extends GenericABM {
 	@Override
 	protected void guardar() {
 		if (campoObligatorio()==true) return;
+		if (modificar==false) {
+			if(verificarCodigo()==true) return;
+		}
+		if(verificarTarjeta()==true) return;
+		if(verificarCi()==true)return;
 		if(validarFecha()==false) return;
 		cargarDatos();
 		dao = new FuncionarioDao();
@@ -373,6 +415,7 @@ public class FuncionarioABM extends GenericABM {
 	
 	//Carag en el formulario el dato que se selecciono en la tabla
 	protected void cargarFormulario(int index) {
+		limpiar();
 		if (index < 0) return;
 		funcionario = funcionarios.get(index);
 		tfCodigo.setText(funcionario.getId()+"");
@@ -451,41 +494,77 @@ public class FuncionarioABM extends GenericABM {
 	//***********************VALIDACIONES Y REQUISITOS********************
 	
 	//Metodos para verificar los campos unicos 
-	private void verificarCi() {
+	private boolean verificarCi() {
 		if (tfDocumento.getText().isEmpty()) {
-			return;
+			lbldocumentoDuplicado.setVisible(false);
+			return false;
 		}
-		for (int i = 0; i < funcionarios.size(); i++) {
-			if (Integer.parseInt(tfDocumento.getText())==funcionarios.get(i).getNoDocumento()) {
-				JOptionPane.showMessageDialog(null, "Documento duplicado", "Atención",JOptionPane.ERROR_MESSAGE);
-				tfDocumento.requestFocus();
-				tfDocumento.selectAll();
+		if (modificar==true) {
+			for (int i = 0; i < funcionarios.size(); i++) {
+				if (Integer.parseInt(tfDocumento.getText())==funcionarios.get(i).getNoDocumento() 
+						& Integer.parseInt(tfCodigo.getText())!=funcionarios.get(i).getId()) {
+					lbldocumentoDuplicado.setVisible(true);
+					lbldocumentoDuplicado.setText("*Documento Duplicado");
+					tfDocumento.requestFocus();
+					return true;
+				}
+			}
+		}else{
+			for (int i = 0; i < funcionarios.size(); i++) {
+				if (Integer.parseInt(tfDocumento.getText())==funcionarios.get(i).getNoDocumento()) {
+					lbldocumentoDuplicado.setVisible(true);
+					lbldocumentoDuplicado.setText("*Documento Duplicado");
+					tfDocumento.requestFocus();
+					return true;
+				}
 			}
 		}
+		lblCodigoDuplicado.setVisible(false);
+		return false;
 	}
-	private void verificarCodigo() {
+	private boolean verificarCodigo() {
 		if (tfCodigo.getText().isEmpty()) {
-			return;
+			lblCodigoDuplicado.setVisible(false);
+			return false;
 		}
 		for (int i = 0; i < funcionarios.size(); i++) {
 			if (Integer.parseInt(tfCodigo.getText())==funcionarios.get(i).getId()) {
-				JOptionPane.showMessageDialog(null, "Codigo duplicado", "Atención",JOptionPane.ERROR_MESSAGE);
+				lblCodigoDuplicado.setVisible(true);
+				lblCodigoDuplicado.setText("*Código Duplicado");
 				tfCodigo.requestFocus();
-				tfCodigo.selectAll();
+				return true;
 			}
 		}
+		lblCodigoDuplicado.setVisible(false);
+		return false;
 	}
-	private void verificarTarjeta() {
+	private boolean verificarTarjeta() {
 		if (tfTarjeta.getText().isEmpty()) {
-			return;
+			lbltarjetaDuplicada.setVisible(false);
+			return false;
 		}
-		for (int i = 0; i < funcionarios.size(); i++) {
-			if (funcionarios.get(i).getTarjeta().equals(tfTarjeta.getText())) {
-				JOptionPane.showMessageDialog(null, "Tarjeta duplicada", "Atención",JOptionPane.ERROR_MESSAGE);
-				tfTarjeta.requestFocus();
-				tfTarjeta.selectAll();
+		if (modificar == true) {
+			for (int i = 0; i < funcionarios.size(); i++) {
+				if (funcionarios.get(i).getTarjeta().equals(tfTarjeta.getText())
+						& Integer.parseInt(tfCodigo.getText())!=funcionarios.get(i).getId()) {
+					lbltarjetaDuplicada.setVisible(true);
+					lbltarjetaDuplicada.setText("*Tarjeta Duplicada");
+					tfTarjeta.requestFocus();
+					return true;
+				}
+			}
+		}else{
+			for (int i = 0; i < funcionarios.size(); i++) {
+				if (funcionarios.get(i).getTarjeta().equals(tfTarjeta.getText())) {
+					lbltarjetaDuplicada.setVisible(true);
+					lbltarjetaDuplicada.setText("*Tarjeta Duplicada");
+					tfTarjeta.requestFocus();
+					return true;
+				}
 			}
 		}
+		lbltarjetaDuplicada.setVisible(false);
+		return false;
 	}
 	
 	private boolean campoObligatorio() {

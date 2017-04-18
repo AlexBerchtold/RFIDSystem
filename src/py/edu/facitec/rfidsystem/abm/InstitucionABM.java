@@ -31,7 +31,7 @@ public class InstitucionABM extends GenericABM {
 	private Institucion institucion;
 	private BloqueDao bloqueDao;
 	private List<Bloque> bloques;
-	private short bandera;
+	private JLabel lblcodigoDuplicado;
 	
 	public InstitucionABM() {
 		setTitle("Registro de Institución");
@@ -43,7 +43,6 @@ public class InstitucionABM extends GenericABM {
 		btnEliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				eliminar();
-				
 			}
 		});
 		btnGuardar.setLocation(10, 381);
@@ -84,12 +83,12 @@ public class InstitucionABM extends GenericABM {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
-				if (!Character.isDigit(c)) {
+				if (!Character.isDigit(c) & c!= e.VK_BACK_SPACE & c!= e.VK_ENTER) {
 					e.consume();
-					if(bandera!=1 & c!= e.VK_BACK_SPACE & c!= e.VK_ENTER){
-						JOptionPane.showMessageDialog(null, "Solo se permiten numeros enteros");
-						bandera=1;
-					}
+					lblcodigoDuplicado.setText("*Solo Numeros");
+					lblcodigoDuplicado.setVisible(true);
+				}else{
+					lblcodigoDuplicado.setVisible(false);
 				}
 			}
 			@Override
@@ -128,6 +127,12 @@ public class InstitucionABM extends GenericABM {
 		lblRegistrosDeInstitucin.setFont(new Font("Algerian", Font.PLAIN, 24));
 		lblRegistrosDeInstitucin.setBounds(1, 11, 690, 53);
 		getContentPane().add(lblRegistrosDeInstitucin);
+		
+		lblcodigoDuplicado = new JLabel("*C\u00F3digo Duplicado");
+		lblcodigoDuplicado.setVisible(false);
+		lblcodigoDuplicado.setForeground(Color.RED);
+		lblcodigoDuplicado.setBounds(133, 196, 108, 14);
+		getContentPane().add(lblcodigoDuplicado);
 		consultarInstitucion();
 		
 	}
@@ -137,6 +142,7 @@ public class InstitucionABM extends GenericABM {
 	protected void limpiar() {
 		tfCodigo.setText("");
 		tfDescripcion.setText("");
+		lblcodigoDuplicado.setVisible(false);
 	}
 
 	@Override
@@ -153,6 +159,7 @@ public class InstitucionABM extends GenericABM {
 	@Override
 	protected void guardar() {
 		if (campoObligatorio()==true) return;
+		if (verificarCodigo()==true) return;
 		cargarDatos();
 		dao=new InstitucionDao();
 		dao.insertarOModificar(institucion);
@@ -174,6 +181,7 @@ public class InstitucionABM extends GenericABM {
 	
 	@Override
 	protected void cargarFormulario(int index) {
+		limpiar();
 		if (index < 0) return;
 		institucion=institucions.get(index);
 		tfCodigo.setText(institucion.getId()+"");
@@ -228,17 +236,21 @@ public class InstitucionABM extends GenericABM {
 	}
 	
 //------------------------Validaciones-----------------
-	private void verificarCodigo() {
+	private boolean verificarCodigo() {
 		if (tfCodigo.getText().isEmpty()) {
-			return;
+			lblcodigoDuplicado.setVisible(false);
+			return false;
 		}
 		for (int i = 0; i < institucions.size(); i++) {
 			if (Integer.parseInt(tfCodigo.getText())==institucions.get(i).getId()) {
-				JOptionPane.showMessageDialog(null, "Código duplicado", "Atención",JOptionPane.ERROR_MESSAGE);
+				lblcodigoDuplicado.setText("*Código Duplicado");
+				lblcodigoDuplicado.setVisible(true);
 				tfCodigo.requestFocus();
-				tfCodigo.selectAll();
+				return true;
 			}
 		}
+		lblcodigoDuplicado.setVisible(false);
+		return false;
 	}
 	private boolean campoObligatorio() {
 		if(tfCodigo.getText().isEmpty()){

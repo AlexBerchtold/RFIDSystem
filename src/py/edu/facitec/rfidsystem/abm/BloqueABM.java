@@ -37,7 +37,7 @@ public class BloqueABM extends GenericABM implements InterfazBuscarInstitucion {
 	private OficinaDao oficinaDao;
 	private List<Oficina> oficinas;
 	private BotonPersonalizadoABM btnBuscarInstitucion;
-	private byte bandera;
+	private JLabel lblcdigoDuplicado;
 	
 	public BloqueABM() {
 		btnEliminar.addActionListener(new ActionListener() {
@@ -88,12 +88,12 @@ public class BloqueABM extends GenericABM implements InterfazBuscarInstitucion {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
-				if (!Character.isDigit(c)) {
+				if (!Character.isDigit(c) & c!= e.VK_BACK_SPACE & c!=e.VK_ENTER) {
 					e.consume();
-					if(bandera!=1 & c!= e.VK_BACK_SPACE & c!=e.VK_ENTER){
-						JOptionPane.showMessageDialog(null, "Solo se permiten numeros enteros");
-						bandera=1;
-					}
+					lblcdigoDuplicado.setText("Solo Numeros");
+					lblcdigoDuplicado.setVisible(true);
+				}else{
+					lblcdigoDuplicado.setVisible(false);
 				}
 			}
 			@Override
@@ -154,6 +154,12 @@ public class BloqueABM extends GenericABM implements InterfazBuscarInstitucion {
 		btnBuscarInstitucion.setText("...");
 		btnBuscarInstitucion.setBounds(281, 286, 46, 20);
 		getContentPane().add(btnBuscarInstitucion);
+		
+		lblcdigoDuplicado = new JLabel("*C\u00F3digo Duplicado");
+		lblcdigoDuplicado.setVisible(false);
+		lblcdigoDuplicado.setForeground(Color.RED);
+		lblcdigoDuplicado.setBounds(113, 185, 128, 14);
+		getContentPane().add(lblcdigoDuplicado);
 		consultarBloque();
 		
 	}
@@ -161,6 +167,7 @@ public class BloqueABM extends GenericABM implements InterfazBuscarInstitucion {
 	//---------------Metodos Genericos-------------
 	@Override
 	protected void limpiar() {
+		lblcdigoDuplicado.setVisible(false);
 		tfCodigo.setText("");
 		tfDescripcion.setText("");
 		tfInstitucion.setText("");
@@ -180,6 +187,9 @@ public class BloqueABM extends GenericABM implements InterfazBuscarInstitucion {
 	@Override
 	protected void guardar() {
 		if (campoObligatorio()==true) return;
+		if (modificar==false) {
+			if(verificarCodigo()==true)return;
+		}
 		cargarDatos();
 		dao = new BloqueDao();
 		dao.insertarOModificar(bloque);
@@ -300,17 +310,21 @@ public class BloqueABM extends GenericABM implements InterfazBuscarInstitucion {
 		}
 		return true;
 	}
-	private void verificarCodigo() {
+	private boolean verificarCodigo() {
 		if (tfCodigo.getText().isEmpty()) {
-			return;
+			lblcdigoDuplicado.setVisible(false);
+			return false;
 		}
 		for (int i = 0; i < bloques.size(); i++) {
 			if (Integer.parseInt(tfCodigo.getText())==bloques.get(i).getId()) {
-				JOptionPane.showMessageDialog(null, "Código duplicado", "Atención",JOptionPane.ERROR_MESSAGE);
+				lblcdigoDuplicado.setText("Código Duplicado");
+				lblcdigoDuplicado.setVisible(true);
 				tfCodigo.requestFocus();
-				tfCodigo.selectAll();
+				return true;
 			}
 		}
+		lblcdigoDuplicado.setVisible(false);
+		return false;
 	}
 	
 	//Metodo para inicializar los datos

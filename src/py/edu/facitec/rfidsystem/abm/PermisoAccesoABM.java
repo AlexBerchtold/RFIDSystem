@@ -49,7 +49,8 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 	private BotonPersonalizadoABM btnBuscarFuncionario;
 	private BotonPersonalizadoABM btnBuscarOficina;
 	private BotonPersonalizadoABM btnBuscadorPuerta;
-	private byte bandera;
+	private JLabel lblCodigoDuplicado;
+	private JLabel lblBuscadorNumeros;
 	
 	public PermisoAccesoABM() {
 		btnEliminar.addActionListener(new ActionListener() {
@@ -104,12 +105,12 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 			@Override
 			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
-				if (!Character.isDigit(c)) {
+				if (!Character.isDigit(c)& c!= e.VK_BACK_SPACE & c!=e.VK_ENTER) {
 					e.consume();
-					if(bandera!=2 & c!= e.VK_BACK_SPACE & c!=e.VK_ENTER){
-						JOptionPane.showMessageDialog(null, "Solo se permiten numeros enteros");
-						bandera=2;
-					}
+					lblCodigoDuplicado.setText("*Solo numeros");
+					lblCodigoDuplicado.setVisible(true);
+				}else{
+					lblCodigoDuplicado.setVisible(false);
 				}
 			}
 		});
@@ -181,12 +182,12 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 			@Override
 			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
-				if (!Character.isDigit(c)) {
+				if (!Character.isDigit(c) & c!= e.VK_BACK_SPACE & c!=e.VK_ENTER) {
 					e.consume();
-					if(bandera!=1 & c!= e.VK_BACK_SPACE & c!=e.VK_ENTER){
-						JOptionPane.showMessageDialog(null, "Solo se permiten numeros enteros");
-						bandera=1;
-					}
+					lblBuscadorNumeros.setText("*Solo numeros");
+					lblBuscadorNumeros.setVisible(true);
+				}else {
+					lblBuscadorNumeros.setVisible(false);
 				}
 			}
 		});
@@ -203,6 +204,18 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 		botonPersonalizadoABM.setText("Buscar");
 		botonPersonalizadoABM.setBounds(400, 94, 90, 26);
 		getContentPane().add(botonPersonalizadoABM);
+		
+		lblCodigoDuplicado = new JLabel("*Solo numeros");
+		lblCodigoDuplicado.setVisible(false);
+		lblCodigoDuplicado.setForeground(Color.RED);
+		lblCodigoDuplicado.setBounds(111, 183, 112, 14);
+		getContentPane().add(lblCodigoDuplicado);
+		
+		lblBuscadorNumeros = new JLabel("*Solo numeros");
+		lblBuscadorNumeros.setVisible(false);
+		lblBuscadorNumeros.setForeground(Color.RED);
+		lblBuscadorNumeros.setBounds(517, 84, 112, 14);
+		getContentPane().add(lblBuscadorNumeros);
 		consultarPermisoAccesos();
 	}
 	
@@ -213,6 +226,8 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 		tfFuncionario.setText("");
 		tfOficina.setText("");
 		tfPuerta.setText("");
+		lblBuscadorNumeros.setVisible(false);
+		lblCodigoDuplicado.setVisible(false);
 	}
 
 	@Override
@@ -229,6 +244,9 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 
 	@Override
 	protected void guardar() {
+		if (modificar==false) {
+			if(verificarCodigo()==true) return;
+		}
 		if (camposObligatorios()==true) return;
 		cargarDatos();
 		dao = new PermisoAccesoDao();
@@ -252,6 +270,7 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 	
 	@Override
 	protected void cargarFormulario(int index) {
+		limpiar();
 		if (index < 0) return;
 		permisoAcceso = permisoAccesos.get(index);
 		funcionario = permisoAccesos.get(index).getFuncionario();
@@ -387,17 +406,21 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 		return true;
 	}
 	
-	private void verificarCodigo() {
+	private boolean verificarCodigo() {
 		if (tfCodigo.getText().isEmpty()) {
-			return;
+			lblCodigoDuplicado.setVisible(false);
+			return false;
 		}
 		for (int i = 0; i <permisoAccesos.size(); i++) {
 			if (Integer.parseInt(tfCodigo.getText())==permisoAccesos.get(i).getId()) {
-				JOptionPane.showMessageDialog(null, "Código duplicado", "Atención",JOptionPane.ERROR_MESSAGE);
+				lblCodigoDuplicado.setText("*Código Duplicado");
+				lblCodigoDuplicado.setVisible(true);
 				tfCodigo.requestFocus();
-				tfCodigo.selectAll();
+				return true;
 			}
 		}
+		lblCodigoDuplicado.setVisible(false);
+		return false;
 	}
 	
 	public void inicializarPermisoAcceso() {

@@ -1,33 +1,31 @@
 package py.edu.facitec.rfidsystem.abm;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import py.edu.facitec.rfidsystem.buscadores.BuscadorPermisoAcceso;
 import py.edu.facitec.rfidsystem.contenedores.BotonPersonalizadoABM;
-import py.edu.facitec.rfidsystem.dao.BloqueDao;
 import py.edu.facitec.rfidsystem.dao.MovimientoDao;
 import py.edu.facitec.rfidsystem.entidad.Movimiento;
 import py.edu.facitec.rfidsystem.entidad.PermisoAcceso;
 import py.edu.facitec.rfidsystem.interfaces.InterfazBuscadorPermisoAcceso;
 import py.edu.facitec.rfidsystem.tablas.TablaMovimiento;
 import py.edu.facitec.rfidsystem.util.FechaUtil;
-
-import javax.swing.JTextField;
-import java.awt.event.ActionListener;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 
 public class MovimientoABM extends GenericABM implements InterfazBuscadorPermisoAcceso{
 	private JTextField tfPermisoAcceso;
@@ -40,7 +38,8 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 	private TablaMovimiento tablaMovimiento;
 	private Movimiento movimiento;
 	private JTextField tfBuscador;
-	private byte bandera;
+	private JLabel lblCodigoDuplicado;
+	private JLabel lblBuscadorNumeros;
 	
 	public MovimientoABM() {
 		btnEliminar.addActionListener(new ActionListener() {
@@ -53,7 +52,6 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 		btnGuardar.setLocation(10, 382);
 		scrollPane.setBounds(350, 132, 328, 276);
 		setBounds(100, 100, 697, 449);
-		btnEliminar.setText("Anular");
 		setLocationRelativeTo(this);
 	
 		
@@ -92,7 +90,7 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 		tfHora = new JFormattedTextField(FechaUtil.getFormatoHora());
 		tfHora.setEnabled(false);
 		tfHora.setColumns(10);
-		tfHora.setBounds(133, 225, 158, 20);
+		tfHora.setBounds(133, 225, 92, 20);
 		getContentPane().add(tfHora);
 		
 		JLabel lblHora = new JLabel("Hora:");
@@ -111,12 +109,12 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 			@Override
 			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
-				if (!Character.isDigit(c)) {
+				if (!Character.isDigit(c)& c!= e.VK_BACK_SPACE & c!=e.VK_ENTER) {
 					e.consume();
-					if(bandera!=1 & c!= e.VK_BACK_SPACE & c!=e.VK_ENTER){
-						JOptionPane.showMessageDialog(null, "Solo se permiten numeros enteros");
-						bandera=1;
-					}
+					lblCodigoDuplicado.setText("*Solo numeros");
+					lblCodigoDuplicado.setVisible(true);
+				}else {
+					lblCodigoDuplicado.setVisible(false);
 				}
 			}
 			@Override
@@ -159,18 +157,30 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 			@Override
 			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
-				if (!Character.isDigit(c)) {
+				if (!Character.isDigit(c) & c!= e.VK_BACK_SPACE & c!=e.VK_ENTER) {
 					e.consume();
-					if(bandera!=2 & c!= e.VK_BACK_SPACE & c!=e.VK_ENTER){
-						JOptionPane.showMessageDialog(null, "Solo se permiten numeros enteros");
-						bandera=2;
-					}
+					lblBuscadorNumeros.setText("*Solo numeros");
+					lblBuscadorNumeros.setVisible(true);
+				}else{
+					lblBuscadorNumeros.setVisible(false);
 				}
 			}
 		});
 		tfBuscador.setColumns(10);
 		tfBuscador.setBounds(467, 98, 211, 20);
 		getContentPane().add(tfBuscador);
+		
+		lblCodigoDuplicado = new JLabel("New label");
+		lblCodigoDuplicado.setForeground(Color.RED);
+		lblCodigoDuplicado.setVisible(false);
+		lblCodigoDuplicado.setBounds(133, 189, 108, 14);
+		getContentPane().add(lblCodigoDuplicado);
+		
+		lblBuscadorNumeros = new JLabel("New label");
+		lblBuscadorNumeros.setVisible(false);
+		lblBuscadorNumeros.setForeground(Color.RED);
+		lblBuscadorNumeros.setBounds(467, 85, 108, 14);
+		getContentPane().add(lblBuscadorNumeros);
 		consultarMovimiento();
 	}
 	
@@ -180,6 +190,8 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 		tfCodigo.setText("");
 		tfHora.setText("");
 		tfPermisoAcceso.setText("");
+		lblBuscadorNumeros.setVisible(false);
+		lblCodigoDuplicado.setVisible(false);
 	}
 
 	@Override
@@ -195,6 +207,9 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 
 	@Override
 	protected void guardar() {
+		if (modificar==false) {
+			if(verificarCodigo()==true) return;
+		}
 		if(campoObligatorio()==true) return;
 		cargarDatos();
 		dao = new MovimientoDao();
@@ -221,6 +236,7 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 	
 	@Override
 	protected void cargarFormulario(int index) {
+		limpiar();
 		if(index<0) return;
 		movimiento=movimientos.get(index);
 		permisoAcceso = movimientos.get(index).getPermisoAcceso();
@@ -312,16 +328,21 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 		return false;
 	}
 	
-	private void verificarCodigo() {
-		dao = new MovimientoDao();
-		movimientos = dao.recuperarTodo();
-		for (int i = 0; i < movimientos.size(); i++) {
+	private boolean verificarCodigo() {
+		if (tfCodigo.getText().isEmpty()) {
+			lblCodigoDuplicado.setVisible(false);
+			return false;
+		}
+		for (int i = 0; i <movimientos.size(); i++) {
 			if (Integer.parseInt(tfCodigo.getText())==movimientos.get(i).getId()) {
-				JOptionPane.showMessageDialog(null, "Codigo Duplicado");
+				lblCodigoDuplicado.setText("*Código Duplicado");
+				lblCodigoDuplicado.setVisible(true);
 				tfCodigo.requestFocus();
-				tfCodigo.selectAll();
+				return true;
 			}
 		}
+		lblCodigoDuplicado.setVisible(false);
+		return false;
 
 	}
 	

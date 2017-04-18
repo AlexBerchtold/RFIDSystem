@@ -11,7 +11,7 @@ import javax.swing.text.MaskFormatter;
 public class FechaUtil {
 	private static MaskFormatter formatter;
 	private static DateFormat DATE_FORTMAT = new SimpleDateFormat("dd/MM/yyyy");
-	private static DateFormat HOUR_FORMAT = new SimpleDateFormat("HH:mm:ss");
+	private static DateFormat HOUR_FORMAT = new SimpleDateFormat("HH:mm");
 	
 	//Metodo para pasar el formato al jtext
 	public static MaskFormatter getFormato() {
@@ -27,7 +27,7 @@ public class FechaUtil {
 	
 	public static MaskFormatter getFormatoHora(){
 		try {
-			formatter = new MaskFormatter("##:##:##");
+			formatter = new MaskFormatter("##:##");
 			formatter.setPlaceholderCharacter('_');
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block

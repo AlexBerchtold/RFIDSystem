@@ -44,12 +44,12 @@ public class OficinaABM extends GenericABM implements InterfazBuscadorBloque {
 	private Bloque bloque;
 	private PuertaDao puertaDao;
 	private List<Puerta> puertas;
-	private byte bandera;
 	private JCheckBox chckbxTodos;
 	private JCheckBox chckbxActivos;
 	private JCheckBox chckbxInactivos;
 	private PermisoAccesoDao permisoAccesoDao;
 	private List<PermisoAcceso> permisoAccesos;
+	private JLabel lblcdigoDuplicado;
 	
 	public OficinaABM() {
 		setTitle("Registro de Oficina");
@@ -101,12 +101,12 @@ public class OficinaABM extends GenericABM implements InterfazBuscadorBloque {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
-				if (!Character.isDigit(c)) {
+				if (!Character.isDigit(c) & c!= e.VK_BACK_SPACE & c!=e.VK_ENTER) {
 					e.consume();
-					if(bandera!=1 & c!= e.VK_BACK_SPACE & c!=e.VK_ENTER){
-						JOptionPane.showMessageDialog(null, "Solo se permiten numeros enteros");
-						bandera=1;
-					}
+					lblcdigoDuplicado.setText("Solo Numeros");
+					lblcdigoDuplicado.setVisible(true);
+				}else{
+					lblcdigoDuplicado.setVisible(false);
 				}
 			}
 			@Override
@@ -228,6 +228,12 @@ public class OficinaABM extends GenericABM implements InterfazBuscadorBloque {
 		});
 		chckbxInactivos.setBounds(581, 133, 97, 23);
 		getContentPane().add(chckbxInactivos);
+		
+		lblcdigoDuplicado = new JLabel("*C\u00F3digo Duplicado");
+		lblcdigoDuplicado.setVisible(false);
+		lblcdigoDuplicado.setForeground(Color.RED);
+		lblcdigoDuplicado.setBounds(113, 186, 128, 14);
+		getContentPane().add(lblcdigoDuplicado);
 		consultarOficina();
 		
 	}
@@ -235,6 +241,7 @@ public class OficinaABM extends GenericABM implements InterfazBuscadorBloque {
 //-------------------Metodos Genericos---------------
 	@Override
 	protected void limpiar() {
+		lblcdigoDuplicado.setVisible(false);
 		tfCodigo.setText("");
 		tfDescripcion.setText("");
 		tfBloque.setText("");
@@ -258,6 +265,9 @@ public class OficinaABM extends GenericABM implements InterfazBuscadorBloque {
 	@Override
 	protected void guardar() {
 		if (campoObligatorio()==true) return;
+		if (modificar==false) {
+			if(verificarCodigo()==true)return;
+		}
 		cargarDatos();
 		dao = new OficinaDao();
 		dao.insertarOModificar(oficina);
@@ -279,6 +289,7 @@ public class OficinaABM extends GenericABM implements InterfazBuscadorBloque {
 	
 	@Override
 	protected void cargarFormulario(int index) {
+		limpiar();
 		if (index < 0) return;
 		oficina = oficinas.get(index);
 		bloque = oficina.getBloque();
@@ -410,17 +421,21 @@ public class OficinaABM extends GenericABM implements InterfazBuscadorBloque {
 		}
 		return true;
 	}
-	private void verificarCodigo() {
+	private boolean verificarCodigo() {
 		if (tfCodigo.getText().isEmpty()) {
-			return;
+			lblcdigoDuplicado.setVisible(false);
+			return false;
 		}
 		for (int i = 0; i < oficinas.size(); i++) {
 			if (Integer.parseInt(tfCodigo.getText())==oficinas.get(i).getId()) {
-				JOptionPane.showMessageDialog(null, "Código duplicado", "Atención",JOptionPane.ERROR_MESSAGE);
+				lblcdigoDuplicado.setText("Código Duplicado");
+				lblcdigoDuplicado.setVisible(true);
 				tfCodigo.requestFocus();
-				tfCodigo.selectAll();
+				return true;
 			}
 		}
+		lblcdigoDuplicado.setVisible(false);
+		return false;
 	}
 	
 	//Metodo para inicializar los datos

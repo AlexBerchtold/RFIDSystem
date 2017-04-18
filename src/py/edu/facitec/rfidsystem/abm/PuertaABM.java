@@ -45,11 +45,12 @@ public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 	private PuertaDao dao;
 	private List<Puerta> puertas;
 	private TablaPuerta tablaPuerta;
-	private byte bandera;
 	private BotonPersonalizadoABM btnBuscador;
 	private JCheckBox chckbxTodos;
 	private JCheckBox chckbxActivos;
 	private JCheckBox chckbxInactivos;
+	private JLabel lblcdigoDuplicado;
+	private JLabel lblnroDePuerta;
 	
 	public PuertaABM() {
 		scrollPane.setBounds(400, 168, 384, 318);
@@ -70,22 +71,22 @@ public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 		
 		JLabel lblOficina = new JLabel("Oficina:");
 		lblOficina.setFont(new Font("Arial", Font.BOLD, 12));
-		lblOficina.setBounds(10, 204, 102, 14);
+		lblOficina.setBounds(9, 216, 102, 14);
 		getContentPane().add(lblOficina);
 		
 		JLabel lblDescripcin = new JLabel("Descripci\u00F3n:");
 		lblDescripcin.setFont(new Font("Arial", Font.BOLD, 12));
-		lblDescripcin.setBounds(10, 244, 102, 14);
+		lblDescripcin.setBounds(10, 271, 102, 14);
 		getContentPane().add(lblDescripcin);
 		
 		JLabel lblNroDePuerta = new JLabel("Nro. de Puerta:");
 		lblNroDePuerta.setFont(new Font("Arial", Font.BOLD, 12));
-		lblNroDePuerta.setBounds(10, 284, 102, 14);
+		lblNroDePuerta.setBounds(10, 324, 102, 14);
 		getContentPane().add(lblNroDePuerta);
 		
 		JLabel lblEstado = new JLabel("Estado:");
 		lblEstado.setFont(new Font("Arial", Font.BOLD, 12));
-		lblEstado.setBounds(10, 324, 113, 14);
+		lblEstado.setBounds(10, 376, 113, 14);
 		getContentPane().add(lblEstado);
 		
 		 chckbxActivo = new JCheckBox("Activo");
@@ -95,7 +96,7 @@ public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 		 	}
 		 });
 		chckbxActivo.setEnabled(false);
-		chckbxActivo.setBounds(129, 321, 97, 23);
+		chckbxActivo.setBounds(129, 373, 97, 23);
 		getContentPane().add(chckbxActivo);
 		
 		chckbxInactivo = new JCheckBox("Inactivo");
@@ -105,7 +106,7 @@ public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 			}
 		});
 		chckbxInactivo.setEnabled(false);
-		chckbxInactivo.setBounds(242, 321, 97, 23);
+		chckbxInactivo.setBounds(242, 373, 97, 23);
 		getContentPane().add(chckbxInactivo);
 		
 		JLabel lblRegistroDePuerta = new JLabel("Registro De Puerta");
@@ -144,19 +145,26 @@ public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
-				if (!Character.isDigit(c)) {
+				if (!Character.isDigit(c) & c!= e.VK_BACK_SPACE & c!= e.VK_ENTER) {
 					e.consume();
-					if(bandera!=1 & c!= e.VK_BACK_SPACE){
-						JOptionPane.showMessageDialog(null, "Solo se permiten numeros enteros");
-						bandera=1;
-					}
+					lblcdigoDuplicado.setText("*Solo Numeros");
+					lblcdigoDuplicado.setVisible(true);
+				}else{
+					lblcdigoDuplicado.setVisible(false);
+				}
+			}
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (c == e.VK_ENTER & !tfCodigo.getText().isEmpty()) {
+					tfDescripcion.requestFocus();
 				}
 			}
 		});
 		tfCodigo.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				verificarCodigo();
+					verificarCodigo();
 			}
 		});
 		tfCodigo.setEnabled(false);
@@ -166,14 +174,23 @@ public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 		
 		tfOficina = new JTextField();
 		tfOficina.setEnabled(false);
-		tfOficina.setBounds(112, 202, 210, 20);
+		tfOficina.setBounds(111, 214, 210, 20);
 		getContentPane().add(tfOficina);
 		tfOficina.setColumns(10);
 		
 		tfDescripcion = new JTextField();
+		tfDescripcion.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (c == e.VK_ENTER) {
+					tfNumeroDePuertas.requestFocus();
+				}
+			}
+		});
 		tfDescripcion.setEnabled(false);
 		tfDescripcion.setColumns(10);
-		tfDescripcion.setBounds(111, 242, 210, 20);
+		tfDescripcion.setBounds(111, 269, 210, 20);
 		getContentPane().add(tfDescripcion);
 		
 		tfNumeroDePuertas = new JTextField();
@@ -187,18 +204,18 @@ public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
-				if (!Character.isDigit(c)) {
+				if (!Character.isDigit(c) & c!= e.VK_BACK_SPACE & c!= e.VK_ENTER) {
 					e.consume();
-					if(bandera!=1 & c!= e.VK_BACK_SPACE){
-						JOptionPane.showMessageDialog(null, "Solo se permiten numeros enteros");
-						bandera=2;
-					}
+					lblnroDePuerta.setText("*Solo Numeros");
+					lblnroDePuerta.setVisible(true);
+				}else{
+					lblnroDePuerta.setVisible(false);
 				}
 			}
 		});
 		tfNumeroDePuertas.setEnabled(false);
 		tfNumeroDePuertas.setColumns(10);
-		tfNumeroDePuertas.setBounds(111, 282, 102, 20);
+		tfNumeroDePuertas.setBounds(111, 322, 102, 20);
 		getContentPane().add(tfNumeroDePuertas);
 		
 		btnBuscador = new BotonPersonalizadoABM();
@@ -209,7 +226,7 @@ public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 			}
 		});
 		btnBuscador.setText("...");
-		btnBuscador.setBounds(331, 202, 46, 20);
+		btnBuscador.setBounds(333, 214, 46, 20);
 		getContentPane().add(btnBuscador);
 		
 		JLabel lblCodigo = new JLabel("Codigo:");
@@ -252,12 +269,26 @@ public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 		});
 		chckbxInactivos.setBounds(687, 138, 97, 23);
 		getContentPane().add(chckbxInactivos);
+		
+		lblcdigoDuplicado = new JLabel("*C\u00F3digo Duplicado");
+		lblcdigoDuplicado.setForeground(Color.RED);
+		lblcdigoDuplicado.setVisible(false);
+		lblcdigoDuplicado.setBounds(112, 189, 129, 14);
+		getContentPane().add(lblcdigoDuplicado);
+		
+		lblnroDePuerta = new JLabel("*Nro. de Puerta Duplicado");
+		lblnroDePuerta.setForeground(Color.RED);
+		lblnroDePuerta.setVisible(false);
+		lblnroDePuerta.setBounds(112, 344, 150, 14);
+		getContentPane().add(lblnroDePuerta);
 		consultarPuertas();
 	}
 	
 	//-------------------------Metodos Genericos----------------------
 	@Override
 	protected void limpiar() {
+		lblcdigoDuplicado.setVisible(false);
+		lblnroDePuerta.setVisible(false);
 		tfCodigo.setText("");
 		tfDescripcion.setText("");
 		tfOficina.setText("");
@@ -283,6 +314,10 @@ public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 	@Override
 	protected void guardar() {
 		if (campoObligatorio()==true) return;
+		if (modificar==false) {
+			if(verificarCodigo()==true)return;
+		}
+		if(verificarNroPuerta()==true)return;
 		cargarDatos();
 		dao = new PuertaDao();
 		dao.insertarOModificar(puerta);
@@ -304,6 +339,7 @@ public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 	
 	@Override
 	protected void cargarFormulario(int index) {
+		limpiar();
 		if (index < 0) return;
 		puerta = puertas.get(index);
 		oficina= puerta.getOficina();
@@ -432,29 +468,47 @@ public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 		return true;
 	}
 
-	private void verificarCodigo() {
+	private boolean verificarCodigo() {
 		if (tfCodigo.getText().isEmpty()) {
-			return;
+			lblcdigoDuplicado.setVisible(false);
+			return false;
 		}
 		for (int i = 0; i < puertas.size(); i++) {
 			if (Integer.parseInt(tfCodigo.getText())==puertas.get(i).getId()) {
-				JOptionPane.showMessageDialog(null, "Codigo duplicado", "Atención",JOptionPane.ERROR_MESSAGE);
+				lblcdigoDuplicado.setText("*Código Duplicado");
+				lblcdigoDuplicado.setVisible(true);
 				tfCodigo.requestFocus();
-				tfCodigo.selectAll();
+				return true;
 			}
 		}
+		lblcdigoDuplicado.setVisible(false);
+		return false;
 	}
-	private void verificarNroPuerta() {
+	private boolean verificarNroPuerta() {
 		if (tfNumeroDePuertas.getText().isEmpty()) {
-			return;
+			lblnroDePuerta.setVisible(false);
+			return false;
 		}
-		for (int i = 0; i < puertas.size(); i++) {
-			if (Integer.parseInt(tfNumeroDePuertas.getText())==puertas.get(i).getNumeroDePuerta()) {
-				JOptionPane.showMessageDialog(null, "Numero de Puerta duplicado", "Atención",JOptionPane.ERROR_MESSAGE);
-				tfNumeroDePuertas.requestFocus();
-				tfNumeroDePuertas.selectAll();
+		if (modificar==true) {
+			for (int i = 0; i < puertas.size(); i++) {
+				if (Integer.parseInt(tfNumeroDePuertas.getText())==puertas.get(i).getNumeroDePuerta()
+						& Integer.parseInt(tfCodigo.getText())!=puertas.get(i).getId()) {
+					lblnroDePuerta.setText("*Nro. De Puerta Duplicado");
+					lblnroDePuerta.setVisible(true);
+					return true;
+				}
+			}
+		}else{
+			for (int i = 0; i < puertas.size(); i++) {
+				if (Integer.parseInt(tfNumeroDePuertas.getText())==puertas.get(i).getNumeroDePuerta()) {
+					lblnroDePuerta.setText("*Nro. De Puerta Duplicado");
+					lblnroDePuerta.setVisible(true);
+					return true;
+				}
 			}
 		}
+		lblnroDePuerta.setVisible(false);
+		return false;
 	}
 	
 	//Metodo para inicializar los datos
