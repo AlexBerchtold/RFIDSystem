@@ -19,9 +19,11 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import net.sf.jasperreports.engine.JRException;
 import py.edu.facitec.rfidsystem.dao.PuertaDao;
 import py.edu.facitec.rfidsystem.entidad.Puerta;
 import py.edu.facitec.rfidsystem.tablas.TablaPuerta;
+import py.edu.facitec.rfidsystem.util.ConexionReportes;
 
 public class ListadoDePuertas extends JDialog {
 
@@ -130,6 +132,19 @@ public class ListadoDePuertas extends JDialog {
 		scrollPane.setViewportView(table);
 		
 		JButton btnImprimir = new JButton("Imprimir");
+		btnImprimir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				ConexionReportes<Puerta> conexionReportes = new ConexionReportes<Puerta>();
+				try {
+					conexionReportes.GerarRealatorio(puertas, "ListadoDePuertas");
+					conexionReportes.viewer.setVisible(true);
+					dispose();
+				} catch (JRException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
 		btnImprimir.setBounds(58, 400, 89, 30);
 		contentPanel.add(btnImprimir);
 		

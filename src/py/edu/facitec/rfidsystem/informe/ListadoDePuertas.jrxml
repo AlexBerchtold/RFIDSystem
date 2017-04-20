@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2017-04-20T11:16:07 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ListadoDePuertas" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9e5efc84-83c7-40b3-9508-01759f118154">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="id" class="java.lang.Integer"/>
+	<field name="oficina.id" class="java.lang.Integer"/>
+	<field name="descripcion" class="java.lang.String"/>
+	<field name="numeroDePuerta" class="java.lang.Integer"/>
+	<field name="estado" class="java.lang.Boolean"/>
+	<field name="oficina.descripcion" class="java.lang.String"/>
+	<field name="oficina.estado" class="java.lang.Boolean"/>
+	<field name="oficina.bloque.id" class="java.lang.Integer"/>
+	<field name="oficina.bloque.nombre" class="java.lang.String"/>
+	<field name="oficina.bloque.institucion.id" class="java.lang.Integer"/>
+	<field name="oficina.bloque.institucion.descripcion" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="-20" y="33" width="595" height="30" uuid="4318fbde-f76a-438c-b7e5-6f02965521b7"/>
+				<textElement textAlignment="Center">
+					<font fontName="Castellar" size="22" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Listado de Puertas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="310" y="0" width="100" height="30" uuid="f4c6aaff-5aa1-45f7-86a1-99a6e9fb9835"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="347" y="0" width="100" height="30" uuid="ca32712c-f56d-47e2-a090-7d4b4faea0e0"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="440" y="0" width="100" height="30" uuid="d6586236-03e9-4088-83ea-4bd09f5ce7f7"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Hora:]]></text>
+			</staticText>
+			<textField pattern="HH:mm">
+				<reportElement x="470" y="0" width="100" height="30" uuid="a36fb59a-3a4e-4a50-8972-41127e2ac094"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="1" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="50" splitType="Stretch">
+			<rectangle>
+				<reportElement x="-10" y="3" width="570" height="40" backcolor="#F0EBEB" uuid="49bbc3da-e9ac-47c0-b11e-89d5c6c73bee"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="10" width="111" height="30" uuid="b00cd94b-01d6-4f20-b6c6-3313131fdb9d"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Código]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="111" y="10" width="111" height="30" uuid="ffadbc02-bdd5-44d5-9ccc-0442cbb07e26"/>
+				<text><![CDATA[Descripción]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="222" y="10" width="111" height="30" uuid="f4328ff0-1024-477d-ae99-68edee66988e"/>
+				<text><![CDATA[Numero de Puerta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="333" y="10" width="111" height="30" uuid="2b93946e-9c70-4b82-ae38-c0b6c075705b"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Estado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="444" y="10" width="111" height="30" uuid="1d2aaf82-dd41-4564-857b-002f123602a0"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Oficina]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="51" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="8" width="111" height="30" uuid="31a99b21-9bf4-4b12-bb9e-8c26136d8b1a"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="111" y="8" width="111" height="30" uuid="e3fc92b5-0cae-4b4a-b9d3-228e1d6efcc4"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="222" y="8" width="111" height="30" uuid="0213f58d-876d-49c6-b51e-faa8c1eb73ff"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{numeroDePuerta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="333" y="8" width="111" height="30" uuid="46afd0b3-d656-4e90-b2de-a8d9dff77438"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="444" y="8" width="111" height="30" uuid="47e5c737-46a9-4538-9b26-8d7ef6175b9e"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{oficina.descripcion}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="3" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="60" splitType="Stretch">
+			<textField>
+				<reportElement x="227" y="30" width="100" height="30" uuid="d0f80cdc-eaf2-4a32-839b-c05e0a76386c"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
