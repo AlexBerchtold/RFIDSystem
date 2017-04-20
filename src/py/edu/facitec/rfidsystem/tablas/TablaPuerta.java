@@ -9,7 +9,7 @@ import py.edu.facitec.rfidsystem.entidad.Puerta;
 public class TablaPuerta extends AbstractTableModel {
 	
 	public String columnas[]={
-			"Codigo","Descripción", "Numero de Puerta", "Estado"	};
+			"Codigo", "Descripción", "Nuro. de Puerta", "Oficina", "Estado"	};
 	
 	private Object[][] datos = new Object[0][columnas.length];
 	
@@ -19,10 +19,11 @@ public class TablaPuerta extends AbstractTableModel {
 			datos[i][0]= lista.get(i).getId();
 			datos[i][1]= lista.get(i).getDescripcion();
 			datos[i][2]= lista.get(i).getNumeroDePuerta();
+			datos[i][3]= lista.get(i).getOficina().getDescripcion();
 			if (lista.get(i).isEstado()==true) {
-				datos[i][3]= "Activo";
+				datos[i][4]= "Activo";
 			}else{
-				datos[i][3]= "Inactivo";
+				datos[i][4]= "Inactivo";
 			}
 		}
 	}

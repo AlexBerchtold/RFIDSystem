@@ -2,6 +2,8 @@ package py.edu.facitec.rfidsystem.dao;
 
 import java.util.List;
 
+import org.apache.commons.collections.functors.IfClosure;
+
 import py.edu.facitec.rfidsystem.entidad.Puerta;
 
 public class PuertaDao extends GenericDao<Puerta> {

@@ -37,7 +37,7 @@ public class BuscadorFuncionario extends JDialog  {
 	 * Create the dialog.
 	 */
 	public BuscadorFuncionario() {
-		setTitle("Buscador de Institución");
+		setTitle("Buscador de Funcionario");
 		setBounds(100, 100, 550, 391);
 		setLocationRelativeTo(this);
 		setModal(true);

@@ -170,25 +170,25 @@ public class PantallaPrincipal extends JFrame implements KeyEventDispatcher {
 		
 		JMenuItemPersonalizado mntmprsnlzdListadoDeEmpleados = new JMenuItemPersonalizado();
 		mntmprsnlzdListadoDeEmpleados.setEnabled(false);
-		mntmprsnlzdListadoDeEmpleados.setText("Listado de Empleado");
+		mntmprsnlzdListadoDeEmpleados.setText("Listado de Funcionarios");
 		mntmprsnlzdListadoDeEmpleados.setIcon("listaempleado");
 		mnInformes.add(mntmprsnlzdListadoDeEmpleados);
 		
 		JMenuItemPersonalizado mntmprsnlzdListadoDePuerta = new JMenuItemPersonalizado();
 		mntmprsnlzdListadoDePuerta.setEnabled(false);
-		mntmprsnlzdListadoDePuerta.setText("Listado de Puerta");
+		mntmprsnlzdListadoDePuerta.setText("Listado de Puertas");
 		mntmprsnlzdListadoDePuerta.setIcon("listapuerta");
 		mnInformes.add(mntmprsnlzdListadoDePuerta);
 		
 		JMenuItemPersonalizado mntmprsnlzdInformesDeAcceso = new JMenuItemPersonalizado();
 		mntmprsnlzdInformesDeAcceso.setEnabled(false);
-		mntmprsnlzdInformesDeAcceso.setText("Informe de Acceso");
+		mntmprsnlzdInformesDeAcceso.setText("Informe de Accesos");
 		mntmprsnlzdInformesDeAcceso.setIcon("listaacceso");
 		mnInformes.add(mntmprsnlzdInformesDeAcceso);
 		
 		JMenuItemPersonalizado mntmprsnlzdInformeDeMovimiento = new JMenuItemPersonalizado();
 		mntmprsnlzdInformeDeMovimiento.setEnabled(false);
-		mntmprsnlzdInformeDeMovimiento.setText("Informe de Movimiento");
+		mntmprsnlzdInformeDeMovimiento.setText("Informe de Movimientos");
 		mntmprsnlzdInformeDeMovimiento.setIcon("listamovimiento");
 		mnInformes.add(mntmprsnlzdInformeDeMovimiento);
 		
@@ -239,7 +239,7 @@ public class PantallaPrincipal extends JFrame implements KeyEventDispatcher {
 				abrirFormularioFuncionario();
 			}
 		});
-		btnprsnlzdFuncionarios.setText("Funcionarios");
+		btnprsnlzdFuncionarios.setText("Funcionario");
 		btnprsnlzdFuncionarios.setIcon("empleado");
 		toolBar.add(btnprsnlzdFuncionarios);
 		
