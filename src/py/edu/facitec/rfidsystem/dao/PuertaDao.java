@@ -2,6 +2,8 @@ package py.edu.facitec.rfidsystem.dao;
 
 import java.util.List;
 
+import javax.persistence.criteria.Join;
+
 import org.apache.commons.collections.functors.IfClosure;
 
 import py.edu.facitec.rfidsystem.entidad.Puerta;
@@ -66,6 +68,35 @@ public class PuertaDao extends GenericDao<Puerta> {
 						builder.equal(root.<Integer>get("id"), filtroId)),
 				        builder.isFalse(root.<Boolean>get("estado"))
 				);
+		lista = session.createQuery(criteriaQuery).getResultList();
+		cerrar();
+		return lista;
+	}
+	
+	public List<Puerta> buscadorPuertaPorOficina(Integer id) {
+		instanciarCriteria();
+		Join<Object, Object> joinPuerta1=root.join("oficina");
+		criteriaQuery.where(builder.or(builder.equal(joinPuerta1.<Integer>get("id"), id)));
+		lista = session.createQuery(criteriaQuery).getResultList();
+		cerrar();
+		return lista;
+	}
+	
+	public List<Puerta> filtroPorOficina(String desde, String hasta, String order) {
+		Integer d =0, h =0;
+		try {
+			d= Integer.parseInt(desde);
+			h= Integer.parseInt(hasta);
+		} catch (NumberFormatException e) {
+			
+		}
+		instanciarCriteria();
+		Join<Object, Object> joinPuerta1=root.join("oficina");
+		criteriaQuery.where(
+				builder.or(
+						builder.between(joinPuerta1.<String>get("descripcion"), desde.toLowerCase()+"%", hasta.toLowerCase()+"%"),
+						builder.between(root.<Integer>get("id"), d, h)));
+		criteriaQuery.orderBy(builder.asc(root.<Integer>get(order.toLowerCase())));
 		lista = session.createQuery(criteriaQuery).getResultList();
 		cerrar();
 		return lista;

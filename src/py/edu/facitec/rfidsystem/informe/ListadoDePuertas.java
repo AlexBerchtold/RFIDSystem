@@ -39,19 +39,6 @@ public class ListadoDePuertas extends JDialog {
 	private JComboBox cbFiltro;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			ListadoDePuertas dialog = new ListadoDePuertas();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
 	 * Create the dialog.
 	 */
 	public ListadoDePuertas() {
@@ -190,59 +177,7 @@ public class ListadoDePuertas extends JDialog {
 		tablaPuerta.fireTableDataChanged();
 		lblTotalNumer.setText(puertas.size()+"");
 	}
-	
-//	private void buscarPorNombre() {
-//		dao = new FuncionarioDao();
-//		if(cbxOrder.getSelectedIndex()==0){
-//		puertas = dao.filtroListadoNombre(tfDesde.getText(), tfHasta.getText(), "id");
-//		}
-//		if(cbxOrder.getSelectedIndex()==1){
-//			puertas = dao.filtroListadoNombre(tfDesde.getText(), tfHasta.getText(), "nombre");
-//		}
-//		if(cbxOrder.getSelectedIndex()==2){
-//			puertas = dao.filtroListadoNombre(tfDesde.getText(), tfHasta.getText(), "apellido");
-//		}
-//		tablaPuerta.setLista(puertas);
-//		tablaPuerta.fireTableDataChanged();
-//		lblTotalNumer.setText(puertas.size()+"");
-//	}
-	
-//	private void buscarPorId(){
-//		dao = new FuncionarioDao();
-//		if(cbxOrder.getSelectedIndex()==0){
-//		puertas = dao.filtroListadoId(Integer.parseInt(tfDesde.getText()), Integer.parseInt(tfHasta.getText()), "id");
-//		}
-//		if(cbxOrder.getSelectedIndex()==1){
-//			puertas = dao.filtroListadoId(Integer.parseInt(tfDesde.getText()), Integer.parseInt(tfHasta.getText()), "nombre");
-//		}
-//		if(cbxOrder.getSelectedIndex()==2){
-//			puertas = dao.filtroListadoId(Integer.parseInt(tfDesde.getText()), Integer.parseInt(tfHasta.getText()), "apellido");
-//		}
-//		tablaPuerta.setLista(puertas);
-//		tablaPuerta.fireTableDataChanged();
-//		lblTotalNumer.setText(puertas.size()+"");
-//	}
-//	
-//	private void VerificarYConsultar() {
-//		if (seleccionarFiltro()==false) {
-//			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) {
-//				recuperarTodo();
-//				return;
-//			}
-//			if(tfHasta.getText().isEmpty()) tfHasta.setText("0");
-//			if(tfDesde.getText().isEmpty()) tfDesde.setText("9999999999");
-//			buscarPorId();
-//		}
-//		if (seleccionarFiltro()==true) {
-//			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) {
-//				recuperarTodo();
-//				return;
-//			}
-//			if(tfHasta.getText().isEmpty()) tfHasta.setText("A");
-//			if(tfDesde.getText().isEmpty()) tfDesde.setText("Z");
-//			buscarPorNombre();
-//		}
-//	}
+
 	
 	private boolean seleccionarFiltro() {
 		if(cbFiltro.getSelectedIndex()==0){

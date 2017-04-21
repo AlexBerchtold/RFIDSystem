@@ -50,7 +50,7 @@ public class BuscadorPermisoAcceso extends JDialog  {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode()==KeyEvent.VK_ENTER) {
-					consultarBloqueFiltro();
+					consultarPermisoAcceso();
 				}
 			}
 			@Override
@@ -71,7 +71,7 @@ public class BuscadorPermisoAcceso extends JDialog  {
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount()==2) seleccionarBloque();
+				if (e.getClickCount()==2) seleccionarPermisoAcceso();
 			}
 		});
 		scrollPane.setViewportView(table);
@@ -85,7 +85,7 @@ public class BuscadorPermisoAcceso extends JDialog  {
 		tablaPermisoAcceso.fireTableDataChanged();
 	}
 	
-	private void consultarBloqueFiltro() {
+	private void consultarPermisoAcceso() {
 		if (tfBuscador.getText().isEmpty()) {
 			consultarBloque();
 			return;
@@ -97,7 +97,7 @@ public class BuscadorPermisoAcceso extends JDialog  {
 	}
 	
 	
-	private void seleccionarBloque() {
+	private void seleccionarPermisoAcceso() {
 		if (table.getSelectedRow()<0) return;
 		PermisoAcceso permisoAcceso = permisoAccesos.get(table.getSelectedRow());
 		interfaz.setPermisoAcceso(permisoAcceso);

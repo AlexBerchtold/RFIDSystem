@@ -79,12 +79,12 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 		
 		JLabel lblOficina = new JLabel("Oficina:");
 		lblOficina.setFont(new Font("Arial", Font.BOLD, 12));
-		lblOficina.setBounds(10, 229, 102, 14);
+		lblOficina.setBounds(10, 294, 102, 14);
 		getContentPane().add(lblOficina);
 		
 		JLabel lblPuerta = new JLabel("Funcionario:");
 		lblPuerta.setFont(new Font("Arial", Font.BOLD, 12));
-		lblPuerta.setBounds(10, 289, 102, 14);
+		lblPuerta.setBounds(10, 231, 102, 14);
 		getContentPane().add(lblPuerta);
 		
 		JLabel lblPuerta_1 = new JLabel("Puerta:");
@@ -122,13 +122,13 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 		tfOficina = new JTextField();
 		tfOficina.setEnabled(false);
 		tfOficina.setColumns(10);
-		tfOficina.setBounds(111, 227, 177, 20);
+		tfOficina.setBounds(111, 292, 177, 20);
 		getContentPane().add(tfOficina);
 		
 		tfFuncionario = new JTextField();
 		tfFuncionario.setEnabled(false);
 		tfFuncionario.setColumns(10);
-		tfFuncionario.setBounds(111, 287, 177, 20);
+		tfFuncionario.setBounds(111, 229, 177, 20);
 		getContentPane().add(tfFuncionario);
 		
 		tfPuerta = new JTextField();
@@ -140,12 +140,14 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 		btnBuscarOficina = new BotonPersonalizadoABM();
 		btnBuscarOficina.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				tfPuerta.setText("");
+				puerta=null;
 				abrirBuscadorOficina();
 			}
 		});
 		btnBuscarOficina.setText("...");
 		btnBuscarOficina.setEnabled(false);
-		btnBuscarOficina.setBounds(298, 227, 46, 20);
+		btnBuscarOficina.setBounds(298, 292, 46, 20);
 		getContentPane().add(btnBuscarOficina);
 		
 		btnBuscarFuncionario = new BotonPersonalizadoABM();
@@ -156,13 +158,13 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 		});
 		btnBuscarFuncionario.setText("...");
 		btnBuscarFuncionario.setEnabled(false);
-		btnBuscarFuncionario.setBounds(298, 287, 46, 20);
+		btnBuscarFuncionario.setBounds(298, 229, 46, 20);
 		getContentPane().add(btnBuscarFuncionario);
 		
 		btnBuscadorPuerta = new BotonPersonalizadoABM();
 		btnBuscadorPuerta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				abrirBuscadorPuerta();
+				verificarOficina();
 			}
 		});
 		btnBuscadorPuerta.setText("...");
@@ -361,10 +363,14 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 		BuscadorFuncionario buscadorFuncionario = new BuscadorFuncionario();
 		buscadorFuncionario.setInterfaz(this);
 		buscadorFuncionario.setVisible(true);
+		puerta=null;
+		tfPuerta.setText("");
 	}
 	
 	private void abrirBuscadorPuerta() {
 		BuscadorPuerta buscadorPuerta = new BuscadorPuerta();
+		buscadorPuerta.setId(oficina.getId());
+		buscadorPuerta.consultarPuertas();
 		buscadorPuerta.setInterfaz(this);
 		buscadorPuerta.setVisible(true);
 	}
@@ -421,6 +427,14 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 		}
 		lblCodigoDuplicado.setVisible(false);
 		return false;
+	}
+	
+	private void verificarOficina() {
+		if (tfOficina.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null,"Seleccione una oficina");
+			return;
+		}
+		abrirBuscadorPuerta();
 	}
 	
 	public void inicializarPermisoAcceso() {

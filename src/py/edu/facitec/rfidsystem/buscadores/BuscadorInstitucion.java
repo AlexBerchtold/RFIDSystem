@@ -45,7 +45,7 @@ public class BuscadorInstitucion extends JDialog  {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode()==KeyEvent.VK_ENTER) {
-					consultarEmpleados();
+					consultarInstitucion();
 				}
 			}
 		});
@@ -60,15 +60,15 @@ public class BuscadorInstitucion extends JDialog  {
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount()==2) seleccionarEmpleado();
+				if (e.getClickCount()==2) seleccionarInstitucion();
 			}
 		});
 		scrollPane.setViewportView(table);
-		consultarEmpleados();
+		consultarInstitucion();
 
 	}
 	
-	private void consultarEmpleados() {
+	private void consultarInstitucion() {
 		dao = new InstitucionDao();
 		institucions = dao.recuperarPorFiltro(tfBuscador.getText());
 		tablaInstitucion.setLista(institucions);
@@ -76,7 +76,7 @@ public class BuscadorInstitucion extends JDialog  {
 	}
 	
 	
-	private void seleccionarEmpleado() {
+	private void seleccionarInstitucion() {
 		if (table.getSelectedRow()<0) return;
 		Institucion institucion = institucions.get(table.getSelectedRow());
 		interfaz.setInstitucion(institucion);

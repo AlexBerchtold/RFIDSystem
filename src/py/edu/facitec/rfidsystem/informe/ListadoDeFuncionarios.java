@@ -39,19 +39,6 @@ public class ListadoDeFuncionarios extends JDialog {
 	private JComboBox cbFiltro;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			ListadoDeFuncionarios dialog = new ListadoDeFuncionarios();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
 	 * Create the dialog.
 	 */
 	public ListadoDeFuncionarios() {
@@ -226,11 +213,11 @@ public class ListadoDeFuncionarios extends JDialog {
 	private void VerificarYConsultar() {
 		if (seleccionarFiltro()==false) {
 			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) {
-				recuperarTodo();
+				ordenarTodo();
 				return;
 			}
-			if(tfHasta.getText().isEmpty()) tfHasta.setText("0");
-			if(tfDesde.getText().isEmpty()) tfDesde.setText("9999999999");
+			if(tfHasta.getText().isEmpty()) tfHasta.setText("999999999");
+			if(tfDesde.getText().isEmpty()) tfDesde.setText("0");
 			buscarPorId();
 		}
 		if (seleccionarFiltro()==true) {
@@ -238,13 +225,31 @@ public class ListadoDeFuncionarios extends JDialog {
 				recuperarTodo();
 				return;
 			}
-			if(tfHasta.getText().isEmpty()) tfHasta.setText("A");
-			if(tfDesde.getText().isEmpty()) tfDesde.setText("Z");
+			if(tfHasta.getText().isEmpty()) tfHasta.setText("Z");
+			if(tfDesde.getText().isEmpty()) tfDesde.setText("A");
 			buscarPorNombre();
 		}
 	}
 	
+	private void ordenarTodo() {
+		dao = new FuncionarioDao();
+		if(cbxOrder.getSelectedIndex()==0){
+		funcionarios = dao.filtroListadoId(0, 999999999, "id");
+		}
+		if(cbxOrder.getSelectedIndex()==1){
+			funcionarios = dao.filtroListadoId(0, 999999999, "nombre");
+		}
+		if(cbxOrder.getSelectedIndex()==2){
+			funcionarios = dao.filtroListadoId(0, 999999999, "apellido");
+		}
+		tablaFuncionario.setLista(funcionarios);
+		tablaFuncionario.fireTableDataChanged();
+		lblTotalNumer.setText(funcionarios.size()+"");
+	}
+	
 	private boolean seleccionarFiltro() {
+		tfDesde.setText("");
+		tfHasta.setText("");
 		if(cbFiltro.getSelectedIndex()==0){
 			return false;
 		}else{

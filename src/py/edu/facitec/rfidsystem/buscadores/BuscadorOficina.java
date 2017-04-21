@@ -51,7 +51,7 @@ public class BuscadorOficina extends JDialog  {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode()==KeyEvent.VK_ENTER) {
-					consultarEmpleados();
+					consultarOficina();
 				}
 			}
 		});
@@ -68,15 +68,15 @@ public class BuscadorOficina extends JDialog  {
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount()==2) seleccionarEmpleado();
+				if (e.getClickCount()==2) seleccionarOficina();
 			}
 		});
 		scrollPane.setViewportView(table);
-		consultarEmpleados();
+		consultarOficina();
 
 	}
 	
-	private void consultarEmpleados() {
+	private void consultarOficina() {
 		dao = new OficinaDao();
 		oficinas = dao.recuperarPorFiltro(tfBuscador.getText());
 		tablaOficina.setLista(oficinas);
@@ -84,7 +84,7 @@ public class BuscadorOficina extends JDialog  {
 	}
 	
 	
-	private void seleccionarEmpleado() {
+	private void seleccionarOficina() {
 		if (table.getSelectedRow()<0) return;
 		Oficina oficina = oficinas.get(table.getSelectedRow());
 		interfaz.setOficina(oficina);

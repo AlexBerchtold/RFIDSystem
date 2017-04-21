@@ -23,12 +23,12 @@ import py.edu.facitec.rfidsystem.tablas.TablaBloque;
 import py.edu.facitec.rfidsystem.tablas.TablaPuerta;
 
 public class BuscadorPuerta extends JDialog  {
-	private JTextField tfBuscador;
 	private JTable table;
 	private TablaPuerta tablaPuerta;
 	private PuertaDao dao;
 	private List<Puerta> puertas;
 	private InterfazBuscadoPuerta interfaz;
+	private Integer id;
 	
 	public void setInterfaz(InterfazBuscadoPuerta interfaz) {
 		this.interfaz = interfaz;
@@ -46,18 +46,6 @@ public class BuscadorPuerta extends JDialog  {
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		setResizable(false);
 		
-		tfBuscador = new JTextField();
-		tfBuscador.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode()==KeyEvent.VK_ENTER) {
-					consultarEmpleados();
-				}
-			}
-		});
-		getContentPane().add(tfBuscador, BorderLayout.NORTH);
-		tfBuscador.setColumns(10);
-		
 		JScrollPane scrollPane = new JScrollPane();
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		
@@ -66,27 +54,32 @@ public class BuscadorPuerta extends JDialog  {
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount()==2) seleccionarEmpleado();
+				if (e.getClickCount()==2) seleccionarPuerta();
 			}
 		});
 		scrollPane.setViewportView(table);
-		consultarEmpleados();
-
+		consultarPuertas();
 	}
 	
-	private void consultarEmpleados() {
+	public void consultarPuertas() {
 		dao = new PuertaDao();
-		puertas = dao.recuperarPorFiltro(tfBuscador.getText());
+		puertas = dao.buscadorPuertaPorOficina(id);
 		tablaPuerta.setLista(puertas);
 		tablaPuerta.fireTableDataChanged();
 	}
 	
 	
-	private void seleccionarEmpleado() {
+	private void seleccionarPuerta() {
 		if (table.getSelectedRow()<0) return;
 		Puerta puerta = puertas.get(table.getSelectedRow());
 		interfaz.setPuerta(puerta);;
 		dispose();
 	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	
+	
 
 }

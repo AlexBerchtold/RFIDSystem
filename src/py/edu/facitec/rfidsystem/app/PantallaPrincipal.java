@@ -34,6 +34,8 @@ import py.edu.facitec.rfidsystem.contenedores.PanelFondo;
 import py.edu.facitec.rfidsystem.dao.ConfiguracionDao;
 import py.edu.facitec.rfidsystem.entidad.Configuracion;
 import py.edu.facitec.rfidsystem.entidad.PermisoAcceso;
+import py.edu.facitec.rfidsystem.informe.ListadoDeFuncionarios;
+import py.edu.facitec.rfidsystem.informe.ListadoDePuertas;
 import py.edu.facitec.rfidsystem.util.Factory;
 import javax.swing.JPanel;
 import java.awt.GridBagLayout;
@@ -80,7 +82,7 @@ public class PantallaPrincipal extends JFrame implements KeyEventDispatcher {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(PantallaPrincipal.class.getResource("/py/edu/facitec/rfidsystem/img/icono.png")));
         DefaultKeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(this); 
 		
-		setTitle("RFID System  1.6");
+		setTitle("RFID System  1.7");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1024, 680);
 		setLocationRelativeTo(this);
@@ -169,13 +171,22 @@ public class PantallaPrincipal extends JFrame implements KeyEventDispatcher {
 		menuBar.add(mnInformes);
 		
 		JMenuItemPersonalizado mntmprsnlzdListadoDeEmpleados = new JMenuItemPersonalizado();
-		mntmprsnlzdListadoDeEmpleados.setEnabled(false);
+		mntmprsnlzdListadoDeEmpleados.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				abrirListadoEmpleados();
+			}
+		});
 		mntmprsnlzdListadoDeEmpleados.setText("Listado de Funcionarios");
 		mntmprsnlzdListadoDeEmpleados.setIcon("listaempleado");
 		mnInformes.add(mntmprsnlzdListadoDeEmpleados);
 		
 		JMenuItemPersonalizado mntmprsnlzdListadoDePuerta = new JMenuItemPersonalizado();
 		mntmprsnlzdListadoDePuerta.setEnabled(false);
+		mntmprsnlzdListadoDePuerta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				abrirListadoPuertas();
+			}
+		});
 		mntmprsnlzdListadoDePuerta.setText("Listado de Puertas");
 		mntmprsnlzdListadoDePuerta.setIcon("listapuerta");
 		mnInformes.add(mntmprsnlzdListadoDePuerta);
@@ -387,6 +398,16 @@ public class PantallaPrincipal extends JFrame implements KeyEventDispatcher {
 	private void abrirConfiguracion() {
 		ConfiguracionABM configuracionABM = new ConfiguracionABM();
 		configuracionABM.setVisible(true);
+	}
+	
+	private void abrirListadoEmpleados(){
+		ListadoDeFuncionarios listadoDeFuncionarios = new ListadoDeFuncionarios();
+		listadoDeFuncionarios.setVisible(true);
+	}
+	
+	private void abrirListadoPuertas() {
+	ListadoDePuertas listadoDePuertas = new ListadoDePuertas();
+	listadoDePuertas.setVisible(true);
 	}
 	
 	public void cargarConfiguracion() {
