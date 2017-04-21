@@ -9,6 +9,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -54,7 +55,7 @@ public class PantallaPrincipal extends JFrame implements KeyEventDispatcher {
 	public static JLabel lblEmail2;
 	public static JLabel lblTelefono;
 	public static JLabel lblCelular;
-	private Configuracion configuracion;
+	private List<Configuracion> configuracion;
 	private ConfiguracionDao configuracionDao;
 	public static JPanel jPanelConfig;
 	
@@ -181,7 +182,6 @@ public class PantallaPrincipal extends JFrame implements KeyEventDispatcher {
 		mnInformes.add(mntmprsnlzdListadoDeEmpleados);
 		
 		JMenuItemPersonalizado mntmprsnlzdListadoDePuerta = new JMenuItemPersonalizado();
-		mntmprsnlzdListadoDePuerta.setEnabled(false);
 		mntmprsnlzdListadoDePuerta.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				abrirListadoPuertas();
@@ -412,12 +412,15 @@ public class PantallaPrincipal extends JFrame implements KeyEventDispatcher {
 	
 	public void cargarConfiguracion() {
 		configuracionDao = new ConfiguracionDao();
-		configuracion = configuracionDao.recuperarPorId(1);
-		lblNombre.setText(configuracion.getNombre());
-		lblEmail1.setText(configuracion.getEmail());
-		lblEmail2.setText(configuracion.getEmail2());
-		lblTelefono.setText(configuracion.getTelefono());
-		lblCelular.setText(configuracion.getCelular());
+		configuracion = configuracionDao.recuperarTodo();
+		if (configuracion.size()==0) {
+			return;
+		}
+		lblNombre.setText(configuracion.get(0).getNombre());
+		lblEmail1.setText(configuracion.get(0).getEmail());
+		lblEmail2.setText(configuracion.get(0).getEmail2());
+		lblTelefono.setText(configuracion.get(0).getTelefono());
+		lblCelular.setText(configuracion.get(0).getCelular());
 	}
 	
 	private void inicializarBaseDeDatos() {

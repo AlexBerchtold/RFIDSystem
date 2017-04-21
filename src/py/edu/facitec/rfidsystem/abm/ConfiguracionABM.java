@@ -18,6 +18,7 @@ import py.edu.facitec.rfidsystem.entidad.Configuracion;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.awt.event.ActionEvent;
 
 public class ConfiguracionABM extends JDialog {
@@ -29,6 +30,7 @@ public class ConfiguracionABM extends JDialog {
 	private Configuracion configuracion;
 	private ConfiguracionDao dao;
 	private PantallaPrincipal pantallaPrincipal;
+	private List<Configuracion> configuraciones;
 
 	/**
 	 * Create the dialog.
@@ -158,11 +160,14 @@ public class ConfiguracionABM extends JDialog {
 	
 	private void datosActuales() {
 		dao = new ConfiguracionDao();
-		configuracion = dao.recuperarPorId(1);
-		tfNombre.setText(configuracion.getNombre());
-		tfEmail1.setText(configuracion.getEmail());
-		tfEmail2.setText(configuracion.getEmail2());
-		tfTelefono.setText(configuracion.getTelefono());
-		tfCelular.setText(configuracion.getCelular());
+		configuraciones = dao.recuperarTodo();
+		if (configuraciones.size()==0) {
+			return;
+		}
+		tfNombre.setText(configuraciones.get(0).getNombre());
+		tfEmail1.setText(configuraciones.get(0).getEmail());
+		tfEmail2.setText(configuraciones.get(0).getEmail2());
+		tfTelefono.setText(configuraciones.get(0).getTelefono());
+		tfCelular.setText(configuraciones.get(0).getCelular());
 	}
 }

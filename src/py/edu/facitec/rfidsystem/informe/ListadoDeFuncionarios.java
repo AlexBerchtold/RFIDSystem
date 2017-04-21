@@ -37,6 +37,7 @@ public class ListadoDeFuncionarios extends JDialog {
 	private JComboBox cbxOrder;
 	private JLabel lblTotalNumer;
 	private JComboBox cbFiltro;
+	private JButton btnImprimir;
 
 	/**
 	 * Create the dialog.
@@ -92,6 +93,7 @@ public class ListadoDeFuncionarios extends JDialog {
 		btnProcesas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				VerificarYConsultar();
+				verificarLista();
 			}
 		});
 		btnProcesas.setBounds(501, 11, 108, 30);
@@ -101,6 +103,7 @@ public class ListadoDeFuncionarios extends JDialog {
 		cbxOrder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				VerificarYConsultar();
+				verificarLista();
 			}
 		});
 		cbxOrder.setModel(new DefaultComboBoxModel(new String[] {"Codigo", "Nombre", "Apellido"}));
@@ -118,7 +121,8 @@ public class ListadoDeFuncionarios extends JDialog {
 		table = new JTable(tablaFuncionario);
 		scrollPane.setViewportView(table);
 		
-		JButton btnImprimir = new JButton("Imprimir");
+		btnImprimir = new JButton("Imprimir");
+		btnImprimir.setEnabled(false);
 		btnImprimir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				ConexionReportes<Funcionario> conexionReportes = new ConexionReportes<Funcionario>();
@@ -168,6 +172,7 @@ public class ListadoDeFuncionarios extends JDialog {
 		cbFiltro.setBounds(88, 11, 95, 20);
 		contentPanel.add(cbFiltro);
 		recuperarTodo();
+		verificarLista();
 	}
 	
 	private void recuperarTodo(){
@@ -254,6 +259,14 @@ public class ListadoDeFuncionarios extends JDialog {
 			return false;
 		}else{
 			return true;
+		}
+	}
+	
+	private void verificarLista(){
+		if (funcionarios.size()==0) {
+			btnImprimir.setEnabled(false);
+		}else{
+			btnImprimir.setEnabled(true);
 		}
 	}
 }

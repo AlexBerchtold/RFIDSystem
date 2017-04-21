@@ -20,6 +20,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import net.sf.jasperreports.engine.JRException;
+import py.edu.facitec.rfidsystem.dao.FuncionarioDao;
 import py.edu.facitec.rfidsystem.dao.PuertaDao;
 import py.edu.facitec.rfidsystem.entidad.Puerta;
 import py.edu.facitec.rfidsystem.tablas.TablaPuerta;
@@ -37,6 +38,7 @@ public class ListadoDePuertas extends JDialog {
 	private JComboBox cbxOrder;
 	private JLabel lblTotalNumer;
 	private JComboBox cbFiltro;
+	private JButton btnImprimir;
 
 	/**
 	 * Create the dialog.
@@ -91,7 +93,8 @@ public class ListadoDePuertas extends JDialog {
 		JButton btnProcesas = new JButton("Procesar");
 		btnProcesas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-//				VerificarYConsultar();
+				VerificarYConsultar();
+				verificarLista();
 			}
 		});
 		btnProcesas.setBounds(501, 11, 108, 30);
@@ -100,7 +103,8 @@ public class ListadoDePuertas extends JDialog {
 		cbxOrder = new JComboBox();
 		cbxOrder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				VerificarYConsultar();
+				VerificarYConsultar();
+				verificarLista();
 			}
 		});
 		cbxOrder.setModel(new DefaultComboBoxModel(new String[] {"Codigo", "Descripci\u00F3n", "Numero"}));
@@ -118,7 +122,7 @@ public class ListadoDePuertas extends JDialog {
 		table = new JTable(tablaPuerta);
 		scrollPane.setViewportView(table);
 		
-		JButton btnImprimir = new JButton("Imprimir");
+		btnImprimir = new JButton("Imprimir");
 		btnImprimir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				ConexionReportes<Puerta> conexionReportes = new ConexionReportes<Puerta>();
@@ -168,6 +172,7 @@ public class ListadoDePuertas extends JDialog {
 		cbFiltro.setBounds(88, 11, 95, 20);
 		contentPanel.add(cbFiltro);
 		recuperarTodo();
+		verificarLista();
 	}
 	
 	private void recuperarTodo(){
@@ -177,13 +182,76 @@ public class ListadoDePuertas extends JDialog {
 		tablaPuerta.fireTableDataChanged();
 		lblTotalNumer.setText(puertas.size()+"");
 	}
+	
+	
+	private void buscarPuertas() {
+		dao = new PuertaDao();
+		if(cbxOrder.getSelectedIndex()==0){
+		puertas = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText(), "id");
+		}
+		if(cbxOrder.getSelectedIndex()==1){
+			puertas = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText(), "nombre");
+		}
+		if(cbxOrder.getSelectedIndex()==2){
+			puertas = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText(), "apellido");
+		}
+		tablaPuerta.setLista(puertas);
+		tablaPuerta.fireTableDataChanged();
+		lblTotalNumer.setText(puertas.size()+"");
+	}
 
+	private void VerificarYConsultar() {
+		if (seleccionarFiltro()==false) {
+			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) {
+				ordenarTodo();
+				return;
+			}
+			if(tfHasta.getText().isEmpty()) tfHasta.setText("999999999");
+			if(tfDesde.getText().isEmpty()) tfDesde.setText("0");
+			buscarPuertas();
+		}
+		if (seleccionarFiltro()==true) {
+			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) {
+				recuperarTodo();
+				return;
+			}
+			if(tfHasta.getText().isEmpty()) tfHasta.setText("Z");
+			if(tfDesde.getText().isEmpty()) tfDesde.setText("A");
+			buscarPuertas();
+		}
+	}
+	
+	private void ordenarTodo() {
+		dao = new PuertaDao();
+		if(cbxOrder.getSelectedIndex()==0){
+		puertas = dao.filtroPorOficina("0", "999999999", "id");
+		}
+		if(cbxOrder.getSelectedIndex()==1){
+			puertas = dao.filtroPorOficina("0", "999999999", "nombre");
+		}
+		if(cbxOrder.getSelectedIndex()==2){
+			puertas = dao.filtroPorOficina("0", "999999999", "apellido");
+		}
+		tablaPuerta.setLista(puertas);
+		tablaPuerta.fireTableDataChanged();
+		lblTotalNumer.setText(puertas.size()+"");
+	}
 	
 	private boolean seleccionarFiltro() {
+		tfDesde.setText("");
+		tfHasta.setText("");
 		if(cbFiltro.getSelectedIndex()==0){
 			return false;
 		}else{
 			return true;
+		}
+	}
+	
+	private void verificarLista(){
+		if (puertas.size()==0) {
+			btnImprimir.setEnabled(false);
+		}else{
+			btnImprimir.setEnabled(true);
 		}
 	}
 }
