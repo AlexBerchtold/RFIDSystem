@@ -48,9 +48,10 @@ public class ListadoDeFuncionarios extends JDialog {
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setResizable(false);
-		setLocationRelativeTo(this);
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
+		setLocationRelativeTo(this);
+		setModal(true);
 		
 		tablaFuncionario = new TablaInformeFuncionario();
 		
@@ -166,6 +167,8 @@ public class ListadoDeFuncionarios extends JDialog {
 		cbFiltro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				seleccionarFiltro();
+				tfDesde.setText("");
+				tfHasta.setText("");
 			}
 		});
 		cbFiltro.setModel(new DefaultComboBoxModel(new String[] {"Codigo", "Nombre"}));
@@ -186,13 +189,13 @@ public class ListadoDeFuncionarios extends JDialog {
 	private void buscarPorNombre() {
 		dao = new FuncionarioDao();
 		if(cbxOrder.getSelectedIndex()==0){
-		funcionarios = dao.filtroListadoNombre(tfDesde.getText(), tfHasta.getText(), "id");
+		funcionarios = dao.filtroListadoNombre(tfDesde.getText(), tfHasta.getText()+1, "id");
 		}
 		if(cbxOrder.getSelectedIndex()==1){
-			funcionarios = dao.filtroListadoNombre(tfDesde.getText(), tfHasta.getText(), "nombre");
+			funcionarios = dao.filtroListadoNombre(tfDesde.getText(), tfHasta.getText()+1, "nombre");
 		}
 		if(cbxOrder.getSelectedIndex()==2){
-			funcionarios = dao.filtroListadoNombre(tfDesde.getText(), tfHasta.getText(), "apellido");
+			funcionarios = dao.filtroListadoNombre(tfDesde.getText(), tfHasta.getText()+1, "apellido");
 		}
 		tablaFuncionario.setLista(funcionarios);
 		tablaFuncionario.fireTableDataChanged();
@@ -253,8 +256,6 @@ public class ListadoDeFuncionarios extends JDialog {
 	}
 	
 	private boolean seleccionarFiltro() {
-		tfDesde.setText("");
-		tfHasta.setText("");
 		if(cbFiltro.getSelectedIndex()==0){
 			return false;
 		}else{

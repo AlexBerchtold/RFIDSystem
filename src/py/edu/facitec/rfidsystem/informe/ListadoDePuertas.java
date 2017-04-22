@@ -50,6 +50,7 @@ public class ListadoDePuertas extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setResizable(false);
 		setLocationRelativeTo(this);
+		setModal(true);
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		
@@ -166,6 +167,8 @@ public class ListadoDePuertas extends JDialog {
 		cbFiltro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				seleccionarFiltro();
+				tfDesde.setText("");
+				tfHasta.setText("");
 			}
 		});
 		cbFiltro.setModel(new DefaultComboBoxModel(new String[] {"Codigo", "Descripci\u00F3n"}));
@@ -238,8 +241,6 @@ public class ListadoDePuertas extends JDialog {
 	}
 	
 	private boolean seleccionarFiltro() {
-		tfDesde.setText("");
-		tfHasta.setText("");
 		if(cbFiltro.getSelectedIndex()==0){
 			return false;
 		}else{

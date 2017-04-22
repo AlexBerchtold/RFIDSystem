@@ -88,7 +88,6 @@ public class PuertaDao extends GenericDao<Puerta> {
 			d= Integer.parseInt(desde);
 			h= Integer.parseInt(hasta);
 		} catch (NumberFormatException e) {
-			
 		}
 		instanciarCriteria();
 		Join<Object, Object> joinPuerta1=root.join("oficina");
