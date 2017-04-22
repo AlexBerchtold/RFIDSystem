@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.persistence.criteria.Join;
 
-import org.apache.commons.collections.functors.IfClosure;
-
 import py.edu.facitec.rfidsystem.entidad.Puerta;
 
 public class PuertaDao extends GenericDao<Puerta> {
@@ -94,8 +92,12 @@ public class PuertaDao extends GenericDao<Puerta> {
 		criteriaQuery.where(
 				builder.or(
 						builder.between(joinPuerta1.<String>get("descripcion"), desde.toLowerCase()+"%", hasta.toLowerCase()+"%"),
-						builder.between(root.<Integer>get("id"), d, h)));
-		criteriaQuery.orderBy(builder.asc(root.<Integer>get(order.toLowerCase())));
+						builder.between(root.<Integer>get("numerodepuerta"), d, h)));
+		try {
+			criteriaQuery.orderBy(builder.asc(root.<Integer>get(order.toLowerCase())));
+		} catch (Exception e) {
+			criteriaQuery.orderBy(builder.asc(joinPuerta1.<Integer>get(order.toLowerCase())));
+		}
 		lista = session.createQuery(criteriaQuery).getResultList();
 		cerrar();
 		return lista;

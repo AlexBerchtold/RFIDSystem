@@ -1,11 +1,18 @@
 package py.edu.facitec.rfidsystem.abm;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.List;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
-import java.awt.Font;
-import java.awt.Color;
-import javax.swing.SwingConstants;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import py.edu.facitec.rfidsystem.buscadores.BuscadorFuncionario;
 import py.edu.facitec.rfidsystem.buscadores.BuscadorOficina;
@@ -22,14 +29,6 @@ import py.edu.facitec.rfidsystem.interfaces.InterfazBuscadoPuerta;
 import py.edu.facitec.rfidsystem.interfaces.InterfazBuscadorFuncionario;
 import py.edu.facitec.rfidsystem.interfaces.InterfazBuscardorOficina;
 import py.edu.facitec.rfidsystem.tablas.TablaPermisoAcceso;
-
-import java.awt.event.ActionListener;
-import java.util.List;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 
 public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFuncionario, InterfazBuscadoPuerta, InterfazBuscardorOficina {
 	private JTextField tfCodigo;
@@ -50,7 +49,6 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 	private BotonPersonalizadoABM btnBuscarOficina;
 	private BotonPersonalizadoABM btnBuscadorPuerta;
 	private JLabel lblCodigoDuplicado;
-	private JLabel lblBuscadorNumeros;
 	
 	public PermisoAccesoABM() {
 		btnEliminar.addActionListener(new ActionListener() {
@@ -181,17 +179,6 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 					buscarPorFiltro();
 				}
 			}
-			@Override
-			public void keyTyped(KeyEvent e) {
-				char c = e.getKeyChar();
-				if (!Character.isDigit(c) & c!= e.VK_BACK_SPACE & c!=e.VK_ENTER) {
-					e.consume();
-					lblBuscadorNumeros.setText("*Solo numeros");
-					lblBuscadorNumeros.setVisible(true);
-				}else {
-					lblBuscadorNumeros.setVisible(false);
-				}
-			}
 		});
 		tfBuscar.setColumns(10);
 		tfBuscar.setBounds(517, 97, 267, 20);
@@ -212,12 +199,6 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 		lblCodigoDuplicado.setForeground(Color.RED);
 		lblCodigoDuplicado.setBounds(111, 183, 112, 14);
 		getContentPane().add(lblCodigoDuplicado);
-		
-		lblBuscadorNumeros = new JLabel("*Solo numeros");
-		lblBuscadorNumeros.setVisible(false);
-		lblBuscadorNumeros.setForeground(Color.RED);
-		lblBuscadorNumeros.setBounds(517, 84, 112, 14);
-		getContentPane().add(lblBuscadorNumeros);
 		consultarPermisoAccesos();
 	}
 	
@@ -228,7 +209,6 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 		tfFuncionario.setText("");
 		tfOficina.setText("");
 		tfPuerta.setText("");
-		lblBuscadorNumeros.setVisible(false);
 		lblCodigoDuplicado.setVisible(false);
 	}
 

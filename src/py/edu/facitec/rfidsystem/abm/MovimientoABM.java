@@ -39,7 +39,6 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 	private Movimiento movimiento;
 	private JTextField tfBuscador;
 	private JLabel lblCodigoDuplicado;
-	private JLabel lblBuscadorNumeros;
 	
 	public MovimientoABM() {
 		btnEliminar.addActionListener(new ActionListener() {
@@ -154,17 +153,6 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 					buscarMovimiento();
 				}
 			}
-			@Override
-			public void keyTyped(KeyEvent e) {
-				char c = e.getKeyChar();
-				if (!Character.isDigit(c) & c!= e.VK_BACK_SPACE & c!=e.VK_ENTER) {
-					e.consume();
-					lblBuscadorNumeros.setText("*Solo numeros");
-					lblBuscadorNumeros.setVisible(true);
-				}else{
-					lblBuscadorNumeros.setVisible(false);
-				}
-			}
 		});
 		tfBuscador.setColumns(10);
 		tfBuscador.setBounds(467, 98, 211, 20);
@@ -175,12 +163,6 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 		lblCodigoDuplicado.setVisible(false);
 		lblCodigoDuplicado.setBounds(133, 189, 108, 14);
 		getContentPane().add(lblCodigoDuplicado);
-		
-		lblBuscadorNumeros = new JLabel("New label");
-		lblBuscadorNumeros.setVisible(false);
-		lblBuscadorNumeros.setForeground(Color.RED);
-		lblBuscadorNumeros.setBounds(467, 85, 108, 14);
-		getContentPane().add(lblBuscadorNumeros);
 		consultarMovimiento();
 	}
 	
@@ -190,7 +172,6 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 		tfCodigo.setText("");
 		tfHora.setText("");
 		tfPermisoAcceso.setText("");
-		lblBuscadorNumeros.setVisible(false);
 		lblCodigoDuplicado.setVisible(false);
 	}
 

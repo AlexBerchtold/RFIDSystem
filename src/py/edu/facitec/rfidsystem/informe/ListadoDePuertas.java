@@ -1,6 +1,7 @@
 package py.edu.facitec.rfidsystem.informe;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,7 +21,6 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import net.sf.jasperreports.engine.JRException;
-import py.edu.facitec.rfidsystem.dao.FuncionarioDao;
 import py.edu.facitec.rfidsystem.dao.PuertaDao;
 import py.edu.facitec.rfidsystem.entidad.Puerta;
 import py.edu.facitec.rfidsystem.tablas.TablaPuerta;
@@ -39,12 +39,13 @@ public class ListadoDePuertas extends JDialog {
 	private JLabel lblTotalNumer;
 	private JComboBox cbFiltro;
 	private JButton btnImprimir;
+	private JLabel lblsolonumeros;
 
 	/**
 	 * Create the dialog.
 	 */
 	public ListadoDePuertas() {
-		setTitle("Listado de Funcionarios");
+		setTitle("Listado de Puertas");
 		setBounds(100, 100, 700, 470);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -71,13 +72,19 @@ public class ListadoDePuertas extends JDialog {
 				char c = e.getKeyChar();
 				if (seleccionarFiltro()==false) {
 					if (!Character.isDigit(c) & c!= e.VK_ENTER & c!= e.VK_BACK_SPACE) {
-						e.consume();	
+						e.consume();
+						lblsolonumeros.setVisible(true);
+						lblsolonumeros.setText("*Solo Numeros");
+					}else{
+						lblsolonumeros.setVisible(false);
 					}
 				}else{
 					if (Character.isDigit(c)) {
-						e.consume();	
+						e.consume();
+						lblsolonumeros.setVisible(true);
+						lblsolonumeros.setText("*Solo Letras");
 					}else{
-						
+						lblsolonumeros.setVisible(false);
 					}
 				}
 			}
@@ -87,6 +94,29 @@ public class ListadoDePuertas extends JDialog {
 		tfDesde.setColumns(10);
 		
 		tfHasta = new JTextField();
+		tfHasta.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (seleccionarFiltro()==false) {
+					if (!Character.isDigit(c) & c!= e.VK_ENTER & c!= e.VK_BACK_SPACE) {
+						e.consume();
+						lblsolonumeros.setVisible(true);
+						lblsolonumeros.setText("*Solo Numeros");
+					}else{
+						lblsolonumeros.setVisible(false);
+					}
+				}else{
+					if (Character.isDigit(c)) {
+						e.consume();
+						lblsolonumeros.setVisible(true);
+						lblsolonumeros.setText("*Solo Letras");
+					}else{
+						lblsolonumeros.setVisible(false);
+					}
+				}
+			}
+		});
 		tfHasta.setBounds(290, 54, 186, 20);
 		contentPanel.add(tfHasta);
 		tfHasta.setColumns(10);
@@ -169,11 +199,19 @@ public class ListadoDePuertas extends JDialog {
 				seleccionarFiltro();
 				tfDesde.setText("");
 				tfHasta.setText("");
+				lblsolonumeros.setVisible(false);
 			}
 		});
-		cbFiltro.setModel(new DefaultComboBoxModel(new String[] {"Codigo", "Descripci\u00F3n"}));
+		cbFiltro.setModel(new DefaultComboBoxModel(new String[] {"Codigo", "Oficina"}));
 		cbFiltro.setBounds(88, 11, 95, 20);
 		contentPanel.add(cbFiltro);
+		
+		lblsolonumeros = new JLabel("*SoloNumeros");
+		lblsolonumeros.setVisible(false);
+		lblsolonumeros.setForeground(Color.RED);
+		lblsolonumeros.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblsolonumeros.setBounds(290, 36, 114, 14);
+		contentPanel.add(lblsolonumeros);
 		recuperarTodo();
 		verificarLista();
 	}
@@ -196,7 +234,7 @@ public class ListadoDePuertas extends JDialog {
 			puertas = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText(), "nombre");
 		}
 		if(cbxOrder.getSelectedIndex()==2){
-			puertas = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText(), "apellido");
+			puertas = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText(), "numerodepuerta");
 		}
 		tablaPuerta.setLista(puertas);
 		tablaPuerta.fireTableDataChanged();
@@ -230,10 +268,10 @@ public class ListadoDePuertas extends JDialog {
 		puertas = dao.filtroPorOficina("0", "999999999", "id");
 		}
 		if(cbxOrder.getSelectedIndex()==1){
-			puertas = dao.filtroPorOficina("0", "999999999", "nombre");
+			puertas = dao.filtroPorOficina("0", "999999999", "descripcion");
 		}
 		if(cbxOrder.getSelectedIndex()==2){
-			puertas = dao.filtroPorOficina("0", "999999999", "apellido");
+			puertas = dao.filtroPorOficina("0", "999999999", "numerodepuerta");
 		}
 		tablaPuerta.setLista(puertas);
 		tablaPuerta.fireTableDataChanged();

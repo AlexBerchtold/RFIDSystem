@@ -21,41 +21,41 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import net.sf.jasperreports.engine.JRException;
-import py.edu.facitec.rfidsystem.dao.FuncionarioDao;
-import py.edu.facitec.rfidsystem.entidad.Funcionario;
-import py.edu.facitec.rfidsystem.tablas.TablaInformeFuncionario;
+import py.edu.facitec.rfidsystem.dao.PermisoAccesoDao;
+import py.edu.facitec.rfidsystem.entidad.PermisoAcceso;
+import py.edu.facitec.rfidsystem.tablas.TablaPermisoAcceso;
 import py.edu.facitec.rfidsystem.util.ConexionReportes;
 
-public class ListadoDeFuncionarios extends JDialog {
+public class InformeDeAcceso extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField tfDesde;
 	private JTable table;
 	private JTextField tfHasta;
-	private TablaInformeFuncionario tablaFuncionario;
-	private FuncionarioDao dao;
-	private List<Funcionario> funcionarios;
+	private TablaPermisoAcceso tablaPermisoAcceso;
+	private PermisoAccesoDao dao;
+	private List<PermisoAcceso> permisoAccesos;
 	private JComboBox cbxOrder;
 	private JLabel lblTotalNumer;
 	private JComboBox cbFiltro;
 	private JButton btnImprimir;
-	private JLabel lblsoloNumeros;
+	private JLabel lblsolonumeros;
 
 	/**
 	 * Create the dialog.
 	 */
-	public ListadoDeFuncionarios() {
-		setTitle("Listado de Funcionarios");
+	public InformeDeAcceso() {
+		setTitle("Informe de Accesos");
 		setBounds(100, 100, 700, 470);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setResizable(false);
-		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		contentPanel.setLayout(null);
 		setLocationRelativeTo(this);
 		setModal(true);
+		getContentPane().add(contentPanel, BorderLayout.CENTER);
+		contentPanel.setLayout(null);
 		
-		tablaFuncionario = new TablaInformeFuncionario();
+		tablaPermisoAcceso = new TablaPermisoAcceso();
 		
 		JLabel lblDesde = new JLabel("Desde:");
 		lblDesde.setBounds(234, 14, 46, 14);
@@ -73,17 +73,18 @@ public class ListadoDeFuncionarios extends JDialog {
 				if (seleccionarFiltro()==false) {
 					if (!Character.isDigit(c) & c!= e.VK_ENTER & c!= e.VK_BACK_SPACE) {
 						e.consume();
-						lblsoloNumeros.setVisible(true);
-						lblsoloNumeros.setText("*Solo Numeros");
+						lblsolonumeros.setVisible(true);
+						lblsolonumeros.setText("*Solo Numeros");
 					}else{
-						lblsoloNumeros.setVisible(false);
+						lblsolonumeros.setVisible(false);
 					}
 				}else{
 					if (Character.isDigit(c)) {
-						e.consume();lblsoloNumeros.setVisible(true);
-						lblsoloNumeros.setText("*Solo Letras");
+						e.consume();
+						lblsolonumeros.setVisible(true);
+						lblsolonumeros.setText("*Solo Letras");
 					}else{
-						lblsoloNumeros.setVisible(false);
+						lblsolonumeros.setVisible(false);
 					}
 				}
 			}
@@ -100,17 +101,18 @@ public class ListadoDeFuncionarios extends JDialog {
 				if (seleccionarFiltro()==false) {
 					if (!Character.isDigit(c) & c!= e.VK_ENTER & c!= e.VK_BACK_SPACE) {
 						e.consume();
-						lblsoloNumeros.setVisible(true);
-						lblsoloNumeros.setText("*Solo Numeros");
+						lblsolonumeros.setVisible(true);
+						lblsolonumeros.setText("*Solo Numeros");
 					}else{
-						lblsoloNumeros.setVisible(false);
+						lblsolonumeros.setVisible(false);
 					}
 				}else{
 					if (Character.isDigit(c)) {
-						e.consume();lblsoloNumeros.setVisible(true);
-						lblsoloNumeros.setText("*Solo Letras");
+						e.consume();
+						lblsolonumeros.setVisible(true);
+						lblsolonumeros.setText("*Solo Letras");
 					}else{
-						lblsoloNumeros.setVisible(false);
+						lblsolonumeros.setVisible(false);
 					}
 				}
 			}
@@ -136,7 +138,7 @@ public class ListadoDeFuncionarios extends JDialog {
 				verificarLista();
 			}
 		});
-		cbxOrder.setModel(new DefaultComboBoxModel(new String[] {"Codigo", "Nombre", "Apellido"}));
+		cbxOrder.setModel(new DefaultComboBoxModel(new String[] {"Codigo", "Oficina", "Funcionario"}));
 		cbxOrder.setBounds(88, 54, 95, 20);
 		contentPanel.add(cbxOrder);
 		
@@ -148,16 +150,15 @@ public class ListadoDeFuncionarios extends JDialog {
 		scrollPane.setBounds(10, 95, 674, 294);
 		contentPanel.add(scrollPane);
 		
-		table = new JTable(tablaFuncionario);
+		table = new JTable(tablaPermisoAcceso);
 		scrollPane.setViewportView(table);
 		
 		btnImprimir = new JButton("Imprimir");
-		btnImprimir.setEnabled(false);
 		btnImprimir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ConexionReportes<Funcionario> conexionReportes = new ConexionReportes<Funcionario>();
+				ConexionReportes<PermisoAcceso> conexionReportes = new ConexionReportes<PermisoAcceso>();
 				try {
-					conexionReportes.GerarRealatorio(funcionarios, "ListadoDeEmpleados");
+					conexionReportes.GerarRealatorio(permisoAccesos, "InformeDeAcceso");
 					conexionReportes.viewer.setVisible(true);
 					dispose();
 				} catch (JRException e) {
@@ -198,63 +199,48 @@ public class ListadoDeFuncionarios extends JDialog {
 				seleccionarFiltro();
 				tfDesde.setText("");
 				tfHasta.setText("");
-				lblsoloNumeros.setVisible(false);
+				lblsolonumeros.setVisible(false);
 			}
 		});
-		cbFiltro.setModel(new DefaultComboBoxModel(new String[] {"Codigo", "Nombre"}));
+		cbFiltro.setModel(new DefaultComboBoxModel(new String[] {"Codigo", "Oficina"}));
 		cbFiltro.setBounds(88, 11, 95, 20);
 		contentPanel.add(cbFiltro);
 		
-		lblsoloNumeros = new JLabel("*Solo Numeros");
-		lblsoloNumeros.setVisible(false);
-		lblsoloNumeros.setForeground(Color.RED);
-		lblsoloNumeros.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblsoloNumeros.setBounds(290, 36, 124, 14);
-		contentPanel.add(lblsoloNumeros);
+		lblsolonumeros = new JLabel("*SoloNumeros");
+		lblsolonumeros.setVisible(false);
+		lblsolonumeros.setForeground(Color.RED);
+		lblsolonumeros.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblsolonumeros.setBounds(290, 36, 114, 14);
+		contentPanel.add(lblsolonumeros);
 		recuperarTodo();
 		verificarLista();
 	}
 	
 	private void recuperarTodo(){
-		dao = new FuncionarioDao();
-		funcionarios= dao.recuperarTodo();
-		tablaFuncionario.setLista(funcionarios);
-		tablaFuncionario.fireTableDataChanged();
-		lblTotalNumer.setText(funcionarios.size()+"");
+		dao = new PermisoAccesoDao();
+		permisoAccesos= dao.recuperarTodo();
+		tablaPermisoAcceso.setLista(permisoAccesos);
+		tablaPermisoAcceso.fireTableDataChanged();
+		lblTotalNumer.setText(permisoAccesos.size()+"");
 	}
 	
-	private void buscarPorNombre() {
-		dao = new FuncionarioDao();
+	
+	private void buscarAccesos() {
+		dao = new PermisoAccesoDao();
 		if(cbxOrder.getSelectedIndex()==0){
-		funcionarios = dao.filtroListadoNombre(tfDesde.getText(), tfHasta.getText()+1, "id");
+		permisoAccesos = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText(), "id");
 		}
 		if(cbxOrder.getSelectedIndex()==1){
-			funcionarios = dao.filtroListadoNombre(tfDesde.getText(), tfHasta.getText()+1, "nombre");
+			permisoAccesos = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText(), "descripcion");
 		}
 		if(cbxOrder.getSelectedIndex()==2){
-			funcionarios = dao.filtroListadoNombre(tfDesde.getText(), tfHasta.getText()+1, "apellido");
+			permisoAccesos = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText(), "nombre");
 		}
-		tablaFuncionario.setLista(funcionarios);
-		tablaFuncionario.fireTableDataChanged();
-		lblTotalNumer.setText(funcionarios.size()+"");
+		tablaPermisoAcceso.setLista(permisoAccesos);
+		tablaPermisoAcceso.fireTableDataChanged();
+		lblTotalNumer.setText(permisoAccesos.size()+"");
 	}
-	
-	private void buscarPorId(){
-		dao = new FuncionarioDao();
-		if(cbxOrder.getSelectedIndex()==0){
-		funcionarios = dao.filtroListadoId(Integer.parseInt(tfDesde.getText()), Integer.parseInt(tfHasta.getText()), "id");
-		}
-		if(cbxOrder.getSelectedIndex()==1){
-			funcionarios = dao.filtroListadoId(Integer.parseInt(tfDesde.getText()), Integer.parseInt(tfHasta.getText()), "nombre");
-		}
-		if(cbxOrder.getSelectedIndex()==2){
-			funcionarios = dao.filtroListadoId(Integer.parseInt(tfDesde.getText()), Integer.parseInt(tfHasta.getText()), "apellido");
-		}
-		tablaFuncionario.setLista(funcionarios);
-		tablaFuncionario.fireTableDataChanged();
-		lblTotalNumer.setText(funcionarios.size()+"");
-	}
-	
+
 	private void VerificarYConsultar() {
 		if (seleccionarFiltro()==false) {
 			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) {
@@ -263,7 +249,7 @@ public class ListadoDeFuncionarios extends JDialog {
 			}
 			if(tfHasta.getText().isEmpty()) tfHasta.setText("999999999");
 			if(tfDesde.getText().isEmpty()) tfDesde.setText("0");
-			buscarPorId();
+			buscarAccesos();
 		}
 		if (seleccionarFiltro()==true) {
 			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) {
@@ -272,24 +258,24 @@ public class ListadoDeFuncionarios extends JDialog {
 			}
 			if(tfHasta.getText().isEmpty()) tfHasta.setText("Z");
 			if(tfDesde.getText().isEmpty()) tfDesde.setText("A");
-			buscarPorNombre();
+			buscarAccesos();
 		}
 	}
 	
 	private void ordenarTodo() {
-		dao = new FuncionarioDao();
+		dao = new PermisoAccesoDao();
 		if(cbxOrder.getSelectedIndex()==0){
-		funcionarios = dao.filtroListadoId(0, 999999999, "id");
+		permisoAccesos = dao.filtroPorOficina("0", "999999999", "id");
 		}
 		if(cbxOrder.getSelectedIndex()==1){
-			funcionarios = dao.filtroListadoId(0, 999999999, "nombre");
+			permisoAccesos = dao.filtroPorOficina("0", "999999999", "nombre");
 		}
 		if(cbxOrder.getSelectedIndex()==2){
-			funcionarios = dao.filtroListadoId(0, 999999999, "apellido");
+			permisoAccesos = dao.filtroPorOficina("0", "999999999", "apellido");
 		}
-		tablaFuncionario.setLista(funcionarios);
-		tablaFuncionario.fireTableDataChanged();
-		lblTotalNumer.setText(funcionarios.size()+"");
+		tablaPermisoAcceso.setLista(permisoAccesos);
+		tablaPermisoAcceso.fireTableDataChanged();
+		lblTotalNumer.setText(permisoAccesos.size()+"");
 	}
 	
 	private boolean seleccionarFiltro() {
@@ -301,7 +287,7 @@ public class ListadoDeFuncionarios extends JDialog {
 	}
 	
 	private void verificarLista(){
-		if (funcionarios.size()==0) {
+		if (permisoAccesos.size()==0) {
 			btnImprimir.setEnabled(false);
 		}else{
 			btnImprimir.setEnabled(true);

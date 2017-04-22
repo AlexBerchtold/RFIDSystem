@@ -35,6 +35,7 @@ import py.edu.facitec.rfidsystem.contenedores.PanelFondo;
 import py.edu.facitec.rfidsystem.dao.ConfiguracionDao;
 import py.edu.facitec.rfidsystem.entidad.Configuracion;
 import py.edu.facitec.rfidsystem.entidad.PermisoAcceso;
+import py.edu.facitec.rfidsystem.informe.InformeDeAcceso;
 import py.edu.facitec.rfidsystem.informe.ListadoDeFuncionarios;
 import py.edu.facitec.rfidsystem.informe.ListadoDePuertas;
 import py.edu.facitec.rfidsystem.util.Factory;
@@ -192,7 +193,11 @@ public class PantallaPrincipal extends JFrame implements KeyEventDispatcher {
 		mnInformes.add(mntmprsnlzdListadoDePuerta);
 		
 		JMenuItemPersonalizado mntmprsnlzdInformesDeAcceso = new JMenuItemPersonalizado();
-		mntmprsnlzdInformesDeAcceso.setEnabled(false);
+		mntmprsnlzdInformesDeAcceso.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				abrirInformeAcceso();
+			}
+		});
 		mntmprsnlzdInformesDeAcceso.setText("Informe de Accesos");
 		mntmprsnlzdInformesDeAcceso.setIcon("listaacceso");
 		mnInformes.add(mntmprsnlzdInformesDeAcceso);
@@ -408,6 +413,12 @@ public class PantallaPrincipal extends JFrame implements KeyEventDispatcher {
 	private void abrirListadoPuertas() {
 	ListadoDePuertas listadoDePuertas = new ListadoDePuertas();
 	listadoDePuertas.setVisible(true);
+	}
+	
+	private void abrirInformeAcceso() {
+		InformeDeAcceso informeDeAcceso = new InformeDeAcceso();
+		informeDeAcceso.setVisible(true);
+
 	}
 	
 	public void cargarConfiguracion() {
