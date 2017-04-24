@@ -268,10 +268,10 @@ public class InformeDeAcceso extends JDialog {
 		permisoAccesos = dao.filtroPorOficina("0", "999999999", "id");
 		}
 		if(cbxOrder.getSelectedIndex()==1){
-			permisoAccesos = dao.filtroPorOficina("0", "999999999", "nombre");
+			permisoAccesos = dao.filtroPorOficina("0", "999999999", "descripcion");
 		}
 		if(cbxOrder.getSelectedIndex()==2){
-			permisoAccesos = dao.filtroPorOficina("0", "999999999", "apellido");
+			permisoAccesos = dao.filtroPorOficina("0", "999999999", "nombre");
 		}
 		tablaPermisoAcceso.setLista(permisoAccesos);
 		tablaPermisoAcceso.fireTableDataChanged();

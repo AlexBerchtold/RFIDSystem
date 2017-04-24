@@ -231,10 +231,10 @@ public class ListadoDePuertas extends JDialog {
 		puertas = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText(), "id");
 		}
 		if(cbxOrder.getSelectedIndex()==1){
-			puertas = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText(), "nombre");
+			puertas = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText(), "descripcion");
 		}
 		if(cbxOrder.getSelectedIndex()==2){
-			puertas = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText(), "numerodepuerta");
+			puertas = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText(), "numeroDePuerta");
 		}
 		tablaPuerta.setLista(puertas);
 		tablaPuerta.fireTableDataChanged();
@@ -271,7 +271,7 @@ public class ListadoDePuertas extends JDialog {
 			puertas = dao.filtroPorOficina("0", "999999999", "descripcion");
 		}
 		if(cbxOrder.getSelectedIndex()==2){
-			puertas = dao.filtroPorOficina("0", "999999999", "numerodepuerta");
+			puertas = dao.filtroPorOficina("0", "999999999", "numeroDePuerta");
 		}
 		tablaPuerta.setLista(puertas);
 		tablaPuerta.fireTableDataChanged();

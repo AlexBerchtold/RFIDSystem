@@ -48,7 +48,7 @@ public class PermisoAccesoDao extends GenericDao<PermisoAcceso> {
 						builder.between(joinOficina.<String>get("descripcion"), desde.toLowerCase()+"%", hasta.toLowerCase()+"%"),
 						builder.between(joinFuncionario.<String>get("nombre"), desde.toLowerCase()+"%", hasta.toLowerCase()+"%"),
 						builder.between(root.<Integer>get("id"), d, h)));
-		criteriaQuery.orderBy(builder.asc(root.<Integer>get(order.toLowerCase())));
+		criteriaQuery.orderBy(builder.asc(root.<Integer>get(order)));
 		lista = session.createQuery(criteriaQuery).getResultList();
 		cerrar();
 		return lista;
