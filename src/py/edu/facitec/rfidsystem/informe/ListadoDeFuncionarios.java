@@ -228,13 +228,13 @@ public class ListadoDeFuncionarios extends JDialog {
 	private void buscarPorNombre() {
 		dao = new FuncionarioDao();
 		if(cbxOrder.getSelectedIndex()==0){
-		funcionarios = dao.filtroListadoNombre(tfDesde.getText(), tfHasta.getText()+1, "id");
+		funcionarios = dao.filtroListadoNombre(tfDesde.getText(), tfHasta.getText()+"zzzzz", "id");
 		}
 		if(cbxOrder.getSelectedIndex()==1){
-			funcionarios = dao.filtroListadoNombre(tfDesde.getText(), tfHasta.getText()+1, "nombre");
+			funcionarios = dao.filtroListadoNombre(tfDesde.getText(), tfHasta.getText()+"zzzzz", "nombre");
 		}
 		if(cbxOrder.getSelectedIndex()==2){
-			funcionarios = dao.filtroListadoNombre(tfDesde.getText(), tfHasta.getText()+1, "apellido");
+			funcionarios = dao.filtroListadoNombre(tfDesde.getText(), tfHasta.getText()+"zzzzz", "apellido");
 		}
 		tablaFuncionario.setLista(funcionarios);
 		tablaFuncionario.fireTableDataChanged();
@@ -272,7 +272,7 @@ public class ListadoDeFuncionarios extends JDialog {
 				recuperarTodo();
 				return;
 			}
-			if(tfHasta.getText().isEmpty()) tfHasta.setText("Z");
+			if(tfHasta.getText().isEmpty()) tfHasta.setText("Zzzzzz");
 			if(tfDesde.getText().isEmpty()) tfDesde.setText("A");
 			buscarPorNombre();
 		}

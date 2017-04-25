@@ -21,21 +21,21 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import net.sf.jasperreports.engine.JRException;
-import py.edu.facitec.rfidsystem.dao.PuertaDao;
-import py.edu.facitec.rfidsystem.entidad.Puerta;
-import py.edu.facitec.rfidsystem.tablas.TablaPuerta;
+import py.edu.facitec.rfidsystem.dao.PermisoAccesoDao;
+import py.edu.facitec.rfidsystem.entidad.PermisoAcceso;
+import py.edu.facitec.rfidsystem.tablas.TablaPermisoAcceso;
 import py.edu.facitec.rfidsystem.util.ConexionReportes;
 import java.awt.Toolkit;
 
-public class ListadoDePuertas extends JDialog {
+public class InformeDeMovimiento extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField tfDesde;
 	private JTable table;
 	private JTextField tfHasta;
-	private TablaPuerta tablaPuerta;
-	private PuertaDao dao;
-	private List<Puerta> puertas;
+	private TablaPermisoAcceso tablaPermisoAcceso;
+	private PermisoAccesoDao dao;
+	private List<PermisoAcceso> permisoAccesos;
 	private JComboBox cbxOrder;
 	private JLabel lblTotalNumer;
 	private JComboBox cbFiltro;
@@ -45,9 +45,9 @@ public class ListadoDePuertas extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public ListadoDePuertas() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(ListadoDePuertas.class.getResource("/py/edu/facitec/rfidsystem/img/listapuerta.png")));
-		setTitle("Listado de Puertas");
+	public InformeDeMovimiento() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(InformeDeMovimiento.class.getResource("/py/edu/facitec/rfidsystem/img/listaacceso.png")));
+		setTitle("Informe de Movimientos");
 		setBounds(100, 100, 700, 470);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -57,7 +57,7 @@ public class ListadoDePuertas extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		
-		tablaPuerta = new TablaPuerta();
+		tablaPermisoAcceso = new TablaPermisoAcceso();
 		
 		JLabel lblDesde = new JLabel("Desde:");
 		lblDesde.setBounds(234, 14, 46, 14);
@@ -72,7 +72,7 @@ public class ListadoDePuertas extends JDialog {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
-				if (seleccionarFiltro()==false) {
+				if (cbFiltro.getSelectedIndex()==0) {
 					if (!Character.isDigit(c) & c!= e.VK_ENTER & c!= e.VK_BACK_SPACE) {
 						e.consume();
 						lblsolonumeros.setVisible(true);
@@ -100,7 +100,7 @@ public class ListadoDePuertas extends JDialog {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
-				if (seleccionarFiltro()==false) {
+				if (cbFiltro.getSelectedIndex()==0) {
 					if (!Character.isDigit(c) & c!= e.VK_ENTER & c!= e.VK_BACK_SPACE) {
 						e.consume();
 						lblsolonumeros.setVisible(true);
@@ -126,8 +126,7 @@ public class ListadoDePuertas extends JDialog {
 		JButton btnProcesas = new JButton("Procesar");
 		btnProcesas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				VerificarYConsultar();
-				verificarLista();
+				
 			}
 		});
 		btnProcesas.setBounds(501, 11, 108, 30);
@@ -136,12 +135,11 @@ public class ListadoDePuertas extends JDialog {
 		cbxOrder = new JComboBox();
 		cbxOrder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				VerificarYConsultar();
-				verificarLista();
+				
 			}
 		});
-		cbxOrder.setModel(new DefaultComboBoxModel(new String[] {"Codigo", "Descripci\u00F3n", "Numero"}));
-		cbxOrder.setBounds(88, 54, 108, 20);
+		cbxOrder.setModel(new DefaultComboBoxModel(new String[] {"Oficina", "Funcionario", "Hora"}));
+		cbxOrder.setBounds(88, 54, 95, 20);
 		contentPanel.add(cbxOrder);
 		
 		JLabel lblOrdenarPor = new JLabel("Ordenar Por:");
@@ -152,15 +150,15 @@ public class ListadoDePuertas extends JDialog {
 		scrollPane.setBounds(10, 95, 674, 294);
 		contentPanel.add(scrollPane);
 		
-		table = new JTable(tablaPuerta);
+		table = new JTable(tablaPermisoAcceso);
 		scrollPane.setViewportView(table);
 		
 		btnImprimir = new JButton("Imprimir");
 		btnImprimir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				ConexionReportes<Puerta> conexionReportes = new ConexionReportes<Puerta>();
+				ConexionReportes<PermisoAcceso> conexionReportes = new ConexionReportes<PermisoAcceso>();
 				try {
-					conexionReportes.GerarRealatorio(puertas, "ListadoDePuertas");
+					conexionReportes.GerarRealatorio(permisoAccesos, "InformeDeAcceso");
 					conexionReportes.viewer.setVisible(true);
 					dispose();
 				} catch (JRException e) {
@@ -198,14 +196,13 @@ public class ListadoDePuertas extends JDialog {
 		cbFiltro = new JComboBox();
 		cbFiltro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				seleccionarFiltro();
 				tfDesde.setText("");
 				tfHasta.setText("");
 				lblsolonumeros.setVisible(false);
 			}
 		});
-		cbFiltro.setModel(new DefaultComboBoxModel(new String[] {"Nro. de Puerta", "Oficina"}));
-		cbFiltro.setBounds(88, 11, 108, 20);
+		cbFiltro.setModel(new DefaultComboBoxModel(new String[] {"Oficina", "Funcionario", "Hora"}));
+		cbFiltro.setBounds(88, 11, 95, 20);
 		contentPanel.add(cbFiltro);
 		
 		lblsolonumeros = new JLabel("*SoloNumeros");
@@ -219,77 +216,16 @@ public class ListadoDePuertas extends JDialog {
 	}
 	
 	private void recuperarTodo(){
-		dao = new PuertaDao();
-		puertas= dao.recuperarTodo();
-		tablaPuerta.setLista(puertas);
-		tablaPuerta.fireTableDataChanged();
-		lblTotalNumer.setText(puertas.size()+"");
+		dao = new PermisoAccesoDao();
+		permisoAccesos= dao.recuperarTodo();
+		tablaPermisoAcceso.setLista(permisoAccesos);
+		tablaPermisoAcceso.fireTableDataChanged();
+		lblTotalNumer.setText(permisoAccesos.size()+"");
 	}
 	
-	
-	private void buscarPuertas() {
-		dao = new PuertaDao();
-		if(cbxOrder.getSelectedIndex()==0){
-		puertas = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText()+"zzzzz", "id");
-		}
-		if(cbxOrder.getSelectedIndex()==1){
-			puertas = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText()+"zzzzz", "descripcion");
-		}
-		if(cbxOrder.getSelectedIndex()==2){
-			puertas = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText()+"zzzzz", "numeroDePuerta");
-		}
-		tablaPuerta.setLista(puertas);
-		tablaPuerta.fireTableDataChanged();
-		lblTotalNumer.setText(puertas.size()+"");
-	}
-
-	private void VerificarYConsultar() {
-		if (seleccionarFiltro()==false) {
-			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) {
-				ordenarTodo();
-				return;
-			}
-			if(tfHasta.getText().isEmpty()) tfHasta.setText("999999999");
-			if(tfDesde.getText().isEmpty()) tfDesde.setText("0");
-			buscarPuertas();
-		}
-		if (seleccionarFiltro()==true) {
-			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) {
-				recuperarTodo();
-				return;
-			}
-			if(tfHasta.getText().isEmpty()) tfHasta.setText("Z");
-			if(tfDesde.getText().isEmpty()) tfDesde.setText("A");
-			buscarPuertas();
-		}
-	}
-	
-	private void ordenarTodo() {
-		dao = new PuertaDao();
-		if(cbxOrder.getSelectedIndex()==0){
-		puertas = dao.filtroPorOficina("0", "999999999", "id");
-		}
-		if(cbxOrder.getSelectedIndex()==1){
-			puertas = dao.filtroPorOficina("0", "999999999", "descripcion");
-		}
-		if(cbxOrder.getSelectedIndex()==2){
-			puertas = dao.filtroPorOficina("0", "999999999", "numeroDePuerta");
-		}
-		tablaPuerta.setLista(puertas);
-		tablaPuerta.fireTableDataChanged();
-		lblTotalNumer.setText(puertas.size()+"");
-	}
-	
-	private boolean seleccionarFiltro() {
-		if(cbFiltro.getSelectedIndex()==0){
-			return false;
-		}else{
-			return true;
-		}
-	}
 	
 	private void verificarLista(){
-		if (puertas.size()==0) {
+		if (permisoAccesos.size()==0) {
 			btnImprimir.setEnabled(false);
 		}else{
 			btnImprimir.setEnabled(true);
