@@ -25,6 +25,7 @@ import py.edu.facitec.rfidsystem.dao.PuertaDao;
 import py.edu.facitec.rfidsystem.entidad.Puerta;
 import py.edu.facitec.rfidsystem.tablas.TablaPuerta;
 import py.edu.facitec.rfidsystem.util.ConexionReportes;
+import java.awt.Toolkit;
 
 public class ListadoDePuertas extends JDialog {
 
@@ -45,6 +46,7 @@ public class ListadoDePuertas extends JDialog {
 	 * Create the dialog.
 	 */
 	public ListadoDePuertas() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(ListadoDePuertas.class.getResource("/py/edu/facitec/rfidsystem/img/listapuerta.png")));
 		setTitle("Listado de Puertas");
 		setBounds(100, 100, 700, 470);
 		getContentPane().setLayout(new BorderLayout());
@@ -139,7 +141,7 @@ public class ListadoDePuertas extends JDialog {
 			}
 		});
 		cbxOrder.setModel(new DefaultComboBoxModel(new String[] {"Codigo", "Descripci\u00F3n", "Numero"}));
-		cbxOrder.setBounds(88, 54, 95, 20);
+		cbxOrder.setBounds(88, 54, 108, 20);
 		contentPanel.add(cbxOrder);
 		
 		JLabel lblOrdenarPor = new JLabel("Ordenar Por:");
@@ -202,8 +204,8 @@ public class ListadoDePuertas extends JDialog {
 				lblsolonumeros.setVisible(false);
 			}
 		});
-		cbFiltro.setModel(new DefaultComboBoxModel(new String[] {"Codigo", "Oficina"}));
-		cbFiltro.setBounds(88, 11, 95, 20);
+		cbFiltro.setModel(new DefaultComboBoxModel(new String[] {"Nro. de Puerta", "Oficina"}));
+		cbFiltro.setBounds(88, 11, 108, 20);
 		contentPanel.add(cbFiltro);
 		
 		lblsolonumeros = new JLabel("*SoloNumeros");

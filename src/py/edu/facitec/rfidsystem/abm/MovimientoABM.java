@@ -26,6 +26,7 @@ import py.edu.facitec.rfidsystem.entidad.PermisoAcceso;
 import py.edu.facitec.rfidsystem.interfaces.InterfazBuscadorPermisoAcceso;
 import py.edu.facitec.rfidsystem.tablas.TablaMovimiento;
 import py.edu.facitec.rfidsystem.util.FechaUtil;
+import java.awt.Toolkit;
 
 public class MovimientoABM extends GenericABM implements InterfazBuscadorPermisoAcceso{
 	private JTextField tfPermisoAcceso;
@@ -41,6 +42,7 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 	private JLabel lblCodigoDuplicado;
 	
 	public MovimientoABM() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(MovimientoABM.class.getResource("/py/edu/facitec/rfidsystem/img/movimientos.png")));
 		btnEliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				eliminar();

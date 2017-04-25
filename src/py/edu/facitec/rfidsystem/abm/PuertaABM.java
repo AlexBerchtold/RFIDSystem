@@ -29,6 +29,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.Toolkit;
 
 public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 	private JTextField tfBuscar;
@@ -53,6 +54,7 @@ public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 	private JLabel lblnroDePuerta;
 	
 	public PuertaABM() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(PuertaABM.class.getResource("/py/edu/facitec/rfidsystem/img/puertas.png")));
 		scrollPane.setBounds(400, 168, 384, 318);
 		setTitle("Registro de Puerta");
 		btnEliminar.addActionListener(new ActionListener() {

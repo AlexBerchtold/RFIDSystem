@@ -30,6 +30,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.Toolkit;
 
 public class FuncionarioABM extends GenericABM {
 	private JTextField tfBuscar;
@@ -57,6 +58,7 @@ public class FuncionarioABM extends GenericABM {
 	 * Create the dialog.
 	 */
 	public FuncionarioABM() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(FuncionarioABM.class.getResource("/py/edu/facitec/rfidsystem/img/empleado.png")));
 		setTitle("Registro de Funcionario");
 		btnEliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

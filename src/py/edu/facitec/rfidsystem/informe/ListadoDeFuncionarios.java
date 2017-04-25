@@ -25,6 +25,7 @@ import py.edu.facitec.rfidsystem.dao.FuncionarioDao;
 import py.edu.facitec.rfidsystem.entidad.Funcionario;
 import py.edu.facitec.rfidsystem.tablas.TablaInformeFuncionario;
 import py.edu.facitec.rfidsystem.util.ConexionReportes;
+import java.awt.Toolkit;
 
 public class ListadoDeFuncionarios extends JDialog {
 
@@ -45,6 +46,7 @@ public class ListadoDeFuncionarios extends JDialog {
 	 * Create the dialog.
 	 */
 	public ListadoDeFuncionarios() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(ListadoDeFuncionarios.class.getResource("/py/edu/facitec/rfidsystem/img/listaempleado.png")));
 		setTitle("Listado de Funcionarios");
 		setBounds(100, 100, 700, 470);
 		getContentPane().setLayout(new BorderLayout());

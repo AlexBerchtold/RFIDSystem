@@ -20,6 +20,7 @@ import py.edu.facitec.rfidsystem.entidad.Institucion;
 import py.edu.facitec.rfidsystem.tablas.TablaInstitucion;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.Toolkit;
 
 public class InstitucionABM extends GenericABM {
 	private JTextField tfBuscar;
@@ -34,6 +35,7 @@ public class InstitucionABM extends GenericABM {
 	private JLabel lblcodigoDuplicado;
 	
 	public InstitucionABM() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(InstitucionABM.class.getResource("/py/edu/facitec/rfidsystem/img/institucion.png")));
 		setTitle("Registro de Institución");
 		setBounds(100, 100, 697, 449);
 		setLocationRelativeTo(this);

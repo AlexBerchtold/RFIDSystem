@@ -29,6 +29,7 @@ import py.edu.facitec.rfidsystem.interfaces.InterfazBuscadoPuerta;
 import py.edu.facitec.rfidsystem.interfaces.InterfazBuscadorFuncionario;
 import py.edu.facitec.rfidsystem.interfaces.InterfazBuscardorOficina;
 import py.edu.facitec.rfidsystem.tablas.TablaPermisoAcceso;
+import java.awt.Toolkit;
 
 public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFuncionario, InterfazBuscadoPuerta, InterfazBuscardorOficina {
 	private JTextField tfCodigo;
@@ -51,6 +52,7 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 	private JLabel lblCodigoDuplicado;
 	
 	public PermisoAccesoABM() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(PermisoAccesoABM.class.getResource("/py/edu/facitec/rfidsystem/img/acceso.png")));
 		btnEliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				eliminar();

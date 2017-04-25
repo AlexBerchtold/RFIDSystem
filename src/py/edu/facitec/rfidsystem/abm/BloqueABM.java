@@ -23,6 +23,7 @@ import py.edu.facitec.rfidsystem.interfaces.InterfazBuscarInstitucion;
 import py.edu.facitec.rfidsystem.tablas.TablaBloque;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.Toolkit;
 
 public class BloqueABM extends GenericABM implements InterfazBuscarInstitucion {
 	private JTextField tfBuscar;
@@ -40,6 +41,7 @@ public class BloqueABM extends GenericABM implements InterfazBuscarInstitucion {
 	private JLabel lblcdigoDuplicado;
 	
 	public BloqueABM() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(BloqueABM.class.getResource("/py/edu/facitec/rfidsystem/img/bloque.png")));
 		btnEliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				eliminar();

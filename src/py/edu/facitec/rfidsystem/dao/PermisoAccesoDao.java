@@ -33,22 +33,22 @@ public class PermisoAccesoDao extends GenericDao<PermisoAcceso> {
 		return lista;
 	}
 	
-	public List<PermisoAcceso> filtroPorOficina(String desde, String hasta, String order) {
-		Integer d =0, h =0;
-		try {
-			d= Integer.parseInt(desde);
-			h= Integer.parseInt(hasta);
-		} catch (NumberFormatException e) {
-		}
+	public List<PermisoAcceso> filtroPorOficina(String desde, String hasta, int order, int filtro) {
 		instanciarCriteria();
 		Join<Object, Object> joinOficina=root.join("oficina");
 		Join<Object, Object> joinFuncionario=root.join("funcionario");
-		criteriaQuery.where(
-				builder.or(
-						builder.between(joinOficina.<String>get("descripcion"), desde.toLowerCase()+"%", hasta.toLowerCase()+"%"),
-						builder.between(joinFuncionario.<String>get("nombre"), desde.toLowerCase()+"%", hasta.toLowerCase()+"%"),
-						builder.between(root.<Integer>get("id"), d, h)));
-		criteriaQuery.orderBy(builder.asc(root.<Integer>get(order)));
+		if (filtro==0) {
+			criteriaQuery.where(
+					builder.between(joinOficina.<String>get("descripcion"), desde.toLowerCase()+"%", hasta.toLowerCase()+"%"));
+		}else{
+			criteriaQuery.where(
+					builder.between(joinFuncionario.<String>get("nombre"), desde.toLowerCase()+"%", hasta.toLowerCase()+"%"));
+		}
+		if (order==0) {
+			criteriaQuery.orderBy(builder.asc(joinOficina.<Integer>get("descripcion")));
+		}else{
+			criteriaQuery.orderBy(builder.asc(joinFuncionario.<Integer>get("nombre")));
+		}
 		lista = session.createQuery(criteriaQuery).getResultList();
 		cerrar();
 		return lista;

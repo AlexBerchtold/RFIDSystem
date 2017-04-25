@@ -25,6 +25,7 @@ import py.edu.facitec.rfidsystem.dao.PermisoAccesoDao;
 import py.edu.facitec.rfidsystem.entidad.PermisoAcceso;
 import py.edu.facitec.rfidsystem.tablas.TablaPermisoAcceso;
 import py.edu.facitec.rfidsystem.util.ConexionReportes;
+import java.awt.Toolkit;
 
 public class InformeDeAcceso extends JDialog {
 
@@ -45,6 +46,7 @@ public class InformeDeAcceso extends JDialog {
 	 * Create the dialog.
 	 */
 	public InformeDeAcceso() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(InformeDeAcceso.class.getResource("/py/edu/facitec/rfidsystem/img/listaacceso.png")));
 		setTitle("Informe de Accesos");
 		setBounds(100, 100, 700, 470);
 		getContentPane().setLayout(new BorderLayout());
@@ -70,15 +72,6 @@ public class InformeDeAcceso extends JDialog {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
-				if (seleccionarFiltro()==false) {
-					if (!Character.isDigit(c) & c!= e.VK_ENTER & c!= e.VK_BACK_SPACE) {
-						e.consume();
-						lblsolonumeros.setVisible(true);
-						lblsolonumeros.setText("*Solo Numeros");
-					}else{
-						lblsolonumeros.setVisible(false);
-					}
-				}else{
 					if (Character.isDigit(c)) {
 						e.consume();
 						lblsolonumeros.setVisible(true);
@@ -87,7 +80,6 @@ public class InformeDeAcceso extends JDialog {
 						lblsolonumeros.setVisible(false);
 					}
 				}
-			}
 		});
 		tfDesde.setBounds(290, 14, 186, 20);
 		contentPanel.add(tfDesde);
@@ -98,22 +90,12 @@ public class InformeDeAcceso extends JDialog {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
-				if (seleccionarFiltro()==false) {
-					if (!Character.isDigit(c) & c!= e.VK_ENTER & c!= e.VK_BACK_SPACE) {
-						e.consume();
-						lblsolonumeros.setVisible(true);
-						lblsolonumeros.setText("*Solo Numeros");
-					}else{
-						lblsolonumeros.setVisible(false);
-					}
+				if (Character.isDigit(c)) {
+					e.consume();
+					lblsolonumeros.setVisible(true);
+					lblsolonumeros.setText("*Solo Letras");
 				}else{
-					if (Character.isDigit(c)) {
-						e.consume();
-						lblsolonumeros.setVisible(true);
-						lblsolonumeros.setText("*Solo Letras");
-					}else{
-						lblsolonumeros.setVisible(false);
-					}
+					lblsolonumeros.setVisible(false);
 				}
 			}
 		});
@@ -138,7 +120,7 @@ public class InformeDeAcceso extends JDialog {
 				verificarLista();
 			}
 		});
-		cbxOrder.setModel(new DefaultComboBoxModel(new String[] {"Codigo", "Oficina", "Funcionario"}));
+		cbxOrder.setModel(new DefaultComboBoxModel(new String[] {"Oficina", "Funcionario"}));
 		cbxOrder.setBounds(88, 54, 95, 20);
 		contentPanel.add(cbxOrder);
 		
@@ -196,13 +178,12 @@ public class InformeDeAcceso extends JDialog {
 		cbFiltro = new JComboBox();
 		cbFiltro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				seleccionarFiltro();
 				tfDesde.setText("");
 				tfHasta.setText("");
 				lblsolonumeros.setVisible(false);
 			}
 		});
-		cbFiltro.setModel(new DefaultComboBoxModel(new String[] {"Codigo", "Oficina"}));
+		cbFiltro.setModel(new DefaultComboBoxModel(new String[] {"Oficina", "Funcionario"}));
 		cbFiltro.setBounds(88, 11, 95, 20);
 		contentPanel.add(cbFiltro);
 		
@@ -228,13 +209,10 @@ public class InformeDeAcceso extends JDialog {
 	private void buscarAccesos() {
 		dao = new PermisoAccesoDao();
 		if(cbxOrder.getSelectedIndex()==0){
-		permisoAccesos = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText(), "id");
+		permisoAccesos = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText()+"zzz", 0, cbFiltro.getSelectedIndex());
 		}
 		if(cbxOrder.getSelectedIndex()==1){
-			permisoAccesos = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText(), "descripcion");
-		}
-		if(cbxOrder.getSelectedIndex()==2){
-			permisoAccesos = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText(), "nombre");
+			permisoAccesos = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText()+"zzz", 1, cbFiltro.getSelectedIndex());
 		}
 		tablaPermisoAcceso.setLista(permisoAccesos);
 		tablaPermisoAcceso.fireTableDataChanged();
@@ -242,21 +220,21 @@ public class InformeDeAcceso extends JDialog {
 	}
 
 	private void VerificarYConsultar() {
-		if (seleccionarFiltro()==false) {
+		if (cbFiltro.getSelectedIndex()==0) {
 			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) {
 				ordenarTodo();
 				return;
 			}
-			if(tfHasta.getText().isEmpty()) tfHasta.setText("999999999");
-			if(tfDesde.getText().isEmpty()) tfDesde.setText("0");
+			if(tfHasta.getText().isEmpty()) tfHasta.setText("Zzzzzzz");
+			if(tfDesde.getText().isEmpty()) tfDesde.setText("A");
 			buscarAccesos();
 		}
-		if (seleccionarFiltro()==true) {
+		if (cbFiltro.getSelectedIndex()==1) {
 			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) {
-				recuperarTodo();
+				ordenarTodo();
 				return;
 			}
-			if(tfHasta.getText().isEmpty()) tfHasta.setText("Z");
+			if(tfHasta.getText().isEmpty()) tfHasta.setText("Zzzzzzz");
 			if(tfDesde.getText().isEmpty()) tfDesde.setText("A");
 			buscarAccesos();
 		}
@@ -265,26 +243,16 @@ public class InformeDeAcceso extends JDialog {
 	private void ordenarTodo() {
 		dao = new PermisoAccesoDao();
 		if(cbxOrder.getSelectedIndex()==0){
-		permisoAccesos = dao.filtroPorOficina("0", "999999999", "id");
+			permisoAccesos = dao.filtroPorOficina("A", "zzzzzzz", 0, 0);
 		}
 		if(cbxOrder.getSelectedIndex()==1){
-			permisoAccesos = dao.filtroPorOficina("0", "999999999", "descripcion");
-		}
-		if(cbxOrder.getSelectedIndex()==2){
-			permisoAccesos = dao.filtroPorOficina("0", "999999999", "nombre");
+			permisoAccesos = dao.filtroPorOficina("A", "zzzzzzzz", 1, 0);
 		}
 		tablaPermisoAcceso.setLista(permisoAccesos);
 		tablaPermisoAcceso.fireTableDataChanged();
 		lblTotalNumer.setText(permisoAccesos.size()+"");
 	}
 	
-	private boolean seleccionarFiltro() {
-		if(cbFiltro.getSelectedIndex()==0){
-			return false;
-		}else{
-			return true;
-		}
-	}
 	
 	private void verificarLista(){
 		if (permisoAccesos.size()==0) {

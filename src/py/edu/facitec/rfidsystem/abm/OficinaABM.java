@@ -28,6 +28,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.Toolkit;
 
 public class OficinaABM extends GenericABM implements InterfazBuscadorBloque {
 	private JTextField tfBuscar;
@@ -52,6 +53,7 @@ public class OficinaABM extends GenericABM implements InterfazBuscadorBloque {
 	private JLabel lblcdigoDuplicado;
 	
 	public OficinaABM() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(OficinaABM.class.getResource("/py/edu/facitec/rfidsystem/img/oficinas.png")));
 		setTitle("Registro de Oficina");
 		btnEliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
