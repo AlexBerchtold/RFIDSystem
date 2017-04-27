@@ -175,7 +175,7 @@ public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 		tfCodigo.setColumns(10);
 		
 		tfOficina = new JTextField();
-		tfOficina.setEnabled(false);
+		tfOficina.setEditable(false);
 		tfOficina.setBounds(111, 214, 210, 20);
 		getContentPane().add(tfOficina);
 		tfOficina.setColumns(10);

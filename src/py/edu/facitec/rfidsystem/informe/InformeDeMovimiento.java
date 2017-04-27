@@ -48,8 +48,8 @@ public class InformeDeMovimiento extends JDialog {
 	private JComboBox cbFiltro;
 	private JButton btnImprimir;
 	private JLabel lblsolonumeros;
-	private JTextField tfDesdeHora;
-	private JTextField tfHastaHora;
+	private JFormattedTextField tfDesdeHora;
+	private JFormattedTextField tfHastaHora;
 
 	/**
 	 * Create the dialog.
@@ -195,7 +195,7 @@ public class InformeDeMovimiento extends JDialog {
 		lblsolonumeros.setVisible(false);
 		lblsolonumeros.setForeground(Color.RED);
 		lblsolonumeros.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblsolonumeros.setBounds(290, 36, 114, 14);
+		lblsolonumeros.setBounds(290, 36, 186, 14);
 		contentPanel.add(lblsolonumeros);
 		
 		tfDesdeHora = new JFormattedTextField(FechaUtil.getFormatoHora());
@@ -241,9 +241,9 @@ public class InformeDeMovimiento extends JDialog {
 	
 	private void validarBusqueda() {
 		if (cbFiltro.getSelectedIndex()==2) {
-			if (tfDesdeHora.getText().isEmpty() & tfHastaHora.getText().isEmpty()){ ordenarTodo(); return;}
-			if (tfDesdeHora.getText().isEmpty()) {tfDesdeHora.setText("0000"); buscarMovimiento(); return;}
-			if (tfHastaHora.getText().isEmpty()) {tfHastaHora.setText("2300"); buscarMovimiento(); return;}
+			if (tfDesdeHora.getValue()==null & tfHastaHora.getValue()==null){ ordenarTodo(); return;}
+			if (tfDesdeHora.getValue()==null) {lblsolonumeros.setText("Ingrese el rango inicial"); lblsolonumeros.setVisible(true); return;}
+			if (tfHastaHora.getText()==null) {lblsolonumeros.setText("Ingrese el rango final"); lblsolonumeros.setVisible(true); return;}
 		}else{
 			if (tfDesde.getText().isEmpty() & tfHasta.getText().isEmpty()) {ordenarTodo(); return;}
 			if (tfDesde.getText().isEmpty()) {tfDesde.setText("A"); buscarMovimiento(); return;}

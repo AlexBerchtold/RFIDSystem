@@ -141,7 +141,7 @@ public class BloqueABM extends GenericABM implements InterfazBuscarInstitucion {
 		getContentPane().add(lblIntitucin);
 		
 		tfInstitucion = new JTextField();
-		tfInstitucion.setEnabled(false);
+		tfInstitucion.setEditable(false);
 		tfInstitucion.setColumns(10);
 		tfInstitucion.setBounds(113, 286, 158, 20);
 		getContentPane().add(tfInstitucion);
