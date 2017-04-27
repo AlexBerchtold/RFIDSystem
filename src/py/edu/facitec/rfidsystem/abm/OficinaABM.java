@@ -154,7 +154,7 @@ public class OficinaABM extends GenericABM implements InterfazBuscadorBloque {
 		getContentPane().add(lblIntitucin);
 		
 		tfBloque = new JTextField();
-		tfBloque.setEnabled(false);
+		tfBloque.setEditable(false);
 		tfBloque.setColumns(10);
 		tfBloque.setBounds(113, 257, 158, 20);
 		getContentPane().add(tfBloque);

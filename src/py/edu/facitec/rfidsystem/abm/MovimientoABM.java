@@ -41,7 +41,8 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 	private Movimiento movimiento;
 	private JTextField tfBuscador;
 	private JLabel lblCodigoDuplicado;
-	private Date hora;
+	private Date horaYFecha;
+	private JFormattedTextField tfFecha;
 	
 	public MovimientoABM() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MovimientoABM.class.getResource("/py/edu/facitec/rfidsystem/img/movimientos.png")));
@@ -76,22 +77,22 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 		});
 		btnPermisoAcceso.setText("...");
 		btnPermisoAcceso.setEnabled(false);
-		btnPermisoAcceso.setBounds(281, 290, 46, 20);
+		btnPermisoAcceso.setBounds(281, 327, 46, 20);
 		getContentPane().add(btnPermisoAcceso);
 		
 		tfPermisoAcceso = new JTextField();
-		tfPermisoAcceso.setEnabled(false);
+		tfPermisoAcceso.setEditable(false);
 		tfPermisoAcceso.setColumns(10);
-		tfPermisoAcceso.setBounds(133, 290, 138, 20);
+		tfPermisoAcceso.setBounds(133, 327, 138, 20);
 		getContentPane().add(tfPermisoAcceso);
 		
 		JLabel lblPermisoDeAcesso = new JLabel("Permiso de Acesso:");
 		lblPermisoDeAcesso.setFont(new Font("Arial", Font.BOLD, 12));
-		lblPermisoDeAcesso.setBounds(10, 292, 126, 14);
+		lblPermisoDeAcesso.setBounds(10, 329, 126, 14);
 		getContentPane().add(lblPermisoDeAcesso);
 		
 		tfHora = new JFormattedTextField(FechaUtil.getFormatoHora());
-		tfHora.setEnabled(false);
+		tfHora.setEditable(false);
 		tfHora.setColumns(10);
 		tfHora.setBounds(133, 225, 92, 20);
 		getContentPane().add(tfHora);
@@ -167,6 +168,17 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 		lblCodigoDuplicado.setVisible(false);
 		lblCodigoDuplicado.setBounds(133, 189, 108, 14);
 		getContentPane().add(lblCodigoDuplicado);
+		
+		JLabel lblFecha = new JLabel("Fecha:");
+		lblFecha.setFont(new Font("Arial", Font.BOLD, 12));
+		lblFecha.setBounds(10, 273, 102, 14);
+		getContentPane().add(lblFecha);
+		
+		tfFecha = new JFormattedTextField(FechaUtil.getFormato());
+		tfFecha.setEditable(false);
+		tfFecha.setColumns(10);
+		tfFecha.setBounds(133, 271, 92, 20);
+		getContentPane().add(tfFecha);
 		consultarMovimiento();
 	}
 	
@@ -185,7 +197,7 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 			tfCodigo.setEnabled(!e);
 		}else {
 			tfCodigo.setEnabled(e);
-			tfHora.setEnabled(e);
+//			tfHora.setEnabled(e);
 			timer.start();
 		}
 		btnPermisoAcceso.setEnabled(e);
@@ -216,9 +228,11 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 
 	@Override
 	protected void fechaActual() {
-		hora = new Date();
-		DateFormat horaFormat = new SimpleDateFormat("HH:mm:ss");
-		tfHora.setText(""+horaFormat.format(hora));
+		horaYFecha = new Date();
+		DateFormat horaFormat = new SimpleDateFormat("HH:mm");
+		DateFormat fechaFormat = new SimpleDateFormat("dd/MM/yyyy");
+		tfHora.setText(""+horaFormat.format(horaYFecha));
+		tfFecha.setText(""+fechaFormat.format(horaYFecha));
 	}
 	
 	@Override
@@ -262,7 +276,7 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 			movimiento= new Movimiento();
 		}
 		movimiento.setId(Integer.parseInt(tfCodigo.getText()));
-		movimiento.setHora(hora);
+		movimiento.setHora(horaYFecha);
 		movimiento.setPermisoAcceso(permisoAcceso);
 	}
 	

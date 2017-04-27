@@ -120,19 +120,19 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 		tfCodigo.setColumns(10);
 		
 		tfOficina = new JTextField();
-		tfOficina.setEnabled(false);
+		tfOficina.setEditable(false);
 		tfOficina.setColumns(10);
 		tfOficina.setBounds(111, 292, 177, 20);
 		getContentPane().add(tfOficina);
 		
 		tfFuncionario = new JTextField();
-		tfFuncionario.setEnabled(false);
+		tfFuncionario.setEditable(false);
 		tfFuncionario.setColumns(10);
 		tfFuncionario.setBounds(111, 229, 177, 20);
 		getContentPane().add(tfFuncionario);
 		
 		tfPuerta = new JTextField();
-		tfPuerta.setEnabled(false);
+		tfPuerta.setEditable(false);
 		tfPuerta.setColumns(10);
 		tfPuerta.setBounds(111, 354, 177, 20);
 		getContentPane().add(tfPuerta);
