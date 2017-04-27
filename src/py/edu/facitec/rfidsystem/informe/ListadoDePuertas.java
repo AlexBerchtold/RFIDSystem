@@ -162,7 +162,6 @@ public class ListadoDePuertas extends JDialog {
 				try {
 					conexionReportes.GerarRealatorio(puertas, "ListadoDePuertas");
 					conexionReportes.viewer.setVisible(true);
-					dispose();
 				} catch (JRException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

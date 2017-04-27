@@ -147,9 +147,8 @@ public class InformeDeMovimiento extends JDialog {
 			public void actionPerformed(ActionEvent arg0) {
 				ConexionReportes<Movimiento> conexionReportes = new ConexionReportes<Movimiento>();
 				try {
-					conexionReportes.GerarRealatorio(movimientos, "InformeDeMovimiento");
+					conexionReportes.GerarRealatorio(movimientos, "ReporteDeMovimiento");
 					conexionReportes.viewer.setVisible(true);
-					dispose();
 				} catch (JRException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

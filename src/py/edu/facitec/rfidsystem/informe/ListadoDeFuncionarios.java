@@ -161,7 +161,6 @@ public class ListadoDeFuncionarios extends JDialog {
 				try {
 					conexionReportes.GerarRealatorio(funcionarios, "ListadoDeEmpleados");
 					conexionReportes.viewer.setVisible(true);
-					dispose();
 				} catch (JRException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

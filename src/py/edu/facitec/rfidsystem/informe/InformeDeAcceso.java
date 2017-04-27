@@ -140,9 +140,8 @@ public class InformeDeAcceso extends JDialog {
 			public void actionPerformed(ActionEvent arg0) {
 				ConexionReportes<PermisoAcceso> conexionReportes = new ConexionReportes<PermisoAcceso>();
 				try {
-					conexionReportes.GerarRealatorio(permisoAccesos, "InformeDeAcceso");
+					conexionReportes.GerarRealatorio(permisoAccesos, "ReporteDePermisoAcceso");
 					conexionReportes.viewer.setVisible(true);
-					dispose();
 				} catch (JRException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

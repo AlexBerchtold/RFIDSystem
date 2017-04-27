@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2017-04-27T16:45:02 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReporteDeMovimiento" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4b7bb6fe-8fcb-45a3-95ec-4941131e9d24">
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="id" class="java.lang.Integer"/>
+	<field name="hora" class="java.util.Date"/>
+	<field name="permisoAcceso.id" class="java.lang.Integer"/>
+	<field name="permisoAcceso.funcionario.nombre" class="java.lang.String"/>
+	<field name="permisoAcceso.funcionario.apellido" class="java.lang.String"/>
+	<field name="permisoAcceso.funcionario.noDocumento" class="java.lang.Integer"/>
+	<field name="permisoAcceso.oficina.estado" class="java.lang.Boolean"/>
+	<field name="permisoAcceso.oficina.descripcion" class="java.lang.String"/>
+	<field name="permisoAcceso.oficina.bloque.nombre" class="java.lang.String"/>
+	<field name="permisoAcceso.oficina.bloque.institucion.descripcion" class="java.lang.String"/>
+	<field name="permisoAcceso.puerta.estado" class="java.lang.Boolean"/>
+	<field name="permisoAcceso.puerta.numeroDePuerta" class="java.lang.Integer"/>
+	<field name="permisoAcceso.puerta.descripcion" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="-20" y="30" width="595" height="30" uuid="34b82e76-5ab2-49f5-88a2-ba17e807367f"/>
+				<textElement textAlignment="Center">
+					<font fontName="Castellar" size="22" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Informe de Movimiento.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="310" y="0" width="100" height="30" uuid="20a27d13-7d6c-4fc5-ac31-a67ca635c99c"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Fecha:]]></text>
+			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="347" y="0" width="100" height="30" uuid="3a29415e-8b3b-42c4-8e47-0d8aac6dc3b5"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH:mm">
+				<reportElement x="470" y="0" width="100" height="30" uuid="ff909525-86aa-4819-a5ab-20c798edc18d"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="440" y="0" width="100" height="30" uuid="c905ed5a-bd8b-4982-b1d6-600a3ea2e5ff"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Hora:]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="1" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="37" splitType="Stretch">
+			<rectangle>
+				<reportElement x="-20" y="-3" width="595" height="36" backcolor="#EBEBEB" uuid="842688a2-eee6-4429-9f17-d53c7048048f"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="0" width="40" height="30" uuid="efe537f9-1838-4b1e-9334-4071839d7de6"/>
+				<text><![CDATA[Codigo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="434" y="0" width="56" height="30" uuid="dad54f8b-6154-4365-8ffc-319e0559dc7d"/>
+				<text><![CDATA[Fecha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="40" y="0" width="79" height="30" uuid="d6a3818a-6845-406c-a8af-4a35ed968508"/>
+				<text><![CDATA[Nombre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="118" y="0" width="79" height="30" uuid="2cd5d331-691e-4862-8f1e-0d6f463aedd9"/>
+				<text><![CDATA[Apellido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="197" y="0" width="79" height="30" uuid="1340363e-9221-41fa-a88f-65fa9f4ffa97"/>
+				<text><![CDATA[C.I]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="276" y="0" width="79" height="30" uuid="d370cd13-feef-4e1c-9d07-0d1957773277"/>
+				<text><![CDATA[Oficina]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="355" y="0" width="79" height="30" uuid="2d58251c-9bb1-4032-ba95-d2b9708d0409"/>
+				<text><![CDATA[Puerta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="510" y="0" width="46" height="30" uuid="32b7ce15-1fc5-49b8-9d4f-41bddddba514"/>
+				<text><![CDATA[Hora]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="41" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="4" width="40" height="30" uuid="7c80ef22-282c-4023-895d-123afbbc4d82"/>
+				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="434" y="4" width="56" height="30" uuid="1153d080-a2bd-44e7-84ad-5ca626e6ad59"/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{hora})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="39" y="4" width="79" height="30" uuid="57e38bd8-5f1b-41e4-bd13-2867d1d78fca"/>
+				<textFieldExpression><![CDATA[$F{permisoAcceso.funcionario.nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="118" y="4" width="79" height="30" uuid="d1178c43-0a00-464e-8197-9c6e0c46807d"/>
+				<textFieldExpression><![CDATA[$F{permisoAcceso.funcionario.apellido}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="197" y="4" width="79" height="30" uuid="3dd06048-2244-47ab-8680-55513a2167c0"/>
+				<textFieldExpression><![CDATA[$F{permisoAcceso.funcionario.noDocumento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="276" y="4" width="79" height="30" uuid="46620293-3526-4493-9db7-815417fdbe26"/>
+				<textFieldExpression><![CDATA[$F{permisoAcceso.oficina.descripcion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="355" y="4" width="79" height="30" uuid="e68c4c72-96e0-4034-a36d-53cee62b7fe9"/>
+				<textFieldExpression><![CDATA[$F{permisoAcceso.puerta.descripcion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="510" y="4" width="46" height="30" uuid="fc3dab77-09f2-4e2f-80d3-da50844023d7"/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("HH:mm").format($F{hora})]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="1" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="1" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="56" splitType="Stretch">
+			<textField>
+				<reportElement x="227" y="26" width="100" height="30" uuid="0a91d3e9-a85c-4505-90c8-2c315232a174"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
