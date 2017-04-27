@@ -213,28 +213,21 @@ public class ListadoDeFuncionarios extends JDialog {
 		lblsoloNumeros.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblsoloNumeros.setBounds(290, 36, 124, 14);
 		contentPanel.add(lblsoloNumeros);
-		recuperarTodo();
+		ordenarTodo();
 		verificarLista();
 	}
 	
-	private void recuperarTodo(){
-		dao = new FuncionarioDao();
-		funcionarios= dao.recuperarTodo();
-		tablaFuncionario.setLista(funcionarios);
-		tablaFuncionario.fireTableDataChanged();
-		lblTotalNumer.setText(funcionarios.size()+"");
-	}
 	
 	private void buscarPorNombre() {
 		dao = new FuncionarioDao();
 		if(cbxOrder.getSelectedIndex()==0){
-		funcionarios = dao.filtroListadoNombre(tfDesde.getText(), tfHasta.getText()+"zzzzz", "id");
+		funcionarios = dao.filtroListadoNombre(tfDesde.getText(), tfHasta.getText()+"zzzzzzz", "id");
 		}
 		if(cbxOrder.getSelectedIndex()==1){
-			funcionarios = dao.filtroListadoNombre(tfDesde.getText(), tfHasta.getText()+"zzzzz", "nombre");
+			funcionarios = dao.filtroListadoNombre(tfDesde.getText(), tfHasta.getText()+"zzzzzzz", "nombre");
 		}
 		if(cbxOrder.getSelectedIndex()==2){
-			funcionarios = dao.filtroListadoNombre(tfDesde.getText(), tfHasta.getText()+"zzzzz", "apellido");
+			funcionarios = dao.filtroListadoNombre(tfDesde.getText(), tfHasta.getText()+"zzzzzzz", "apellido");
 		}
 		tablaFuncionario.setLista(funcionarios);
 		tablaFuncionario.fireTableDataChanged();
@@ -269,10 +262,9 @@ public class ListadoDeFuncionarios extends JDialog {
 		}
 		if (seleccionarFiltro()==true) {
 			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) {
-				recuperarTodo();
+				ordenarTodo();
 				return;
 			}
-			if(tfHasta.getText().isEmpty()) tfHasta.setText("Zzzzzz");
 			if(tfDesde.getText().isEmpty()) tfDesde.setText("A");
 			buscarPorNombre();
 		}

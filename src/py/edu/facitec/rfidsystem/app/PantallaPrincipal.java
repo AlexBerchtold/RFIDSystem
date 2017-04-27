@@ -36,6 +36,7 @@ import py.edu.facitec.rfidsystem.dao.ConfiguracionDao;
 import py.edu.facitec.rfidsystem.entidad.Configuracion;
 import py.edu.facitec.rfidsystem.entidad.PermisoAcceso;
 import py.edu.facitec.rfidsystem.informe.InformeDeAcceso;
+import py.edu.facitec.rfidsystem.informe.InformeDeMovimiento;
 import py.edu.facitec.rfidsystem.informe.ListadoDeFuncionarios;
 import py.edu.facitec.rfidsystem.informe.ListadoDePuertas;
 import py.edu.facitec.rfidsystem.util.Factory;
@@ -203,7 +204,11 @@ public class PantallaPrincipal extends JFrame implements KeyEventDispatcher {
 		mnInformes.add(mntmprsnlzdInformesDeAcceso);
 		
 		JMenuItemPersonalizado mntmprsnlzdInformeDeMovimiento = new JMenuItemPersonalizado();
-		mntmprsnlzdInformeDeMovimiento.setEnabled(false);
+		mntmprsnlzdInformeDeMovimiento.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				abririnformeMovimiento();
+			}
+		});
 		mntmprsnlzdInformeDeMovimiento.setText("Informe de Movimientos");
 		mntmprsnlzdInformeDeMovimiento.setIcon("listamovimiento");
 		mnInformes.add(mntmprsnlzdInformeDeMovimiento);
@@ -419,6 +424,11 @@ public class PantallaPrincipal extends JFrame implements KeyEventDispatcher {
 		InformeDeAcceso informeDeAcceso = new InformeDeAcceso();
 		informeDeAcceso.setVisible(true);
 
+	}
+	
+	private void abririnformeMovimiento(){
+		InformeDeMovimiento informeDeMovimiento = new InformeDeMovimiento();
+		informeDeMovimiento.setVisible(true);
 	}
 	
 	public void cargarConfiguracion() {

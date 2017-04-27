@@ -1,6 +1,7 @@
 package py.edu.facitec.rfidsystem.abm;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
@@ -17,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
 
 import py.edu.facitec.rfidsystem.buscadores.BuscadorPermisoAcceso;
 import py.edu.facitec.rfidsystem.contenedores.BotonPersonalizadoABM;
@@ -26,7 +28,6 @@ import py.edu.facitec.rfidsystem.entidad.PermisoAcceso;
 import py.edu.facitec.rfidsystem.interfaces.InterfazBuscadorPermisoAcceso;
 import py.edu.facitec.rfidsystem.tablas.TablaMovimiento;
 import py.edu.facitec.rfidsystem.util.FechaUtil;
-import java.awt.Toolkit;
 
 public class MovimientoABM extends GenericABM implements InterfazBuscadorPermisoAcceso{
 	private JTextField tfPermisoAcceso;
@@ -40,6 +41,7 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 	private Movimiento movimiento;
 	private JTextField tfBuscador;
 	private JLabel lblCodigoDuplicado;
+	private Date hora;
 	
 	public MovimientoABM() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MovimientoABM.class.getResource("/py/edu/facitec/rfidsystem/img/movimientos.png")));
@@ -183,8 +185,9 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 			tfCodigo.setEnabled(!e);
 		}else {
 			tfCodigo.setEnabled(e);
+			tfHora.setEnabled(e);
+			timer.start();
 		}
-		tfHora.setEnabled(e);
 		btnPermisoAcceso.setEnabled(e);
 	}
 
@@ -208,11 +211,12 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 		accionesPrimarias(true);
 		movimiento=null;
 		consultarMovimiento();
+		timer.stop();
 	}
 
 	@Override
 	protected void fechaActual() {
-		Date hora = new Date();
+		hora = new Date();
 		DateFormat horaFormat = new SimpleDateFormat("HH:mm:ss");
 		tfHora.setText(""+horaFormat.format(hora));
 	}
@@ -228,6 +232,7 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 		tfPermisoAcceso.setText(movimiento.getPermisoAcceso().getId()+"");
 		habilitarCampos(false);
 		accionesPrimarias(false);
+		timer.stop();
 	}
 	
 	private void eliminar() {
@@ -249,6 +254,7 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 		limpiar();
 		accionesPrimarias(true);
 		consultarMovimiento();
+		timer.stop();
 	}
 	
 	private void cargarDatos() {
@@ -256,7 +262,7 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 			movimiento= new Movimiento();
 		}
 		movimiento.setId(Integer.parseInt(tfCodigo.getText()));
-		movimiento.setHora(FechaUtil.stringAHora(tfHora.getText()));
+		movimiento.setHora(hora);
 		movimiento.setPermisoAcceso(permisoAcceso);
 	}
 	
@@ -328,6 +334,13 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 		return false;
 
 	}
+	
+	Timer timer = new Timer(10000, new ActionListener() {	
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			fechaActual();
+		}
+	});
 	
 	public void inicializarMovimiento() {
 		String tabla ="Movimiento";

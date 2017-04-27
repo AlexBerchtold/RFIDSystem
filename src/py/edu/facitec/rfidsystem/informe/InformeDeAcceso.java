@@ -3,6 +3,7 @@ package py.edu.facitec.rfidsystem.informe;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -25,7 +26,6 @@ import py.edu.facitec.rfidsystem.dao.PermisoAccesoDao;
 import py.edu.facitec.rfidsystem.entidad.PermisoAcceso;
 import py.edu.facitec.rfidsystem.tablas.TablaPermisoAcceso;
 import py.edu.facitec.rfidsystem.util.ConexionReportes;
-import java.awt.Toolkit;
 
 public class InformeDeAcceso extends JDialog {
 
@@ -193,26 +193,17 @@ public class InformeDeAcceso extends JDialog {
 		lblsolonumeros.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblsolonumeros.setBounds(290, 36, 114, 14);
 		contentPanel.add(lblsolonumeros);
-		recuperarTodo();
+		ordenarTodo();
 		verificarLista();
 	}
-	
-	private void recuperarTodo(){
-		dao = new PermisoAccesoDao();
-		permisoAccesos= dao.recuperarTodo();
-		tablaPermisoAcceso.setLista(permisoAccesos);
-		tablaPermisoAcceso.fireTableDataChanged();
-		lblTotalNumer.setText(permisoAccesos.size()+"");
-	}
-	
 	
 	private void buscarAccesos() {
 		dao = new PermisoAccesoDao();
 		if(cbxOrder.getSelectedIndex()==0){
-		permisoAccesos = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText()+"zzz", 0, cbFiltro.getSelectedIndex());
+		permisoAccesos = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText()+"zzzzzzzz", 0, cbFiltro.getSelectedIndex());
 		}
 		if(cbxOrder.getSelectedIndex()==1){
-			permisoAccesos = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText()+"zzz", 1, cbFiltro.getSelectedIndex());
+			permisoAccesos = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText()+"zzzzzzzz", 1, cbFiltro.getSelectedIndex());
 		}
 		tablaPermisoAcceso.setLista(permisoAccesos);
 		tablaPermisoAcceso.fireTableDataChanged();
@@ -234,7 +225,6 @@ public class InformeDeAcceso extends JDialog {
 				ordenarTodo();
 				return;
 			}
-			if(tfHasta.getText().isEmpty()) tfHasta.setText("Zzzzzzz");
 			if(tfDesde.getText().isEmpty()) tfDesde.setText("A");
 			buscarAccesos();
 		}

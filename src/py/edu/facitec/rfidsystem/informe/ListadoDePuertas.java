@@ -3,6 +3,7 @@ package py.edu.facitec.rfidsystem.informe;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -25,7 +26,6 @@ import py.edu.facitec.rfidsystem.dao.PuertaDao;
 import py.edu.facitec.rfidsystem.entidad.Puerta;
 import py.edu.facitec.rfidsystem.tablas.TablaPuerta;
 import py.edu.facitec.rfidsystem.util.ConexionReportes;
-import java.awt.Toolkit;
 
 public class ListadoDePuertas extends JDialog {
 
@@ -214,29 +214,20 @@ public class ListadoDePuertas extends JDialog {
 		lblsolonumeros.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblsolonumeros.setBounds(290, 36, 114, 14);
 		contentPanel.add(lblsolonumeros);
-		recuperarTodo();
+		ordenarTodo();
 		verificarLista();
 	}
-	
-	private void recuperarTodo(){
-		dao = new PuertaDao();
-		puertas= dao.recuperarTodo();
-		tablaPuerta.setLista(puertas);
-		tablaPuerta.fireTableDataChanged();
-		lblTotalNumer.setText(puertas.size()+"");
-	}
-	
 	
 	private void buscarPuertas() {
 		dao = new PuertaDao();
 		if(cbxOrder.getSelectedIndex()==0){
-		puertas = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText()+"zzzzz", "id");
+		puertas = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText()+"zzzzzzzz", "id");
 		}
 		if(cbxOrder.getSelectedIndex()==1){
-			puertas = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText()+"zzzzz", "descripcion");
+			puertas = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText()+"zzzzzzzz", "descripcion");
 		}
 		if(cbxOrder.getSelectedIndex()==2){
-			puertas = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText()+"zzzzz", "numeroDePuerta");
+			puertas = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText()+"zzzzzzz", "numeroDePuerta");
 		}
 		tablaPuerta.setLista(puertas);
 		tablaPuerta.fireTableDataChanged();
@@ -255,10 +246,9 @@ public class ListadoDePuertas extends JDialog {
 		}
 		if (seleccionarFiltro()==true) {
 			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) {
-				recuperarTodo();
+				ordenarTodo();
 				return;
 			}
-			if(tfHasta.getText().isEmpty()) tfHasta.setText("Z");
 			if(tfDesde.getText().isEmpty()) tfDesde.setText("A");
 			buscarPuertas();
 		}
