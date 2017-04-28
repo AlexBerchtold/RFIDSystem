@@ -106,7 +106,7 @@ public class InformeDeAcceso extends JDialog {
 		JButton btnProcesas = new JButton("Procesar");
 		btnProcesas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				VerificarYConsultar();
+				verificarYConsultar();
 				verificarLista();
 			}
 		});
@@ -116,7 +116,7 @@ public class InformeDeAcceso extends JDialog {
 		cbxOrder = new JComboBox();
 		cbxOrder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				VerificarYConsultar();
+				verificarYConsultar();
 				verificarLista();
 			}
 		});
@@ -143,7 +143,6 @@ public class InformeDeAcceso extends JDialog {
 					conexionReportes.GerarRealatorio(permisoAccesos, "ReporteDePermisoAcceso");
 					conexionReportes.viewer.setVisible(true);
 				} catch (JRException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -185,7 +184,6 @@ public class InformeDeAcceso extends JDialog {
 		cbFiltro.setModel(new DefaultComboBoxModel(new String[] {"Oficina", "Funcionario"}));
 		cbFiltro.setBounds(88, 11, 95, 20);
 		contentPanel.add(cbFiltro);
-		
 		lblsolonumeros = new JLabel("*SoloNumeros");
 		lblsolonumeros.setVisible(false);
 		lblsolonumeros.setForeground(Color.RED);
@@ -194,49 +192,35 @@ public class InformeDeAcceso extends JDialog {
 		contentPanel.add(lblsolonumeros);
 		ordenarTodo();
 		verificarLista();
-	}
+	}//fin del metodo constructor
 	
-	private void buscarAccesos() {
+	private void filtrarAccesos() {
 		dao = new PermisoAccesoDao();
-		if(cbxOrder.getSelectedIndex()==0){
-		permisoAccesos = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText()+"zzzzzzzz", 0, cbFiltro.getSelectedIndex());
-		}
-		if(cbxOrder.getSelectedIndex()==1){
-			permisoAccesos = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText()+"zzzzzzzz", 1, cbFiltro.getSelectedIndex());
-		}
+		if(cbxOrder.getSelectedIndex()==0) permisoAccesos = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText()+"zzzzzzzz", 0, cbFiltro.getSelectedIndex());
+		if(cbxOrder.getSelectedIndex()==1) permisoAccesos = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText()+"zzzzzzzz", 1, cbFiltro.getSelectedIndex());
 		tablaPermisoAcceso.setLista(permisoAccesos);
 		tablaPermisoAcceso.fireTableDataChanged();
 		lblTotalNumer.setText(permisoAccesos.size()+"");
 	}
 
-	private void VerificarYConsultar() {
+	private void verificarYConsultar() {
 		if (cbFiltro.getSelectedIndex()==0) {
-			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) {
-				ordenarTodo();
-				return;
-			}
+			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) { ordenarTodo(); return;}
 			if(tfHasta.getText().isEmpty()) tfHasta.setText("Zzzzzzz");
 			if(tfDesde.getText().isEmpty()) tfDesde.setText("A");
-			buscarAccesos();
+			filtrarAccesos();
 		}
 		if (cbFiltro.getSelectedIndex()==1) {
-			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) {
-				ordenarTodo();
-				return;
-			}
+			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) { ordenarTodo(); return;}
 			if(tfDesde.getText().isEmpty()) tfDesde.setText("A");
-			buscarAccesos();
+			filtrarAccesos();
 		}
 	}
 	
 	private void ordenarTodo() {
 		dao = new PermisoAccesoDao();
-		if(cbxOrder.getSelectedIndex()==0){
-			permisoAccesos = dao.filtroPorOficina("A", "zzzzzzz", 0, 0);
-		}
-		if(cbxOrder.getSelectedIndex()==1){
-			permisoAccesos = dao.filtroPorOficina("A", "zzzzzzzz", 1, 0);
-		}
+		if(cbxOrder.getSelectedIndex()==0) permisoAccesos = dao.filtroPorOficina("A", "zzzzzzz", 0, 0);
+		if(cbxOrder.getSelectedIndex()==1) permisoAccesos = dao.filtroPorOficina("A", "zzzzzzzz", 1, 0);
 		tablaPermisoAcceso.setLista(permisoAccesos);
 		tablaPermisoAcceso.fireTableDataChanged();
 		lblTotalNumer.setText(permisoAccesos.size()+"");

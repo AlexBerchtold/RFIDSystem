@@ -316,9 +316,7 @@ public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 	@Override
 	protected void guardar() {
 		if (campoObligatorio()==true) return;
-		if (modificar==false) {
-			if(verificarCodigo()==true)return;
-		}
+		if (modificar==false) {if(verificarCodigo()==true)return;}
 		if(verificarNroPuerta()==true)return;
 		cargarDatos();
 		dao = new PuertaDao();
@@ -363,8 +361,7 @@ public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 		if (table.getSelectedRow()<0) return;
 		int respuesta = JOptionPane.showConfirmDialog(null, 
 				"Esta seguro que desea eliminar la Puerta "+puerta.getDescripcion(),
-				"Atención",
-				JOptionPane.YES_NO_OPTION);
+				"Atención", JOptionPane.YES_NO_OPTION);
 		if(respuesta == JOptionPane.YES_OPTION){
 			dao = new PuertaDao();
 			dao.eliminar(puerta);
@@ -380,19 +377,13 @@ public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 	}
 	
 	private void cargarDatos() {
-		if (modificar==false) {
-			puerta = new Puerta();
-		}
+		if (modificar==false) puerta = new Puerta();
 		puerta.setId(Integer.parseInt(tfCodigo.getText()));
 		puerta.setDescripcion(tfDescripcion.getText());
 		puerta.setNumeroDePuerta(Integer.parseInt(tfNumeroDePuertas.getText()));
 		puerta.setOficina(oficina);
-		if (chckbxActivo.isSelected()==true) {
-			puerta.setEstado(true);
-		}
-		if (chckbxInactivo.isSelected()==true) {
-			puerta.setEstado(false);
-		}
+		if (chckbxActivo.isSelected()==true) puerta.setEstado(true);
+		if (chckbxInactivo.isSelected()==true) puerta.setEstado(false);
 	}
 	
 	private void consultarPuertas() {
@@ -405,15 +396,9 @@ public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 	
 	private void buscarPuerta() {
 		dao = new PuertaDao();
-		if (chckbxTodos.isSelected()==true) {
-			puertas = dao.recuperarPorFiltro(tfBuscar.getText());
-		}
-		if (chckbxActivos.isSelected()==true) {
-			puertas = dao.recuperarActivo(tfBuscar.getText());
-		}
-		if (chckbxInactivos.isSelected()==true) {
-			puertas = dao.recuperarInactivo(tfBuscar.getText());
-		}
+		if (chckbxTodos.isSelected()==true) puertas = dao.recuperarPorFiltro(tfBuscar.getText());
+		if (chckbxActivos.isSelected()==true) puertas = dao.recuperarActivo(tfBuscar.getText());
+		if (chckbxInactivos.isSelected()==true) puertas = dao.recuperarInactivo(tfBuscar.getText());
 		tablaPuerta.setLista(puertas);
 		tablaPuerta.fireTableDataChanged();
 		System.err.println("Josa");

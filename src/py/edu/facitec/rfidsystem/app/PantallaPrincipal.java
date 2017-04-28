@@ -4,6 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.DefaultKeyboardFocusManager;
 import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.KeyEventDispatcher;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -11,13 +15,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.List;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JToolBar;
-import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import py.edu.facitec.rfidsystem.abm.BloqueABM;
@@ -29,25 +33,15 @@ import py.edu.facitec.rfidsystem.abm.OficinaABM;
 import py.edu.facitec.rfidsystem.abm.PermisoAccesoABM;
 import py.edu.facitec.rfidsystem.abm.PuertaABM;
 import py.edu.facitec.rfidsystem.contenedores.BotonPersonalizado;
-import py.edu.facitec.rfidsystem.contenedores.BotonPersonalizadoABM;
 import py.edu.facitec.rfidsystem.contenedores.JMenuItemPersonalizado;
 import py.edu.facitec.rfidsystem.contenedores.PanelFondo;
 import py.edu.facitec.rfidsystem.dao.ConfiguracionDao;
 import py.edu.facitec.rfidsystem.entidad.Configuracion;
-import py.edu.facitec.rfidsystem.entidad.PermisoAcceso;
 import py.edu.facitec.rfidsystem.informe.InformeDeAcceso;
 import py.edu.facitec.rfidsystem.informe.InformeDeMovimiento;
 import py.edu.facitec.rfidsystem.informe.ListadoDeFuncionarios;
 import py.edu.facitec.rfidsystem.informe.ListadoDePuertas;
 import py.edu.facitec.rfidsystem.util.Factory;
-import javax.swing.JPanel;
-import java.awt.GridBagLayout;
-import javax.swing.JLabel;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.awt.Font;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 
 public class PantallaPrincipal extends JFrame implements KeyEventDispatcher {
 
@@ -357,7 +351,6 @@ public class PantallaPrincipal extends JFrame implements KeyEventDispatcher {
 		jPanelConfig.add(lblCelular, gbc_lblCelular);
 		
 		cargarConfiguracion();
-		
 	}
 
 	//Metodo para desactivar funciones no deseadas del teclado 
@@ -423,7 +416,6 @@ public class PantallaPrincipal extends JFrame implements KeyEventDispatcher {
 	private void abrirInformeAcceso() {
 		InformeDeAcceso informeDeAcceso = new InformeDeAcceso();
 		informeDeAcceso.setVisible(true);
-
 	}
 	
 	private void abririnformeMovimiento(){
@@ -434,9 +426,7 @@ public class PantallaPrincipal extends JFrame implements KeyEventDispatcher {
 	public void cargarConfiguracion() {
 		configuracionDao = new ConfiguracionDao();
 		configuracion = configuracionDao.recuperarTodo();
-		if (configuracion.size()==0) {
-			return;
-		}
+		if (configuracion.size()==0) return;
 		lblNombre.setText(configuracion.get(0).getNombre());
 		lblEmail1.setText(configuracion.get(0).getEmail());
 		lblEmail2.setText(configuracion.get(0).getEmail2());

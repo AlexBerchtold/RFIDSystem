@@ -18,7 +18,7 @@ public class ConexionReportes<E> {
 	public JDialog viewer = new JDialog(new javax.swing.JFrame(),"Visualizar Reporte", true);
 	
 	public void GerarRealatorio(List<E> lista, String reporte) throws JRException{     
-		viewer.setSize(1000,800);     
+		viewer.setSize(1000,700);     
 		viewer.setLocationRelativeTo(null);
 		viewer.setModal(true);
 		InputStream stream = ConexionReportes.class.getResourceAsStream("/py/edu/facitec/rfidsystem/informe/"+reporte+".jrxml");

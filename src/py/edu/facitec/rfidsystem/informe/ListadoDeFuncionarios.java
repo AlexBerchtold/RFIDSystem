@@ -3,6 +3,7 @@ package py.edu.facitec.rfidsystem.informe;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -25,7 +26,6 @@ import py.edu.facitec.rfidsystem.dao.FuncionarioDao;
 import py.edu.facitec.rfidsystem.entidad.Funcionario;
 import py.edu.facitec.rfidsystem.tablas.TablaInformeFuncionario;
 import py.edu.facitec.rfidsystem.util.ConexionReportes;
-import java.awt.Toolkit;
 
 public class ListadoDeFuncionarios extends JDialog {
 
@@ -124,7 +124,7 @@ public class ListadoDeFuncionarios extends JDialog {
 		JButton btnProcesas = new JButton("Procesar");
 		btnProcesas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				VerificarYConsultar();
+				verificarYConsultar();
 				verificarLista();
 			}
 		});
@@ -134,7 +134,7 @@ public class ListadoDeFuncionarios extends JDialog {
 		cbxOrder = new JComboBox();
 		cbxOrder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				VerificarYConsultar();
+				verificarYConsultar();
 				verificarLista();
 			}
 		});
@@ -162,7 +162,6 @@ public class ListadoDeFuncionarios extends JDialog {
 					conexionReportes.GerarRealatorio(funcionarios, "ListadoDeEmpleados");
 					conexionReportes.viewer.setVisible(true);
 				} catch (JRException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -205,7 +204,6 @@ public class ListadoDeFuncionarios extends JDialog {
 		cbFiltro.setModel(new DefaultComboBoxModel(new String[] {"Codigo", "Nombre"}));
 		cbFiltro.setBounds(88, 11, 95, 20);
 		contentPanel.add(cbFiltro);
-		
 		lblsoloNumeros = new JLabel("*Solo Numeros");
 		lblsoloNumeros.setVisible(false);
 		lblsoloNumeros.setForeground(Color.RED);
@@ -214,83 +212,55 @@ public class ListadoDeFuncionarios extends JDialog {
 		contentPanel.add(lblsoloNumeros);
 		ordenarTodo();
 		verificarLista();
-	}
+	}//fin del metodo constructor
 	
-	
-	private void buscarPorNombre() {
+	private void filtrarPorNombre() {
 		dao = new FuncionarioDao();
-		if(cbxOrder.getSelectedIndex()==0){
-		funcionarios = dao.filtroListadoNombre(tfDesde.getText(), tfHasta.getText()+"zzzzzzz", "id");
-		}
-		if(cbxOrder.getSelectedIndex()==1){
-			funcionarios = dao.filtroListadoNombre(tfDesde.getText(), tfHasta.getText()+"zzzzzzz", "nombre");
-		}
-		if(cbxOrder.getSelectedIndex()==2){
-			funcionarios = dao.filtroListadoNombre(tfDesde.getText(), tfHasta.getText()+"zzzzzzz", "apellido");
-		}
+		if(cbxOrder.getSelectedIndex()==0) funcionarios = dao.filtroListadoNombre(tfDesde.getText(), tfHasta.getText()+"zzzz", "id");
+		if(cbxOrder.getSelectedIndex()==1)funcionarios = dao.filtroListadoNombre(tfDesde.getText(), tfHasta.getText()+"zzzz", "nombre");
+		if(cbxOrder.getSelectedIndex()==2) funcionarios = dao.filtroListadoNombre(tfDesde.getText(), tfHasta.getText()+"zzzz", "apellido");
 		tablaFuncionario.setLista(funcionarios);
 		tablaFuncionario.fireTableDataChanged();
 		lblTotalNumer.setText(funcionarios.size()+"");
 	}
 	
-	private void buscarPorId(){
+	private void filtrarPorId(){
 		dao = new FuncionarioDao();
-		if(cbxOrder.getSelectedIndex()==0){
-		funcionarios = dao.filtroListadoId(Integer.parseInt(tfDesde.getText()), Integer.parseInt(tfHasta.getText()), "id");
-		}
-		if(cbxOrder.getSelectedIndex()==1){
-			funcionarios = dao.filtroListadoId(Integer.parseInt(tfDesde.getText()), Integer.parseInt(tfHasta.getText()), "nombre");
-		}
-		if(cbxOrder.getSelectedIndex()==2){
-			funcionarios = dao.filtroListadoId(Integer.parseInt(tfDesde.getText()), Integer.parseInt(tfHasta.getText()), "apellido");
-		}
+		if(cbxOrder.getSelectedIndex()==0) funcionarios = dao.filtroListadoId(Integer.parseInt(tfDesde.getText()), Integer.parseInt(tfHasta.getText()), "id");
+		if(cbxOrder.getSelectedIndex()==1) funcionarios = dao.filtroListadoId(Integer.parseInt(tfDesde.getText()), Integer.parseInt(tfHasta.getText()), "nombre");	
+		if(cbxOrder.getSelectedIndex()==2) funcionarios = dao.filtroListadoId(Integer.parseInt(tfDesde.getText()), Integer.parseInt(tfHasta.getText()), "apellido");
 		tablaFuncionario.setLista(funcionarios);
 		tablaFuncionario.fireTableDataChanged();
 		lblTotalNumer.setText(funcionarios.size()+"");
 	}
 	
-	private void VerificarYConsultar() {
+	private void verificarYConsultar() {
 		if (seleccionarFiltro()==false) {
-			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) {
-				ordenarTodo();
-				return;
-			}
+			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) { ordenarTodo(); return;}
 			if(tfHasta.getText().isEmpty()) tfHasta.setText("999999999");
 			if(tfDesde.getText().isEmpty()) tfDesde.setText("0");
-			buscarPorId();
+			filtrarPorId();
 		}
 		if (seleccionarFiltro()==true) {
-			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) {
-				ordenarTodo();
-				return;
-			}
+			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) { ordenarTodo(); return;}
 			if(tfDesde.getText().isEmpty()) tfDesde.setText("A");
-			buscarPorNombre();
+			filtrarPorNombre();
 		}
 	}
 	
 	private void ordenarTodo() {
 		dao = new FuncionarioDao();
-		if(cbxOrder.getSelectedIndex()==0){
-		funcionarios = dao.filtroListadoId(0, 999999999, "id");
-		}
-		if(cbxOrder.getSelectedIndex()==1){
-			funcionarios = dao.filtroListadoId(0, 999999999, "nombre");
-		}
-		if(cbxOrder.getSelectedIndex()==2){
-			funcionarios = dao.filtroListadoId(0, 999999999, "apellido");
-		}
+		if(cbxOrder.getSelectedIndex()==0) funcionarios = dao.filtroListadoId(0, 999999999, "id");
+		if(cbxOrder.getSelectedIndex()==1) funcionarios = dao.filtroListadoId(0, 999999999, "nombre");
+		if(cbxOrder.getSelectedIndex()==2) funcionarios = dao.filtroListadoId(0, 999999999, "apellido");
 		tablaFuncionario.setLista(funcionarios);
 		tablaFuncionario.fireTableDataChanged();
 		lblTotalNumer.setText(funcionarios.size()+"");
 	}
 	
 	private boolean seleccionarFiltro() {
-		if(cbFiltro.getSelectedIndex()==0){
-			return false;
-		}else{
-			return true;
-		}
+		if(cbFiltro.getSelectedIndex()==0)return false;
+		return true;
 	}
 	
 	private void verificarLista(){

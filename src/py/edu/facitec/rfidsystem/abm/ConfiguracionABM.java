@@ -120,10 +120,8 @@ public class ConfiguracionABM extends JDialog {
 		});
 		btnCancelar.setBounds(240, 297, 89, 23);
 		getContentPane().add(btnCancelar);
-
 		datosActuales();
-		
-	}
+	}//fin del metodo constructor
 	
 	private void cargarDatos() {
 		configuracion = new Configuracion();
@@ -161,9 +159,7 @@ public class ConfiguracionABM extends JDialog {
 	private void datosActuales() {
 		dao = new ConfiguracionDao();
 		configuraciones = dao.recuperarTodo();
-		if (configuraciones.size()==0) {
-			return;
-		}
+		if (configuraciones.size()==0) return;
 		tfNombre.setText(configuraciones.get(0).getNombre());
 		tfEmail1.setText(configuraciones.get(0).getEmail());
 		tfEmail2.setText(configuraciones.get(0).getEmail2());

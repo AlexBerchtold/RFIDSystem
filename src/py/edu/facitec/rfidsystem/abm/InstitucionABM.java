@@ -136,7 +136,6 @@ public class InstitucionABM extends GenericABM {
 		lblcodigoDuplicado.setBounds(133, 196, 108, 14);
 		getContentPane().add(lblcodigoDuplicado);
 		consultarInstitucion();
-		
 	}
 	
 	//---------------------Metodos Genericos-----------------
@@ -212,13 +211,10 @@ public class InstitucionABM extends GenericABM {
 		}
 		limpiar();
 		accionesPrimarias(true);
-
 	}
 
 	private void cargarDatos() {
-		if (modificar==false) {
-			institucion = new Institucion();
-		}
+		if (modificar==false) institucion = new Institucion();
 		institucion.setId(Integer.parseInt(tfCodigo.getText()));
 		institucion.setDescripcion(tfDescripcion.getText());
 	}
@@ -265,7 +261,6 @@ public class InstitucionABM extends GenericABM {
 			tfDescripcion.requestFocus();
 			return true;
 		}
-		
 		return false;
 	}
 	

@@ -126,7 +126,7 @@ public class ListadoDePuertas extends JDialog {
 		JButton btnProcesas = new JButton("Procesar");
 		btnProcesas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				VerificarYConsultar();
+				verificarYConsultar();
 				verificarLista();
 			}
 		});
@@ -136,7 +136,7 @@ public class ListadoDePuertas extends JDialog {
 		cbxOrder = new JComboBox();
 		cbxOrder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				VerificarYConsultar();
+				verificarYConsultar();
 				verificarLista();
 			}
 		});
@@ -163,7 +163,6 @@ public class ListadoDePuertas extends JDialog {
 					conexionReportes.GerarRealatorio(puertas, "ListadoDePuertas");
 					conexionReportes.viewer.setVisible(true);
 				} catch (JRException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -215,66 +214,45 @@ public class ListadoDePuertas extends JDialog {
 		contentPanel.add(lblsolonumeros);
 		ordenarTodo();
 		verificarLista();
-	}
+	}// fin del metodo constructor
 	
-	private void buscarPuertas() {
+	private void filtrarPuertas() {
 		dao = new PuertaDao();
-		if(cbxOrder.getSelectedIndex()==0){
-		puertas = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText()+"zzzzzzzz", "id");
-		}
-		if(cbxOrder.getSelectedIndex()==1){
-			puertas = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText()+"zzzzzzzz", "descripcion");
-		}
-		if(cbxOrder.getSelectedIndex()==2){
-			puertas = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText()+"zzzzzzz", "numeroDePuerta");
-		}
+		if(cbxOrder.getSelectedIndex()==0) puertas = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText(), "id");
+		if(cbxOrder.getSelectedIndex()==1) puertas = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText(), "descripcion");
+		if(cbxOrder.getSelectedIndex()==2) puertas = dao.filtroPorOficina(tfDesde.getText(), tfHasta.getText(), "numeroDePuerta");
 		tablaPuerta.setLista(puertas);
 		tablaPuerta.fireTableDataChanged();
 		lblTotalNumer.setText(puertas.size()+"");
 	}
 
-	private void VerificarYConsultar() {
+	private void verificarYConsultar() {
 		if (seleccionarFiltro()==false) {
-			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) {
-				ordenarTodo();
-				return;
-			}
+			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) { ordenarTodo(); return;}
 			if(tfHasta.getText().isEmpty()) tfHasta.setText("999999999");
 			if(tfDesde.getText().isEmpty()) tfDesde.setText("0");
-			buscarPuertas();
+			filtrarPuertas();
 		}
 		if (seleccionarFiltro()==true) {
-			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) {
-				ordenarTodo();
-				return;
-			}
+			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) { ordenarTodo(); return;}
 			if(tfDesde.getText().isEmpty()) tfDesde.setText("A");
-			buscarPuertas();
+			filtrarPuertas();
 		}
 	}
 	
 	private void ordenarTodo() {
 		dao = new PuertaDao();
-		if(cbxOrder.getSelectedIndex()==0){
-		puertas = dao.filtroPorOficina("0", "999999999", "id");
-		}
-		if(cbxOrder.getSelectedIndex()==1){
-			puertas = dao.filtroPorOficina("0", "999999999", "descripcion");
-		}
-		if(cbxOrder.getSelectedIndex()==2){
-			puertas = dao.filtroPorOficina("0", "999999999", "numeroDePuerta");
-		}
+		if(cbxOrder.getSelectedIndex()==0) puertas = dao.filtroPorOficina("0", "999999999", "id");
+		if(cbxOrder.getSelectedIndex()==1) puertas = dao.filtroPorOficina("0", "999999999", "descripcion");
+		if(cbxOrder.getSelectedIndex()==2) puertas = dao.filtroPorOficina("0", "999999999", "numeroDePuerta");
 		tablaPuerta.setLista(puertas);
 		tablaPuerta.fireTableDataChanged();
 		lblTotalNumer.setText(puertas.size()+"");
 	}
 	
 	private boolean seleccionarFiltro() {
-		if(cbFiltro.getSelectedIndex()==0){
-			return false;
-		}else{
-			return true;
-		}
+		if(cbFiltro.getSelectedIndex()==0) return false;
+		return true;
 	}
 	
 	private void verificarLista(){

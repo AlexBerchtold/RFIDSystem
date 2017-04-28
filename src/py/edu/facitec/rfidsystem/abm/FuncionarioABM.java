@@ -347,7 +347,6 @@ public class FuncionarioABM extends GenericABM {
 
 		consultarFuncionarios();
 		funcionario=null;
-		
 	}
 	
 	//----------------Metodos Genericos---------------
@@ -441,10 +440,8 @@ public class FuncionarioABM extends GenericABM {
 	public void eliminar(){
 		if(verificarRelacion()==false) return;
 		if (table.getSelectedRow()<0) return;
-		int respuesta = JOptionPane.showConfirmDialog(null, 
-				"Esta seguro que desea eliminar el funcionario "+funcionario.getNombre(),
-				"Atención",
-				JOptionPane.YES_NO_OPTION);
+		int respuesta = JOptionPane.showConfirmDialog(null, "Esta seguro que desea eliminar el funcionario "
+		+funcionario.getNombre(), "Atención", JOptionPane.YES_NO_OPTION);
 		if(respuesta == JOptionPane.YES_OPTION){
 			dao = new FuncionarioDao();
 			dao.eliminar(funcionario);
@@ -461,9 +458,7 @@ public class FuncionarioABM extends GenericABM {
 	
 	//Metodo para cargargar los datos en el funcionario
 	public void cargarDatos(){
-		if (modificar==false) {
-			funcionario = new Funcionario();
-		}
+		if (modificar==false) funcionario = new Funcionario();
 		funcionario.setApellido(tfApellido.getText());
 		funcionario.setFechaIncorporacion(FechaUtil.dSql(tfFechaIncorporacion.getText()));
 		funcionario.setFechaNacimiento(FechaUtil.dSql(tfFechaNacimiento.getText()));
@@ -614,7 +609,7 @@ public class FuncionarioABM extends GenericABM {
 		permisoAccesos = permisoAccesoDao.recuperarTodo();
 		for (int i = 0; i < permisoAccesos.size(); i++) {
 			if (Integer.parseInt(tfCodigo.getText())==permisoAccesos.get(i).getFuncionario().getId()) {
-				JOptionPane.showMessageDialog(null, "Funcionario Con Permisos de Acceso", "Atencion",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Funcionario Con Permisos de Acceso", "Atención",JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
 		}

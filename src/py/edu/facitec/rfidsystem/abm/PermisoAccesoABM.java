@@ -1,6 +1,7 @@
 package py.edu.facitec.rfidsystem.abm;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
@@ -29,7 +30,6 @@ import py.edu.facitec.rfidsystem.interfaces.InterfazBuscadoPuerta;
 import py.edu.facitec.rfidsystem.interfaces.InterfazBuscadorFuncionario;
 import py.edu.facitec.rfidsystem.interfaces.InterfazBuscardorOficina;
 import py.edu.facitec.rfidsystem.tablas.TablaPermisoAcceso;
-import java.awt.Toolkit;
 
 public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFuncionario, InterfazBuscadoPuerta, InterfazBuscardorOficina {
 	private JTextField tfCodigo;
@@ -228,9 +228,7 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 
 	@Override
 	protected void guardar() {
-		if (modificar==false) {
-			if(verificarCodigo()==true) return;
-		}
+		if (modificar==false) { if(verificarCodigo()==true) return;}
 		if (camposObligatorios()==true) return;
 		cargarDatos();
 		dao = new PermisoAccesoDao();
@@ -273,8 +271,7 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 		if (table.getSelectedRow()<0) return;
 		int respuesta = JOptionPane.showConfirmDialog(null, 
 				"Esta seguro que desea Anular Permiso de Acceso de "+permisoAcceso.getFuncionario().getNombre(),
-				"Atención",
-				JOptionPane.YES_NO_OPTION);
+				"Atención", JOptionPane.YES_NO_OPTION);
 		if(respuesta == JOptionPane.YES_OPTION){
 			dao= new PermisoAccesoDao();
 			dao.eliminar(permisoAcceso);
@@ -290,9 +287,7 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 	}
 	
 	private void cargarDatos(){
-		if (modificar==false){
-			permisoAcceso = new PermisoAcceso();
-		}
+		if (modificar==false) permisoAcceso = new PermisoAcceso();
 		permisoAcceso.setId(Integer.parseInt(tfCodigo.getText()));
 		permisoAcceso.setFuncionario(funcionario);
 		permisoAcceso.setOficina(oficina);

@@ -3,8 +3,11 @@ package py.edu.facitec.rfidsystem.informe;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.List;
@@ -21,18 +24,12 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import net.sf.jasperreports.components.list.HorizontalFillList;
 import net.sf.jasperreports.engine.JRException;
 import py.edu.facitec.rfidsystem.dao.MovimientoDao;
-import py.edu.facitec.rfidsystem.dao.PermisoAccesoDao;
 import py.edu.facitec.rfidsystem.entidad.Movimiento;
-import py.edu.facitec.rfidsystem.entidad.PermisoAcceso;
 import py.edu.facitec.rfidsystem.tablas.TablaMovimiento;
-import py.edu.facitec.rfidsystem.tablas.TablaPermisoAcceso;
 import py.edu.facitec.rfidsystem.util.ConexionReportes;
 import py.edu.facitec.rfidsystem.util.FechaUtil;
-
-import java.awt.Toolkit;
 
 public class InformeDeMovimiento extends JDialog {
 
@@ -115,7 +112,7 @@ public class InformeDeMovimiento extends JDialog {
 		JButton btnProcesas = new JButton("Procesar");
 		btnProcesas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				validarBusqueda();
+				verificarYConsultar();
 			}
 		});
 		btnProcesas.setBounds(501, 11, 108, 30);
@@ -124,7 +121,7 @@ public class InformeDeMovimiento extends JDialog {
 		cbxOrder = new JComboBox();
 		cbxOrder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				validarBusqueda();
+				verificarYConsultar();
 			}
 		});
 		cbxOrder.setModel(new DefaultComboBoxModel(new String[] {"Oficina", "Funcionario", "Hora"}));
@@ -150,7 +147,6 @@ public class InformeDeMovimiento extends JDialog {
 					conexionReportes.GerarRealatorio(movimientos, "ReporteDeMovimiento");
 					conexionReportes.viewer.setVisible(true);
 				} catch (JRException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -199,6 +195,12 @@ public class InformeDeMovimiento extends JDialog {
 		contentPanel.add(lblsolonumeros);
 		
 		tfDesdeHora = new JFormattedTextField(FechaUtil.getFormatoHora());
+		tfDesdeHora.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				if(FechaUtil.stringAHora(tfDesdeHora.getText())==null) tfDesdeHora.setValue(null);
+			}
+		});
 		tfDesdeHora.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -218,6 +220,12 @@ public class InformeDeMovimiento extends JDialog {
 		contentPanel.add(tfDesdeHora);
 		
 		tfHastaHora = new JFormattedTextField(FechaUtil.getFormatoHora());
+		tfHastaHora.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				if(FechaUtil.stringAHora(tfHastaHora.getText())==null) tfDesdeHora.setValue(null);
+			}
+		});
 		tfHastaHora.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -237,21 +245,21 @@ public class InformeDeMovimiento extends JDialog {
 		contentPanel.add(tfHastaHora);
 		ordenarTodo();
 		verificarLista();
-	}
+	}// fin del metodo constructor
 	
-	private void validarBusqueda() {
+	private void verificarYConsultar() {
 		if (cbFiltro.getSelectedIndex()==2) {
 			if (tfDesdeHora.getValue()==null & tfHastaHora.getValue()==null){ ordenarTodo(); return;}
 			if (tfDesdeHora.getValue()==null) {lblsolonumeros.setText("Ingrese el rango inicial"); lblsolonumeros.setVisible(true); return;}
-			if (tfHastaHora.getText()==null) {lblsolonumeros.setText("Ingrese el rango final"); lblsolonumeros.setVisible(true); return;}
+			if (tfHastaHora.getValue()==null) {lblsolonumeros.setText("Ingrese el rango final"); lblsolonumeros.setVisible(true); return;}
 		}else{
 			if (tfDesde.getText().isEmpty() & tfHasta.getText().isEmpty()) {ordenarTodo(); return;}
-			if (tfDesde.getText().isEmpty()) {tfDesde.setText("A"); buscarMovimiento(); return;}
+			if (tfDesde.getText().isEmpty()) {tfDesde.setText("A"); filtrarMovimiento(); return;}
 		}
-		buscarMovimiento();
+		filtrarMovimiento();
 	}
 	
-	private void buscarMovimiento() {
+	private void filtrarMovimiento() {
 		dao = new MovimientoDao();
 		if (cbFiltro.getSelectedIndex()==2) {
 			movimientos = dao.filtrarInforme(tfDesdeHora.getText(), tfHastaHora.getText(), cbxOrder.getSelectedIndex(), 2);
@@ -265,15 +273,9 @@ public class InformeDeMovimiento extends JDialog {
 	
 	private void ordenarTodo() {
 		dao = new MovimientoDao();
-		if (cbxOrder.getSelectedIndex()==0) {
-			movimientos = dao.filtrarInforme("A", "zzzzzz", 0, 1);
-		}
-		if (cbxOrder.getSelectedIndex()==1) {
-			movimientos = dao.filtrarInforme("A", "zzzzzz", 1, 1);
-		}
-		if (cbxOrder.getSelectedIndex()==2) {
-			movimientos = dao.filtrarInforme("A", "zzzzzz", 2, 1);
-		}
+		if (cbxOrder.getSelectedIndex()==0) movimientos = dao.filtrarInforme("A", "zzzzzz", 0, 1);
+		if (cbxOrder.getSelectedIndex()==1) movimientos = dao.filtrarInforme("A", "zzzzzz", 1, 1);
+		if (cbxOrder.getSelectedIndex()==2) movimientos = dao.filtrarInforme("A", "zzzzzz", 2, 1);
 		tablaMovimiento.setLista(movimientos);
 		tablaMovimiento.fireTableDataChanged();
 		verificarLista();
@@ -293,8 +295,8 @@ public class InformeDeMovimiento extends JDialog {
 		}
 		tfDesde.setText("");
 		tfHasta.setText("");
-		tfDesdeHora.setText("");
-		tfHastaHora.setText("");
+		tfDesdeHora.setValue(null);;
+		tfHastaHora.setValue(null);
 		lblsolonumeros.setVisible(false);
 	}
 	
@@ -304,6 +306,5 @@ public class InformeDeMovimiento extends JDialog {
 		}else{
 			btnImprimir.setEnabled(true);
 		}
-
 	}
 }

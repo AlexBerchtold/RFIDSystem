@@ -189,6 +189,7 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 		tfHora.setText("");
 		tfPermisoAcceso.setText("");
 		lblCodigoDuplicado.setVisible(false);
+		tfFecha.setText("");
 	}
 
 	@Override
@@ -205,9 +206,7 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 
 	@Override
 	protected void guardar() {
-		if (modificar==false) {
-			if(verificarCodigo()==true) return;
-		}
+		if (modificar==false) {if(verificarCodigo()==true) return;}
 		if(campoObligatorio()==true) return;
 		cargarDatos();
 		dao = new MovimientoDao();
@@ -243,6 +242,7 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 		permisoAcceso = movimientos.get(index).getPermisoAcceso();
 		tfCodigo.setText(movimiento.getId()+"");
 		tfHora.setText(FechaUtil.horaAString(movimiento.getHora()));
+		tfFecha.setText(FechaUtil.fechaAString(movimiento.getHora()));
 		tfPermisoAcceso.setText(movimiento.getPermisoAcceso().getId()+"");
 		habilitarCampos(false);
 		accionesPrimarias(false);
@@ -272,9 +272,7 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 	}
 	
 	private void cargarDatos() {
-		if(modificar==false){
-			movimiento= new Movimiento();
-		}
+		if(modificar==false) movimiento= new Movimiento();
 		movimiento.setId(Integer.parseInt(tfCodigo.getText()));
 		movimiento.setHora(horaYFecha);
 		movimiento.setPermisoAcceso(permisoAcceso);
@@ -346,11 +344,9 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 		}
 		lblCodigoDuplicado.setVisible(false);
 		return false;
-
 	}
 	
 	Timer timer = new Timer(10000, new ActionListener() {	
-		@Override
 		public void actionPerformed(ActionEvent e) {
 			fechaActual();
 		}

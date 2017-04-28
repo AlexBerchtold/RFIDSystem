@@ -69,7 +69,6 @@ public class FechaUtil {
 		try {
 			return HOUR_FORMAT.parse(text);
 		} catch (ParseException e) {
-			JOptionPane.showMessageDialog(null, "Formato de Hora invalido");
 			return null;
 		}
 	}

@@ -91,7 +91,7 @@ public class PuertaDao extends GenericDao<Puerta> {
 		Join<Object, Object> joinPuerta1=root.join("oficina");
 		criteriaQuery.where(
 				builder.or(
-						builder.between(joinPuerta1.<String>get("descripcion"), desde.toLowerCase()+"%", hasta.toLowerCase()+"%"),
+						builder.between(joinPuerta1.<String>get("descripcion"), desde.toLowerCase()+"%", hasta.toLowerCase()+"zzzzz%"),
 						builder.between(root.<Integer>get("numeroDePuerta"), d, h)));
 		if (order=="descripcion") {
 			criteriaQuery.orderBy(builder.asc(joinPuerta1.<Integer>get(order)));

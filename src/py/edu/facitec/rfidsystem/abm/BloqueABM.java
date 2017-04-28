@@ -189,9 +189,7 @@ public class BloqueABM extends GenericABM implements InterfazBuscarInstitucion {
 	@Override
 	protected void guardar() {
 		if (campoObligatorio()==true) return;
-		if (modificar==false) {
-			if(verificarCodigo()==true)return;
-		}
+		if (modificar==false) if(verificarCodigo()==true)return;;
 		cargarDatos();
 		dao = new BloqueDao();
 		dao.insertarOModificar(bloque);
@@ -245,13 +243,10 @@ public class BloqueABM extends GenericABM implements InterfazBuscarInstitucion {
 	}
 	
 	private void cargarDatos() {
-		if (modificar==false) {
-			bloque = new Bloque();
-		}
+		if (modificar==false) bloque = new Bloque();
 		bloque.setId(Integer.parseInt(tfCodigo.getText()));
 		bloque.setNombre(tfDescripcion.getText());
 		bloque.setInstitucion(institucion);
-
 	}
 	
 	private void consultarBloque() {
@@ -296,8 +291,7 @@ public class BloqueABM extends GenericABM implements InterfazBuscarInstitucion {
 			JOptionPane.showMessageDialog(null, "Institución es un campo obligatorio");
 			btnBuscarInstitucion.requestFocus();
 			return true;
-		}
-			
+		}	
 		return false;
 	}
 

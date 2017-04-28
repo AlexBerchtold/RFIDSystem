@@ -237,7 +237,6 @@ public class OficinaABM extends GenericABM implements InterfazBuscadorBloque {
 		lblcdigoDuplicado.setBounds(113, 186, 128, 14);
 		getContentPane().add(lblcdigoDuplicado);
 		consultarOficina();
-		
 	}
 
 //-------------------Metodos Genericos---------------
@@ -267,9 +266,7 @@ public class OficinaABM extends GenericABM implements InterfazBuscadorBloque {
 	@Override
 	protected void guardar() {
 		if (campoObligatorio()==true) return;
-		if (modificar==false) {
-			if(verificarCodigo()==true)return;
-		}
+		if (modificar==false) { if(verificarCodigo()==true)return;}
 		cargarDatos();
 		dao = new OficinaDao();
 		dao.insertarOModificar(oficina);
@@ -312,8 +309,7 @@ public class OficinaABM extends GenericABM implements InterfazBuscadorBloque {
 		if (table.getSelectedRow()<0) return;
 		int respuesta = JOptionPane.showConfirmDialog(null, 
 				"Esta seguro que desea eliminar el registro de Oficina "+oficina.getDescripcion(),
-				"Atención",
-				JOptionPane.YES_NO_OPTION);
+				"Atención", JOptionPane.YES_NO_OPTION);
 		if(respuesta == JOptionPane.YES_OPTION){
 			dao = new OficinaDao();
 			dao.eliminar(oficina);
@@ -329,18 +325,12 @@ public class OficinaABM extends GenericABM implements InterfazBuscadorBloque {
 	}
 	
 	private void cargarDatos() {
-		if (modificar==false) {
-			oficina = new Oficina();
-		}
+		if (modificar==false) oficina = new Oficina();
 		oficina.setId(Integer.parseInt(tfCodigo.getText()));
 		oficina.setDescripcion(tfDescripcion.getText());
 		oficina.setBloque(bloque);
-		if (cbActivo.isSelected()==true) {
-			oficina.setEstado(true);
-		}
-		if (cbInactivo.isSelected()==true) {
-			oficina.setEstado(false);
-		}
+		if (cbActivo.isSelected()==true) oficina.setEstado(true);
+		if (cbInactivo.isSelected()==true) oficina.setEstado(false);
 	}
 	
 	private void consultarOficina() {
@@ -353,15 +343,9 @@ public class OficinaABM extends GenericABM implements InterfazBuscadorBloque {
 	
 	private void buscarOficina() {
 		dao = new OficinaDao();
-		if (chckbxTodos.isSelected()==true) {
-			oficinas = dao.recuperarPorFiltro(tfBuscar.getText());
-		}
-		if (chckbxActivos.isSelected()==true) {
-			oficinas = dao.recuperarPorActivo(tfBuscar.getText());
-		}
-		if (chckbxInactivos.isSelected()==true) {
-			oficinas = dao.recuperarInactivo(tfBuscar.getText());
-		}
+		if (chckbxTodos.isSelected()==true) oficinas = dao.recuperarPorFiltro(tfBuscar.getText());
+		if (chckbxActivos.isSelected()==true) oficinas = dao.recuperarPorActivo(tfBuscar.getText());
+		if (chckbxInactivos.isSelected()==true) oficinas = dao.recuperarInactivo(tfBuscar.getText());
 		tablaOficina.setLista(oficinas);
 		tablaOficina.fireTableDataChanged();
 	}
@@ -400,7 +384,6 @@ public class OficinaABM extends GenericABM implements InterfazBuscadorBloque {
 			cbActivo.requestFocus();
 			return true;
 		}
-		
 		return false;
 	}
 
@@ -417,7 +400,7 @@ public class OficinaABM extends GenericABM implements InterfazBuscadorBloque {
 		permisoAccesos = permisoAccesoDao.recuperarTodo();
 		for(int i =0; i<permisoAccesos.size(); i++){
 			if (Integer.parseInt(tfCodigo.getText())==permisoAccesos.get(i).getOficina().getId()) {
-				JOptionPane.showMessageDialog(null, "Oficina con Permisos Registrados", "Atencion",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Oficina con Permisos Registrados", "Atención",JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
 		}
