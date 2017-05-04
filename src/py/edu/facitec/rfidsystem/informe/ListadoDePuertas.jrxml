@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-04-27T16:47:21 -->
+<!-- 2017-05-02T17:43:53 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ListadoDePuertas" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9e5efc84-83c7-40b3-9508-01759f118154">
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -30,19 +29,12 @@
 				<text><![CDATA[Listado de Puertas]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="310" y="0" width="100" height="30" uuid="f4c6aaff-5aa1-45f7-86a1-99a6e9fb9835"/>
+				<reportElement x="306" y="0" width="100" height="30" uuid="f4c6aaff-5aa1-45f7-86a1-99a6e9fb9835"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<text><![CDATA[Fecha:]]></text>
 			</staticText>
-			<textField pattern="MMMMM dd, yyyy">
-				<reportElement x="347" y="0" width="100" height="30" uuid="ca32712c-f56d-47e2-a090-7d4b4faea0e0"/>
-				<textElement>
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement x="440" y="0" width="100" height="30" uuid="d6586236-03e9-4088-83ea-4bd09f5ce7f7"/>
 				<textElement>
@@ -56,6 +48,13 @@
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="347" y="0" width="100" height="30" uuid="f649d915-c976-4a6f-94c0-3f5d98825bd8"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
@@ -125,11 +124,15 @@
 		<band height="3" splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
-		<band height="60" splitType="Stretch">
+		<band height="43" splitType="Stretch">
 			<textField>
-				<reportElement x="227" y="30" width="100" height="30" uuid="d0f80cdc-eaf2-4a32-839b-c05e0a76386c"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+				<reportElement mode="Opaque" x="0" y="30" width="515" height="13" backcolor="#E6E6E6" uuid="0b4d0852-3d1c-4d53-8c24-db9864da00b5"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Pág. "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="515" y="30" width="40" height="13" backcolor="#E6E6E6" uuid="14792e39-1b95-4d96-bcaa-c2b9593715c5"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>

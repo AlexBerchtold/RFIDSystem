@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-04-27T16:45:02 -->
+<!-- 2017-05-02T17:45:09 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ReporteDeMovimiento" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4b7bb6fe-8fcb-45a3-95ec-4941131e9d24">
 	<queryString>
 		<![CDATA[]]>
@@ -31,19 +31,12 @@
 				<text><![CDATA[Informe de Movimiento.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="310" y="0" width="100" height="30" uuid="20a27d13-7d6c-4fc5-ac31-a67ca635c99c"/>
+				<reportElement x="307" y="0" width="100" height="30" uuid="20a27d13-7d6c-4fc5-ac31-a67ca635c99c"/>
 				<textElement>
 					<font size="12"/>
 				</textElement>
 				<text><![CDATA[Fecha:]]></text>
 			</staticText>
-			<textField pattern="MMMMM dd, yyyy">
-				<reportElement x="347" y="0" width="100" height="30" uuid="3a29415e-8b3b-42c4-8e47-0d8aac6dc3b5"/>
-				<textElement>
-					<font size="12"/>
-				</textElement>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
-			</textField>
 			<textField pattern="HH:mm">
 				<reportElement x="470" y="0" width="100" height="30" uuid="ff909525-86aa-4819-a5ab-20c798edc18d"/>
 				<textElement>
@@ -58,6 +51,13 @@
 				</textElement>
 				<text><![CDATA[Hora:]]></text>
 			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="347" y="0" width="100" height="30" uuid="577f2c72-d302-447e-8dab-0fc9e2d53913"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
@@ -145,11 +145,15 @@
 		<band height="1" splitType="Stretch"/>
 	</pageFooter>
 	<summary>
-		<band height="56" splitType="Stretch">
+		<band height="46" splitType="Stretch">
 			<textField>
-				<reportElement x="227" y="26" width="100" height="30" uuid="0a91d3e9-a85c-4505-90c8-2c315232a174"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+				<reportElement mode="Opaque" x="-20" y="33" width="555" height="13" backcolor="#E6E6E6" uuid="69d0e8d3-0540-41f6-b351-e3361dc99b82"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Pág. "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="495" y="33" width="80" height="13" backcolor="#E6E6E6" uuid="933ce7c6-ac9a-4c89-b0ea-b2276b000106"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>
