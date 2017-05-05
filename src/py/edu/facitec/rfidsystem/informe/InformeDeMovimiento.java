@@ -10,6 +10,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
@@ -47,6 +48,8 @@ public class InformeDeMovimiento extends JDialog {
 	private JLabel lblsolonumeros;
 	private JFormattedTextField tfDesdeHora;
 	private JFormattedTextField tfHastaHora;
+	private HashMap par;
+	private int c;
 
 	/**
 	 * Create the dialog.
@@ -143,8 +146,12 @@ public class InformeDeMovimiento extends JDialog {
 		btnImprimir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				ConexionReportes<Movimiento> conexionReportes = new ConexionReportes<Movimiento>();
+				if (par==null) {
+					par = new HashMap<>();
+					par.put("parametro", "Informe General		Ordenado por: "+cbxOrder.getSelectedItem());
+				}
 				try {
-					conexionReportes.GerarRealatorio(movimientos, "ReporteDeMovimiento");
+					conexionReportes.GerarRealatorio(movimientos, par, "ReporteDeMovimiento");
 					conexionReportes.viewer.setVisible(true);
 				} catch (JRException e) {
 					e.printStackTrace();
@@ -245,18 +252,21 @@ public class InformeDeMovimiento extends JDialog {
 		contentPanel.add(tfHastaHora);
 		ordenarTodo();
 		verificarLista();
+		c=movimientos.size();
 	}// fin del metodo constructor
 	
 	private void verificarYConsultar() {
 		if (cbFiltro.getSelectedIndex()==2) {
-			if (tfDesdeHora.getValue()==null & tfHastaHora.getValue()==null){ ordenarTodo(); return;}
+			if (tfDesdeHora.getValue()==null & tfHastaHora.getValue()==null){ ordenarTodo(); parametro(); return;}
 			if (tfDesdeHora.getValue()==null) {lblsolonumeros.setText("Ingrese el rango inicial"); lblsolonumeros.setVisible(true); return;}
 			if (tfHastaHora.getValue()==null) {lblsolonumeros.setText("Ingrese el rango final"); lblsolonumeros.setVisible(true); return;}
 		}else{
-			if (tfDesde.getText().isEmpty() & tfHasta.getText().isEmpty()) {ordenarTodo(); return;}
-			if (tfDesde.getText().isEmpty()) {tfDesde.setText("A"); filtrarMovimiento(); return;}
+			if (tfDesde.getText().isEmpty() & tfHasta.getText().isEmpty()) {ordenarTodo(); parametro(); return;}
+			if (tfDesde.getText().isEmpty()) tfDesde.setText("A");
+			if (tfHasta.getText().isEmpty()) tfHasta.setText("Z");
 		}
 		filtrarMovimiento();
+		parametro();
 	}
 	
 	private void filtrarMovimiento() {
@@ -306,5 +316,20 @@ public class InformeDeMovimiento extends JDialog {
 		}else{
 			btnImprimir.setEnabled(true);
 		}
+	}
+	
+	private void parametro() {
+		par = new HashMap<>();
+		if (tfDesde.getText().isEmpty() & tfHasta.getText().isEmpty() | c==movimientos.size()) {
+			par.put("parametro", "Informe General		Ordenado por: "+cbxOrder.getSelectedItem());
+			return;
+		}else{
+			if (cbFiltro.getSelectedIndex()==2) {
+				par.put("parametro", "Desde: "+tfDesdeHora.getText()+"		Hasta: "+tfHastaHora.getText()+"		"
+						+ "Orden por: "+cbxOrder.getSelectedItem());
+			}else
+			par.put("parametro", "Desde: "+tfDesde.getText()+"		Hasta: "+tfHasta.getText()+"		"
+					+ "Orden por: "+cbxOrder.getSelectedItem());
+			}
 	}
 }

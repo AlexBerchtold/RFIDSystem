@@ -79,7 +79,7 @@ public class PantallaPrincipal extends JFrame implements KeyEventDispatcher {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(PantallaPrincipal.class.getResource("/py/edu/facitec/rfidsystem/img/icono.png")));
         DefaultKeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(this); 
 		
-		setTitle("RFID System  1.7");
+		setTitle("RFID System  1.9");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1024, 680);
 		setLocationRelativeTo(this);

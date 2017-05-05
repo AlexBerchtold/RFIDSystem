@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
@@ -41,6 +42,8 @@ public class ListadoDeFuncionarios extends JDialog {
 	private JComboBox cbFiltro;
 	private JButton btnImprimir;
 	private JLabel lblsoloNumeros;
+	private HashMap par;
+	private int c;
 
 	/**
 	 * Create the dialog.
@@ -158,8 +161,12 @@ public class ListadoDeFuncionarios extends JDialog {
 		btnImprimir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				ConexionReportes<Funcionario> conexionReportes = new ConexionReportes<Funcionario>();
+				if (par==null) {
+					par = new HashMap<>();
+					par.put("parametro", "Listado General		Ordenado por: "+cbxOrder.getSelectedItem());
+				}
 				try {
-					conexionReportes.GerarRealatorio(funcionarios, "ListadoDeEmpleados");
+					conexionReportes.GerarRealatorio(funcionarios, par, "ListadoDeEmpleados");
 					conexionReportes.viewer.setVisible(true);
 				} catch (JRException e) {
 					e.printStackTrace();
@@ -212,6 +219,7 @@ public class ListadoDeFuncionarios extends JDialog {
 		contentPanel.add(lblsoloNumeros);
 		ordenarTodo();
 		verificarLista();
+		c=funcionarios.size();
 	}//fin del metodo constructor
 	
 	private void filtrarPorNombre() {
@@ -236,15 +244,18 @@ public class ListadoDeFuncionarios extends JDialog {
 	
 	private void verificarYConsultar() {
 		if (seleccionarFiltro()==false) {
-			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) { ordenarTodo(); return;}
+			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) { ordenarTodo(); parametro(); return;}
 			if(tfHasta.getText().isEmpty()) tfHasta.setText("999999999");
 			if(tfDesde.getText().isEmpty()) tfDesde.setText("0");
 			filtrarPorId();
+			parametro();
 		}
 		if (seleccionarFiltro()==true) {
-			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) { ordenarTodo(); return;}
+			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) { ordenarTodo(); parametro(); return;}
+			if(tfHasta.getText().isEmpty()) tfHasta.setText("Z");
 			if(tfDesde.getText().isEmpty()) tfDesde.setText("A");
 			filtrarPorNombre();
+			parametro();
 		}
 	}
 	
@@ -268,6 +279,17 @@ public class ListadoDeFuncionarios extends JDialog {
 			btnImprimir.setEnabled(false);
 		}else{
 			btnImprimir.setEnabled(true);
+		}
+	}
+	
+	private void parametro() {
+		par = new HashMap<>();
+		if (tfDesde.getText().isEmpty() & tfHasta.getText().isEmpty() | c==funcionarios.size()) {
+			par.put("parametro", "Listado General		Ordenado por: "+cbxOrder.getSelectedItem());
+			return;
+		}else{
+			par.put("parametro", "Desde: "+tfDesde.getText()+"		Hasta: "+tfHasta.getText()+"		"
+					+ "Orden por: "+cbxOrder.getSelectedItem());
 		}
 	}
 }

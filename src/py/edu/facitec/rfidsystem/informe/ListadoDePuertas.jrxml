@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-05-02T17:43:53 -->
+<!-- 2017-05-04T21:49:13 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ListadoDePuertas" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9e5efc84-83c7-40b3-9508-01759f118154">
+	<parameter name="parametro" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -59,40 +60,60 @@
 		</band>
 	</title>
 	<pageHeader>
-		<band height="1" splitType="Stretch"/>
+		<band height="46" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="555" height="30" uuid="f362ddfd-e5a8-4daa-9d4c-a49812ea7508"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="13"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{parametro}]]></textFieldExpression>
+			</textField>
+		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="50" splitType="Stretch">
+		<band height="40" splitType="Stretch">
 			<rectangle>
-				<reportElement x="-10" y="3" width="570" height="40" backcolor="#F0EBEB" uuid="49bbc3da-e9ac-47c0-b11e-89d5c6c73bee"/>
+				<reportElement x="-10" y="3" width="570" height="37" backcolor="#F0EBEB" uuid="49bbc3da-e9ac-47c0-b11e-89d5c6c73bee"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="0" y="10" width="111" height="30" uuid="b00cd94b-01d6-4f20-b6c6-3313131fdb9d"/>
-				<textElement textAlignment="Center"/>
+				<reportElement x="0" y="10" width="111" height="20" uuid="b00cd94b-01d6-4f20-b6c6-3313131fdb9d"/>
+				<textElement textAlignment="Center">
+					<font size="11"/>
+				</textElement>
 				<text><![CDATA[Código]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="111" y="10" width="111" height="30" uuid="ffadbc02-bdd5-44d5-9ccc-0442cbb07e26"/>
+				<reportElement x="111" y="10" width="111" height="20" uuid="ffadbc02-bdd5-44d5-9ccc-0442cbb07e26"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
 				<text><![CDATA[Descripción]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="222" y="10" width="111" height="30" uuid="f4328ff0-1024-477d-ae99-68edee66988e"/>
+				<reportElement x="222" y="10" width="111" height="20" uuid="f4328ff0-1024-477d-ae99-68edee66988e"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
 				<text><![CDATA[Numero de Puerta]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="333" y="10" width="111" height="30" uuid="2b93946e-9c70-4b82-ae38-c0b6c075705b"/>
-				<textElement textAlignment="Center"/>
+				<reportElement x="333" y="10" width="111" height="20" uuid="2b93946e-9c70-4b82-ae38-c0b6c075705b"/>
+				<textElement textAlignment="Center">
+					<font size="11"/>
+				</textElement>
 				<text><![CDATA[Estado]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="444" y="10" width="111" height="30" uuid="1d2aaf82-dd41-4564-857b-002f123602a0"/>
-				<textElement textAlignment="Center"/>
+				<reportElement x="444" y="10" width="111" height="20" uuid="1d2aaf82-dd41-4564-857b-002f123602a0"/>
+				<textElement textAlignment="Center">
+					<font size="11"/>
+				</textElement>
 				<text><![CDATA[Oficina]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="51" splitType="Stretch">
+		<band height="38" splitType="Stretch">
 			<textField>
 				<reportElement x="0" y="8" width="111" height="30" uuid="31a99b21-9bf4-4b12-bb9e-8c26136d8b1a"/>
 				<textElement textAlignment="Center"/>
@@ -126,12 +147,17 @@
 	<pageFooter>
 		<band height="43" splitType="Stretch">
 			<textField>
-				<reportElement mode="Opaque" x="0" y="30" width="515" height="13" backcolor="#E6E6E6" uuid="0b4d0852-3d1c-4d53-8c24-db9864da00b5"/>
-				<textElement textAlignment="Right"/>
+				<reportElement mode="Opaque" x="0" y="20" width="515" height="23" backcolor="#E6E6E6" uuid="0b4d0852-3d1c-4d53-8c24-db9864da00b5"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
 				<textFieldExpression><![CDATA["Pág. "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
-				<reportElement mode="Opaque" x="515" y="30" width="40" height="13" backcolor="#E6E6E6" uuid="14792e39-1b95-4d96-bcaa-c2b9593715c5"/>
+				<reportElement mode="Opaque" x="515" y="20" width="40" height="23" backcolor="#E6E6E6" uuid="14792e39-1b95-4d96-bcaa-c2b9593715c5"/>
+				<textElement verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
 				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 		</band>

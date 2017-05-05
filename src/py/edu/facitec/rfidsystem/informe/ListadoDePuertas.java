@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
@@ -41,6 +42,8 @@ public class ListadoDePuertas extends JDialog {
 	private JComboBox cbFiltro;
 	private JButton btnImprimir;
 	private JLabel lblsolonumeros;
+	private HashMap par;
+	private int c;
 
 	/**
 	 * Create the dialog.
@@ -159,8 +162,12 @@ public class ListadoDePuertas extends JDialog {
 		btnImprimir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				ConexionReportes<Puerta> conexionReportes = new ConexionReportes<Puerta>();
+				if (par==null) {
+					par = new HashMap<>();
+					par.put("parametro", "Listado General		Ordenado por: "+cbxOrder.getSelectedItem());;
+				}
 				try {
-					conexionReportes.GerarRealatorio(puertas, "ListadoDePuertas");
+					conexionReportes.GerarRealatorio(puertas, par, "ListadoDePuertas");
 					conexionReportes.viewer.setVisible(true);
 				} catch (JRException e) {
 					e.printStackTrace();
@@ -214,6 +221,7 @@ public class ListadoDePuertas extends JDialog {
 		contentPanel.add(lblsolonumeros);
 		ordenarTodo();
 		verificarLista();
+		c=puertas.size();
 	}// fin del metodo constructor
 	
 	private void filtrarPuertas() {
@@ -228,16 +236,18 @@ public class ListadoDePuertas extends JDialog {
 
 	private void verificarYConsultar() {
 		if (seleccionarFiltro()==false) {
-			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) { ordenarTodo(); return;}
+			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) { ordenarTodo(); parametro(); return;}
 			if(tfHasta.getText().isEmpty()) tfHasta.setText("999999999");
 			if(tfDesde.getText().isEmpty()) tfDesde.setText("0");
 			filtrarPuertas();
 		}
 		if (seleccionarFiltro()==true) {
-			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) { ordenarTodo(); return;}
+			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) { ordenarTodo(); parametro(); return;}
 			if(tfDesde.getText().isEmpty()) tfDesde.setText("A");
+			if(tfHasta.getText().isEmpty()) tfHasta.setText("z");
 			filtrarPuertas();
 		}
+		parametro();
 	}
 	
 	private void ordenarTodo() {
@@ -262,4 +272,17 @@ public class ListadoDePuertas extends JDialog {
 			btnImprimir.setEnabled(true);
 		}
 	}
+	
+	private void parametro() {
+		par = new HashMap<>();
+		if (tfDesde.getText().isEmpty() & tfHasta.getText().isEmpty() | c==puertas.size()) {
+			par.put("parametro", "Listado General		Ordenado por: "+cbxOrder.getSelectedItem());
+			return;
+		}else{
+			par.put("parametro", "Desde: "+tfDesde.getText()+"		Hasta: "+tfHasta.getText()+"		"
+					+ "Orden por: "+cbxOrder.getSelectedItem());
+		}
+	}
+	
+
 }

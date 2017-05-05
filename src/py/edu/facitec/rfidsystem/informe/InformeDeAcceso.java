@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
@@ -41,6 +42,8 @@ public class InformeDeAcceso extends JDialog {
 	private JComboBox cbFiltro;
 	private JButton btnImprimir;
 	private JLabel lblsolonumeros;
+	private HashMap par;
+	private int c;
 
 	/**
 	 * Create the dialog.
@@ -139,8 +142,12 @@ public class InformeDeAcceso extends JDialog {
 		btnImprimir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				ConexionReportes<PermisoAcceso> conexionReportes = new ConexionReportes<PermisoAcceso>();
+				if (par==null) {
+					par = new HashMap<>();
+					par.put("parametro", "Informe General		Ordenado por: "+cbxOrder.getSelectedItem());
+				}
 				try {
-					conexionReportes.GerarRealatorio(permisoAccesos, "ReporteDePermisoAcceso");
+					conexionReportes.GerarRealatorio(permisoAccesos, par, "ReporteDePermisoAcceso");
 					conexionReportes.viewer.setVisible(true);
 				} catch (JRException e) {
 					e.printStackTrace();
@@ -192,6 +199,7 @@ public class InformeDeAcceso extends JDialog {
 		contentPanel.add(lblsolonumeros);
 		ordenarTodo();
 		verificarLista();
+		c=permisoAccesos.size();
 	}//fin del metodo constructor
 	
 	private void filtrarAccesos() {
@@ -205,16 +213,17 @@ public class InformeDeAcceso extends JDialog {
 
 	private void verificarYConsultar() {
 		if (cbFiltro.getSelectedIndex()==0) {
-			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) { ordenarTodo(); return;}
+			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) { ordenarTodo(); parametro(); return;}
 			if(tfHasta.getText().isEmpty()) tfHasta.setText("Zzzzzzz");
 			if(tfDesde.getText().isEmpty()) tfDesde.setText("A");
 			filtrarAccesos();
 		}
 		if (cbFiltro.getSelectedIndex()==1) {
-			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) { ordenarTodo(); return;}
+			if (tfHasta.getText().isEmpty() & tfDesde.getText().isEmpty()) { ordenarTodo(); parametro(); return;}
 			if(tfDesde.getText().isEmpty()) tfDesde.setText("A");
 			filtrarAccesos();
 		}
+		parametro();
 	}
 	
 	private void ordenarTodo() {
@@ -232,6 +241,17 @@ public class InformeDeAcceso extends JDialog {
 			btnImprimir.setEnabled(false);
 		}else{
 			btnImprimir.setEnabled(true);
+		}
+	}
+	
+	private void parametro() {
+		par = new HashMap<>();
+		if (tfDesde.getText().isEmpty() & tfHasta.getText().isEmpty() | c==permisoAccesos.size()) {
+			par.put("parametro", "Informe General		Ordenado por: "+cbxOrder.getSelectedItem());
+			return;
+		}else{
+			par.put("parametro", "Desde: "+tfDesde.getText()+"		Hasta: "+tfHasta.getText()+"		"
+					+ "Orden por: "+cbxOrder.getSelectedItem());
 		}
 	}
 }
