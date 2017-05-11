@@ -12,6 +12,7 @@ public class FechaUtil {
 	private static MaskFormatter formatter;
 	private static DateFormat DATE_FORTMAT = new SimpleDateFormat("dd/MM/yyyy");
 	private static DateFormat HOUR_FORMAT = new SimpleDateFormat("HH:mm");
+	private static DateFormat hourdateFormat = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
 	
 	//Metodo para pasar el formato al jtext
 	public static MaskFormatter getFormato() {
@@ -46,6 +47,17 @@ public class FechaUtil {
 			return null;
 		}
 	}
+	
+	public static Date stringFechaHora(String text){
+		DATE_FORTMAT.setLenient(false);
+		try {
+			return hourdateFormat.parse(text);
+		} catch (ParseException e) {
+			System.err.println("No funciona la fecha");
+			return null;
+		}
+	}
+	
 
 	//Metodo que convierte datos del tipo Date a String
 	public static String fechaAString(Date fecha) {
@@ -76,4 +88,5 @@ public class FechaUtil {
 	public static String horaAString(Date fecha){
 		return HOUR_FORMAT.format(fecha);
 	}
+	
 }

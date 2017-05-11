@@ -10,7 +10,7 @@ import py.edu.facitec.rfidsystem.util.FechaUtil;
 public class TablaInformeFuncionario extends AbstractTableModel {
 
 	public String columnas[]={
-			"Codigo", "Nombre", "Apellido", "Fecha Nacimiento", "CI.", "Incorporacion", "Tarjeta"	};
+			"Código", "Nombre", "Apellido", "Fecha Nacimiento", "CI.", "Incorporación", "Tarjeta"	};
 	
 	private Object[][] datos = new Object[0][columnas.length];
 	

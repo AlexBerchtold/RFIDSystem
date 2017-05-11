@@ -61,7 +61,7 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 		setBounds(100, 100, 800, 525);
 		setLocationRelativeTo(this);
 		setTitle("Registro de Acceso");
-		btnEliminar.setText("Anular");
+		btnEliminar.setText("Eliminar");
 		tablaPermisoAcceso = new TablaPermisoAcceso();
 		table.setModel(tablaPermisoAcceso);
 		

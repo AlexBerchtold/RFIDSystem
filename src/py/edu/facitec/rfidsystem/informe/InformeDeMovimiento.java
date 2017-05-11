@@ -10,6 +10,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,6 +29,7 @@ import javax.swing.border.EmptyBorder;
 import net.sf.jasperreports.engine.JRException;
 import py.edu.facitec.rfidsystem.dao.MovimientoDao;
 import py.edu.facitec.rfidsystem.entidad.Movimiento;
+import py.edu.facitec.rfidsystem.tablas.TablaInformeMovimiento;
 import py.edu.facitec.rfidsystem.tablas.TablaMovimiento;
 import py.edu.facitec.rfidsystem.util.ConexionReportes;
 import py.edu.facitec.rfidsystem.util.FechaUtil;
@@ -38,7 +40,7 @@ public class InformeDeMovimiento extends JDialog {
 	private JTextField tfDesde;
 	private JTable table;
 	private JTextField tfHasta;
-	private TablaMovimiento tablaMovimiento;
+	private TablaInformeMovimiento tablaMovimiento;
 	private MovimientoDao dao;
 	private List<Movimiento> movimientos;
 	private JComboBox cbxOrder;
@@ -50,6 +52,7 @@ public class InformeDeMovimiento extends JDialog {
 	private JFormattedTextField tfHastaHora;
 	private HashMap par;
 	private int c;
+	private String fechaActual;
 
 	/**
 	 * Create the dialog.
@@ -66,7 +69,7 @@ public class InformeDeMovimiento extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		
-		tablaMovimiento = new TablaMovimiento();
+		tablaMovimiento = new TablaInformeMovimiento();
 		
 		JLabel lblDesde = new JLabel("Desde:");
 		lblDesde.setBounds(234, 14, 46, 14);
@@ -253,6 +256,7 @@ public class InformeDeMovimiento extends JDialog {
 		ordenarTodo();
 		verificarLista();
 		c=movimientos.size();
+		fechaActual();
 	}// fin del metodo constructor
 	
 	private void verificarYConsultar() {
@@ -272,7 +276,7 @@ public class InformeDeMovimiento extends JDialog {
 	private void filtrarMovimiento() {
 		dao = new MovimientoDao();
 		if (cbFiltro.getSelectedIndex()==2) {
-			movimientos = dao.filtrarInforme(tfDesdeHora.getText(), tfHastaHora.getText(), cbxOrder.getSelectedIndex(), 2);
+			movimientos = dao.filtrarInforme(tfDesdeHora.getText(), tfHastaHora.getText()+":00 "+fechaActual, cbxOrder.getSelectedIndex(), 2);
 		}else{
 			movimientos = dao.filtrarInforme(tfDesde.getText(), tfHasta.getText()+"zzzzzzz", cbxOrder.getSelectedIndex(), cbFiltro.getSelectedIndex());
 		}
@@ -331,5 +335,9 @@ public class InformeDeMovimiento extends JDialog {
 			par.put("parametro", "Desde: "+tfDesde.getText()+"		Hasta: "+tfHasta.getText()+"		"
 					+ "Orden por: "+cbxOrder.getSelectedItem());
 			}
+	}
+	
+	private void fechaActual(){
+		fechaActual = FechaUtil.fechaAString(new Date());
 	}
 }

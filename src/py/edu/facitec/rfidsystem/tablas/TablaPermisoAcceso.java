@@ -9,7 +9,7 @@ import py.edu.facitec.rfidsystem.entidad.PermisoAcceso;
 public class TablaPermisoAcceso extends AbstractTableModel{
 	
 	public String columnas[]={
-			"Codigo", "Oficina", "Funcionario", "Nro. Puerta"	};
+			"Código", "Oficina", "Funcionario", "Nro. Puerta"	};
 	
 	private Object[][] datos = new Object[0][columnas.length];
 	
