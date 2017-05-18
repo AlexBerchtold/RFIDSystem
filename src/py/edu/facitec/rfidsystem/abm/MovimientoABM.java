@@ -125,7 +125,7 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 			public void keyPressed(KeyEvent e) {
 				char c = e.getKeyChar();
 				if (c== e.VK_ENTER) {
-					tfHora.requestFocus();
+					btnPermisoAcceso.requestFocus();
 				}
 			}
 		});
@@ -190,6 +190,7 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 		tfPermisoAcceso.setText("");
 		lblCodigoDuplicado.setVisible(false);
 		tfFecha.setText("");
+		tfCodigo.requestFocus();
 	}
 
 	@Override

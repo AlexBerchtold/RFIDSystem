@@ -144,6 +144,7 @@ public class InstitucionABM extends GenericABM {
 		tfCodigo.setText("");
 		tfDescripcion.setText("");
 		lblcodigoDuplicado.setVisible(false);
+		tfCodigo.requestFocus();
 	}
 
 	@Override

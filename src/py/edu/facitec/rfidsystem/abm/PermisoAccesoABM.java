@@ -113,6 +113,13 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 					lblCodigoDuplicado.setVisible(false);
 				}
 			}
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (c== e.VK_ENTER) {
+					btnBuscarFuncionario.requestFocus();
+				}
+			}
 		});
 		tfCodigo.setEnabled(false);
 		tfCodigo.setBounds(111, 163, 86, 20);
@@ -212,6 +219,7 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 		tfOficina.setText("");
 		tfPuerta.setText("");
 		lblCodigoDuplicado.setVisible(false);
+		tfCodigo.requestFocus();
 	}
 
 	@Override

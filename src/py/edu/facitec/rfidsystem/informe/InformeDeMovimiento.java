@@ -92,6 +92,13 @@ public class InformeDeMovimiento extends JDialog {
 						lblsolonumeros.setVisible(false);
 					}
 				}
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (c== e.VK_ENTER) {
+					tfHasta.requestFocus();
+				}
+			}
 		});
 		tfDesde.setBounds(290, 14, 186, 20);
 		contentPanel.add(tfDesde);
@@ -223,6 +230,13 @@ public class InformeDeMovimiento extends JDialog {
 					lblsolonumeros.setVisible(false);
 				}
 			}
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (c== e.VK_ENTER) {
+					tfHastaHora.requestFocus();
+				}
+			}
 		});
 		tfDesdeHora.setVisible(false);
 		tfDesdeHora.setColumns(10);
@@ -257,6 +271,7 @@ public class InformeDeMovimiento extends JDialog {
 		verificarLista();
 		c=movimientos.size();
 		fechaActual();
+		tfDesde.requestFocus();
 	}// fin del metodo constructor
 	
 	private void verificarYConsultar() {
@@ -301,11 +316,13 @@ public class InformeDeMovimiento extends JDialog {
 			tfHasta.setVisible(false);
 			tfDesdeHora.setVisible(true);
 			tfHastaHora.setVisible(true);
+			tfDesdeHora.requestFocus();
 		}else{
 			tfDesde.setVisible(true);
 			tfHasta.setVisible(true);
 			tfDesdeHora.setVisible(false);
 			tfHastaHora.setVisible(false);
+			tfDesde.requestFocus();
 		}
 		tfDesde.setText("");
 		tfHasta.setText("");

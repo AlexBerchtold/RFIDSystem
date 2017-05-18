@@ -93,6 +93,13 @@ public class ListadoDePuertas extends JDialog {
 					}
 				}
 			}
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (c== e.VK_ENTER) {
+					tfHasta.requestFocus();
+				}
+			}
 		});
 		tfDesde.setBounds(290, 14, 186, 20);
 		contentPanel.add(tfDesde);
@@ -207,6 +214,7 @@ public class ListadoDePuertas extends JDialog {
 				tfDesde.setText("");
 				tfHasta.setText("");
 				lblsolonumeros.setVisible(false);
+				tfDesde.requestFocus();
 			}
 		});
 		cbFiltro.setModel(new DefaultComboBoxModel(new String[] {"Nro. de Puerta", "Oficina"}));
@@ -222,6 +230,7 @@ public class ListadoDePuertas extends JDialog {
 		ordenarTodo();
 		verificarLista();
 		c=puertas.size();
+		tfDesde.requestFocus();
 	}// fin del metodo constructor
 	
 	private void filtrarPuertas() {

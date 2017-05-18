@@ -83,6 +83,13 @@ public class InformeDeAcceso extends JDialog {
 						lblsolonumeros.setVisible(false);
 					}
 				}
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (c== e.VK_ENTER) {
+					tfHasta.requestFocus();
+				}
+			}
 		});
 		tfDesde.setBounds(290, 14, 186, 20);
 		contentPanel.add(tfDesde);
@@ -184,6 +191,7 @@ public class InformeDeAcceso extends JDialog {
 		cbFiltro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				tfDesde.setText("");
+				tfDesde.requestFocus();
 				tfHasta.setText("");
 				lblsolonumeros.setVisible(false);
 			}
@@ -200,6 +208,7 @@ public class InformeDeAcceso extends JDialog {
 		ordenarTodo();
 		verificarLista();
 		c=permisoAccesos.size();
+		tfDesde.requestFocus();
 	}//fin del metodo constructor
 	
 	private void filtrarAccesos() {

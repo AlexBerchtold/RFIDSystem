@@ -131,6 +131,15 @@ public class OficinaABM extends GenericABM implements InterfazBuscadorBloque {
 		getContentPane().add(tfCodigo);
 		
 		tfDescripcion = new JTextField();
+		tfDescripcion.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (c== e.VK_ENTER) {
+					btnBuscarBloque.requestFocus();
+				}
+			}
+		});
 		tfDescripcion.setEnabled(false);
 		tfDescripcion.setColumns(10);
 		tfDescripcion.setBounds(113, 210, 158, 20);
@@ -248,6 +257,7 @@ public class OficinaABM extends GenericABM implements InterfazBuscadorBloque {
 		tfBloque.setText("");
 		cbActivo.setSelected(false);
 		cbInactivo.setSelected(false);
+		tfCodigo.requestFocus();
 	}
 
 	@Override

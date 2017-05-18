@@ -92,6 +92,13 @@ public class ListadoDeFuncionarios extends JDialog {
 					}
 				}
 			}
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (c== e.VK_ENTER) {
+					tfHasta.requestFocus();
+				}
+			}
 		});
 		tfDesde.setBounds(290, 14, 186, 20);
 		contentPanel.add(tfDesde);
@@ -206,6 +213,7 @@ public class ListadoDeFuncionarios extends JDialog {
 				tfDesde.setText("");
 				tfHasta.setText("");
 				lblsoloNumeros.setVisible(false);
+				tfDesde.requestFocus();
 			}
 		});
 		cbFiltro.setModel(new DefaultComboBoxModel(new String[] {"C\u00F3digo", "Nombre"}));
@@ -220,6 +228,7 @@ public class ListadoDeFuncionarios extends JDialog {
 		ordenarTodo();
 		verificarLista();
 		c=funcionarios.size();
+		tfHasta.requestFocus();
 	}//fin del metodo constructor
 	
 	private void filtrarPorNombre() {

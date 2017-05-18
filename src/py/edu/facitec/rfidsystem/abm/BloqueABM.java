@@ -118,6 +118,15 @@ public class BloqueABM extends GenericABM implements InterfazBuscarInstitucion {
 		getContentPane().add(tfCodigo);
 		
 		tfDescripcion = new JTextField();
+		tfDescripcion.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (c == e.VK_ENTER) {
+					btnBuscarInstitucion.requestFocus();
+				}
+			}
+		});
 		tfDescripcion.setEnabled(false);
 		tfDescripcion.setColumns(10);
 		tfDescripcion.setBounds(113, 221, 158, 20);
@@ -173,6 +182,7 @@ public class BloqueABM extends GenericABM implements InterfazBuscarInstitucion {
 		tfCodigo.setText("");
 		tfDescripcion.setText("");
 		tfInstitucion.setText("");
+		tfCodigo.requestFocus();
 	}
 	
 	@Override

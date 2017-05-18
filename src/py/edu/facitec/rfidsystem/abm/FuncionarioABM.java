@@ -364,6 +364,7 @@ public class FuncionarioABM extends GenericABM {
 		lbltarjetaDuplicada.setVisible(false);
 		lblValidarApellido.setVisible(false);
 		lblValidarNombre.setVisible(false);
+		tfCodigo.requestFocus();
 	}
 	
 	@Override

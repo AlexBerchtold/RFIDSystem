@@ -159,7 +159,7 @@ public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 			public void keyPressed(KeyEvent e) {
 				char c = e.getKeyChar();
 				if (c == e.VK_ENTER & !tfCodigo.getText().isEmpty()) {
-					tfDescripcion.requestFocus();
+					btnBuscador.requestFocus();
 				}
 			}
 		});
@@ -221,6 +221,15 @@ public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 		getContentPane().add(tfNumeroDePuertas);
 		
 		btnBuscador = new BotonPersonalizadoABM();
+		btnBuscador.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (c== e.VK_ENTER) {
+					tfDescripcion.requestFocus();
+				}
+			}
+		});
 		btnBuscador.setEnabled(false);
 		btnBuscador.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
