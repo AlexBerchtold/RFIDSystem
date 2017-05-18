@@ -9,7 +9,7 @@ import py.edu.facitec.rfidsystem.entidad.Puerta;
 public class TablaPuerta extends AbstractTableModel {
 	
 	public String columnas[]={
-			"Código", "Descripción", "Nuro. de Puerta", "Oficina", "Estado"	};
+			"Código", "Descripción", "Nro. de Puerta", "Oficina", "Estado"	};
 	
 	private Object[][] datos = new Object[0][columnas.length];
 	

@@ -141,7 +141,7 @@ public class ListadoDeFuncionarios extends JDialog {
 				verificarLista();
 			}
 		});
-		cbxOrder.setModel(new DefaultComboBoxModel(new String[] {"Codigo", "Nombre", "Apellido"}));
+		cbxOrder.setModel(new DefaultComboBoxModel(new String[] {"C\u00F3digo", "Nombre", "Apellido"}));
 		cbxOrder.setBounds(88, 54, 95, 20);
 		contentPanel.add(cbxOrder);
 		
@@ -208,7 +208,7 @@ public class ListadoDeFuncionarios extends JDialog {
 				lblsoloNumeros.setVisible(false);
 			}
 		});
-		cbFiltro.setModel(new DefaultComboBoxModel(new String[] {"Codigo", "Nombre"}));
+		cbFiltro.setModel(new DefaultComboBoxModel(new String[] {"C\u00F3digo", "Nombre"}));
 		cbFiltro.setBounds(88, 11, 95, 20);
 		contentPanel.add(cbFiltro);
 		lblsoloNumeros = new JLabel("*Solo Numeros");
