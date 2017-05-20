@@ -47,7 +47,7 @@ public class MovimientoDao extends GenericDao<Movimiento> {
 		}
 		if (filtro==2) {
 			Date d = null, h=null;
-			d= FechaUtil.stringAHora(desde);
+			d= FechaUtil.stringFechaHora(desde);
 			h= FechaUtil.stringFechaHora(hasta);
 			criteriaQuery.where(builder.between(root.<java.sql.Date>get("hora"), d, h));
 		}

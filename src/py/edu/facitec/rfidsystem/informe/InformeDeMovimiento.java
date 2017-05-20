@@ -53,6 +53,8 @@ public class InformeDeMovimiento extends JDialog {
 	private HashMap par;
 	private int c;
 	private String fechaActual;
+	private JFormattedTextField tfDesdeFecha;
+	private JFormattedTextField tfHastaFecha;
 
 	/**
 	 * Create the dialog.
@@ -234,20 +236,20 @@ public class InformeDeMovimiento extends JDialog {
 			public void keyPressed(KeyEvent e) {
 				char c = e.getKeyChar();
 				if (c== e.VK_ENTER) {
-					tfHastaHora.requestFocus();
+					tfDesdeFecha.requestFocus();
 				}
 			}
 		});
 		tfDesdeHora.setVisible(false);
 		tfDesdeHora.setColumns(10);
-		tfDesdeHora.setBounds(290, 14, 186, 20);
+		tfDesdeHora.setBounds(290, 14, 46, 20);
 		contentPanel.add(tfDesdeHora);
 		
 		tfHastaHora = new JFormattedTextField(FechaUtil.getFormatoHora());
 		tfHastaHora.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				if(FechaUtil.stringAHora(tfHastaHora.getText())==null) tfDesdeHora.setValue(null);
+				if(FechaUtil.stringAHora(tfHastaHora.getText())==null) tfHastaHora.setValue(null);
 			}
 		});
 		tfHastaHora.addKeyListener(new KeyAdapter() {
@@ -262,23 +264,98 @@ public class InformeDeMovimiento extends JDialog {
 					lblsolonumeros.setVisible(false);
 				}
 			}
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (c== e.VK_ENTER) {
+					tfHastaFecha.requestFocus();
+				}
+			}
 		});
 		tfHastaHora.setVisible(false);
 		tfHastaHora.setColumns(10);
-		tfHastaHora.setBounds(290, 54, 186, 20);
+		tfHastaHora.setBounds(290, 54, 46, 20);
 		contentPanel.add(tfHastaHora);
+		
+		tfDesdeFecha = new JFormattedTextField(FechaUtil.getFormato());
+		tfDesdeFecha.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				if(FechaUtil.stringAFecha(tfDesdeFecha.getText())==null) tfDesdeFecha.setValue(null);
+			}
+		});
+		tfDesdeFecha.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (!Character.isDigit(c) & c!= e.VK_ENTER & c!= e.VK_BACK_SPACE) {
+					e.consume();
+					lblsolonumeros.setVisible(true);
+					lblsolonumeros.setText("*Solo Numeros");
+				}else{
+					lblsolonumeros.setVisible(false);
+				}
+			}
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (c== e.VK_ENTER) {
+					tfHastaHora.requestFocus();
+				}
+			}
+		});
+		tfDesdeFecha.setVisible(false);
+		tfDesdeFecha.setBounds(346, 14, 70, 20);
+		contentPanel.add(tfDesdeFecha);
+		
+		tfHastaFecha = new JFormattedTextField(FechaUtil.getFormato());
+		tfHastaFecha.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (!Character.isDigit(c) & c!= e.VK_ENTER & c!= e.VK_BACK_SPACE) {
+					e.consume();
+					lblsolonumeros.setVisible(true);
+					lblsolonumeros.setText("*Solo Numeros");
+				}else{
+					lblsolonumeros.setVisible(false);
+				}
+			}
+			@Override
+			public void keyPressed(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (!Character.isDigit(c) & c!= e.VK_ENTER & c!= e.VK_BACK_SPACE) {
+					e.consume();
+					lblsolonumeros.setVisible(true);
+					lblsolonumeros.setText("*Solo Numeros");
+				}else{
+					lblsolonumeros.setVisible(false);
+				}
+			}
+		});
+		tfHastaFecha.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(FechaUtil.stringAFecha(tfHastaFecha.getText())==null) tfHastaFecha.setValue(null);
+			}
+		});
+		tfHastaFecha.setVisible(false);
+		tfHastaFecha.setBounds(346, 54, 70, 20);
+		contentPanel.add(tfHastaFecha);
 		ordenarTodo();
 		verificarLista();
 		c=movimientos.size();
-		fechaActual();
 		tfDesde.requestFocus();
 	}// fin del metodo constructor
 	
 	private void verificarYConsultar() {
 		if (cbFiltro.getSelectedIndex()==2) {
-			if (tfDesdeHora.getValue()==null & tfHastaHora.getValue()==null){ ordenarTodo(); parametro(); return;}
-			if (tfDesdeHora.getValue()==null) {lblsolonumeros.setText("Ingrese el rango inicial"); lblsolonumeros.setVisible(true); return;}
-			if (tfHastaHora.getValue()==null) {lblsolonumeros.setText("Ingrese el rango final"); lblsolonumeros.setVisible(true); return;}
+			if (FechaUtil.stringAFecha(tfDesdeFecha.getText())==null & FechaUtil.stringAFecha(tfHastaFecha.getText())==null & tfDesdeHora.getValue()==null & tfHastaHora.getValue()==null ){ ordenarTodo(); parametro(); return;}
+			if (FechaUtil.stringAFecha(tfDesdeFecha.getText())==null) {lblsolonumeros.setText("Ingrese la fecha inicial"); lblsolonumeros.setVisible(true); return;}
+			if (FechaUtil.stringAFecha(tfHastaFecha.getText())==null ) {lblsolonumeros.setText("Ingrese la fecha final"); lblsolonumeros.setVisible(true); return;}
+			if(tfDesdeHora.getValue()==null & tfHastaHora.getValue()==null){filtrarPorFecha(); return;}
+			if(tfDesdeHora.getValue()==null){tfDesdeHora.requestFocus(); lblsolonumeros.setText("Ingrese la Hora inicial"); return;}
+			if(tfHastaHora.getValue()==null){tfHastaHora.requestFocus(); lblsolonumeros.setText("Ingrese Hora final"); return;}
 		}else{
 			if (tfDesde.getText().isEmpty() & tfHasta.getText().isEmpty()) {ordenarTodo(); parametro(); return;}
 			if (tfDesde.getText().isEmpty()) tfDesde.setText("A");
@@ -291,13 +368,23 @@ public class InformeDeMovimiento extends JDialog {
 	private void filtrarMovimiento() {
 		dao = new MovimientoDao();
 		if (cbFiltro.getSelectedIndex()==2) {
-			movimientos = dao.filtrarInforme(tfDesdeHora.getText(), tfHastaHora.getText()+":00 "+fechaActual, cbxOrder.getSelectedIndex(), 2);
+			movimientos = dao.filtrarInforme(tfDesdeHora.getText()+":00 "+tfDesdeFecha.getText(), tfHastaHora.getText()+":00 "+tfHastaFecha.getText(), cbxOrder.getSelectedIndex(), 2);
 		}else{
 			movimientos = dao.filtrarInforme(tfDesde.getText(), tfHasta.getText()+"zzzzzzz", cbxOrder.getSelectedIndex(), cbFiltro.getSelectedIndex());
 		}
 		tablaMovimiento.setLista(movimientos);
 		tablaMovimiento.fireTableDataChanged();
 		verificarLista();
+	}
+	
+	private void filtrarPorFecha() {
+		dao = new MovimientoDao();
+		movimientos = dao.filtrarInforme("00:00:00 "+tfDesdeFecha.getText(), "23:59:00 "+tfHastaFecha.getText(), cbxOrder.getSelectedIndex(), 2);
+		tablaMovimiento.setLista(movimientos);
+		tablaMovimiento.fireTableDataChanged();
+		verificarLista();
+		par = new HashMap<>();
+		par.put("parametro", "Desde: "+tfDesdeFecha.getText()+"		Hasta: "+tfHastaFecha.getText()+"		"+ "Orden por: "+cbxOrder.getSelectedItem());
 	}
 	
 	private void ordenarTodo() {
@@ -316,18 +403,24 @@ public class InformeDeMovimiento extends JDialog {
 			tfHasta.setVisible(false);
 			tfDesdeHora.setVisible(true);
 			tfHastaHora.setVisible(true);
+			tfDesdeFecha.setVisible(true);
+			tfHastaFecha.setVisible(true);
 			tfDesdeHora.requestFocus();
 		}else{
 			tfDesde.setVisible(true);
 			tfHasta.setVisible(true);
 			tfDesdeHora.setVisible(false);
 			tfHastaHora.setVisible(false);
+			tfDesdeFecha.setVisible(false);
+			tfHastaFecha.setVisible(false);
 			tfDesde.requestFocus();
 		}
 		tfDesde.setText("");
 		tfHasta.setText("");
 		tfDesdeHora.setValue(null);;
 		tfHastaHora.setValue(null);
+		tfDesdeFecha.setValue("");
+		tfHastaFecha.setValue("");
 		lblsolonumeros.setVisible(false);
 	}
 	
@@ -341,12 +434,12 @@ public class InformeDeMovimiento extends JDialog {
 	
 	private void parametro() {
 		par = new HashMap<>();
-		if (tfDesde.getText().isEmpty() & tfHasta.getText().isEmpty() | c==movimientos.size()) {
+		if (c==movimientos.size()) {
 			par.put("parametro", "Informe General		Ordenado por: "+cbxOrder.getSelectedItem());
 			return;
 		}else{
 			if (cbFiltro.getSelectedIndex()==2) {
-				par.put("parametro", "Desde: "+tfDesdeHora.getText()+"		Hasta: "+tfHastaHora.getText()+"		"
+				par.put("parametro", "Desde: "+tfDesdeHora.getText()+"  "+tfDesdeFecha.getText()+"		Hasta: "+tfHastaHora.getText()+" "+tfHastaFecha.getText()+"		"
 						+ "Orden por: "+cbxOrder.getSelectedItem());
 			}else
 			par.put("parametro", "Desde: "+tfDesde.getText()+"		Hasta: "+tfHasta.getText()+"		"
@@ -354,7 +447,4 @@ public class InformeDeMovimiento extends JDialog {
 			}
 	}
 	
-	private void fechaActual(){
-		fechaActual = FechaUtil.fechaAString(new Date());
-	}
 }

@@ -150,7 +150,7 @@ public class ListadoDePuertas extends JDialog {
 				verificarLista();
 			}
 		});
-		cbxOrder.setModel(new DefaultComboBoxModel(new String[] {"C\u00F3digo", "Descripci\u00F3n", "Numero"}));
+		cbxOrder.setModel(new DefaultComboBoxModel(new String[] {"C\u00F3digo", "Oficina", "Numero"}));
 		cbxOrder.setBounds(88, 54, 108, 20);
 		contentPanel.add(cbxOrder);
 		

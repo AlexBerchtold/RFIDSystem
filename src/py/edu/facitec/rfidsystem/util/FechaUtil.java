@@ -43,7 +43,6 @@ public class FechaUtil {
 		try {
 			return DATE_FORTMAT.parse(text);
 		} catch (ParseException e) {
-			JOptionPane.showMessageDialog(null, "Formato de fecha invalido");
 			return null;
 		}
 	}

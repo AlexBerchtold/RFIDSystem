@@ -42,7 +42,7 @@ public class ListadoDeFuncionarios extends JDialog {
 	private JComboBox cbFiltro;
 	private JButton btnImprimir;
 	private JLabel lblsoloNumeros;
-	private HashMap par;
+	private HashMap<String, Object> par;
 	private int c;
 
 	/**
@@ -173,7 +173,7 @@ public class ListadoDeFuncionarios extends JDialog {
 					par.put("parametro", "Listado General		Ordenado por: "+cbxOrder.getSelectedItem());
 				}
 				try {
-					conexionReportes.GerarRealatorio(funcionarios, par, "ListadoDeEmpleados");
+					conexionReportes.GerarRealatorio(funcionarios, par, "ListadoDeFuncionario");
 					conexionReportes.viewer.setVisible(true);
 				} catch (JRException e) {
 					e.printStackTrace();

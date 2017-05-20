@@ -27,7 +27,5 @@ public class ConexionReportes<E> {
 		JasperPrint print = JasperFillManager.fillReport(report, par,new JRBeanCollectionDataSource(lista));
 		JasperViewer jrViewer = new JasperViewer(print, true);     
 		viewer.getContentPane().add(jrViewer.getContentPane());
-		
-		
 	}
 }
