@@ -24,6 +24,7 @@ public class OficinaDao extends GenericDao<Oficina> {
 						builder.like(builder.lower(root.<String>get("descripcion")), "%"+filtro.toLowerCase()+"%"),
 						builder.equal(root.<Integer>get("id"), filtroId))
 				);
+		
 		lista = session.createQuery(criteriaQuery).getResultList();
 		cerrar();
 		return lista;

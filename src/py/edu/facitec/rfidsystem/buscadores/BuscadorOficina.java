@@ -73,7 +73,6 @@ public class BuscadorOficina extends JDialog  {
 		});
 		scrollPane.setViewportView(table);
 		consultarOficina();
-
 	}
 	
 	private void consultarOficina() {

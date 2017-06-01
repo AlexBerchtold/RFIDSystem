@@ -2,10 +2,14 @@ package py.edu.facitec.rfidsystem.abm;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,7 +17,6 @@ import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -26,11 +29,6 @@ import py.edu.facitec.rfidsystem.entidad.Funcionario;
 import py.edu.facitec.rfidsystem.entidad.PermisoAcceso;
 import py.edu.facitec.rfidsystem.tablas.TablaFuncionario;
 import py.edu.facitec.rfidsystem.util.FechaUtil;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.Toolkit;
 
 public class FuncionarioABM extends GenericABM {
 	private JTextField tfBuscar;
@@ -48,7 +46,6 @@ public class FuncionarioABM extends GenericABM {
 	private TablaFuncionario tablaFuncionario;
 	private List<Funcionario> funcionarios;
 	private List<PermisoAcceso> permisoAccesos;
-	private JLabel lblCodigoDuplicado;
 	private JLabel lbldocumentoDuplicado;
 	private JLabel lbltarjetaDuplicada;
 	private JLabel lblValidarNombre;
@@ -111,34 +108,7 @@ public class FuncionarioABM extends GenericABM {
 		getContentPane().add(lblCodigo);
 		
 		tfCodigo = new JTextField();
-		tfCodigo.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-				char c = e.getKeyChar();
-				if (!Character.isDigit(c) & c!= e.VK_ENTER & c!= e.VK_BACK_SPACE) {
-					e.consume();
-					lblCodigoDuplicado.setText("*Solo Numeros");
-					lblCodigoDuplicado.setVisible(true);
-				}else{
-					lblCodigoDuplicado.setVisible(false);
-				}
-			}
-			@Override
-			public void keyPressed(KeyEvent e) {
-				char c = e.getKeyChar();
-				if (c == e.VK_ENTER) {
-					tfDocumento.requestFocus();
-				}
-			}
-		});
-		tfCodigo.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent arg0) {
-				if (verificarCodigo()==false){
-					lblCodigoDuplicado.setVisible(false);
-				}
-			}
-		});
+		
 		tfCodigo.setEnabled(false);
 		tfCodigo.setBounds(133, 143, 92, 20);
 		getContentPane().add(tfCodigo);
@@ -315,12 +285,6 @@ public class FuncionarioABM extends GenericABM {
 		getContentPane().add(tfTarjeta);
 		tfTarjeta.setColumns(10);
 		
-		lblCodigoDuplicado = new JLabel("*C\u00F3digo Duplicado");
-		lblCodigoDuplicado.setVisible(false);
-		lblCodigoDuplicado.setForeground(Color.RED);
-		lblCodigoDuplicado.setBounds(133, 162, 108, 14);
-		getContentPane().add(lblCodigoDuplicado);
-		
 		lbldocumentoDuplicado = new JLabel("*Documento Duplicado");
 		lbldocumentoDuplicado.setVisible(false);
 		lbldocumentoDuplicado.setForeground(Color.RED);
@@ -359,7 +323,6 @@ public class FuncionarioABM extends GenericABM {
 		tfFechaNacimiento.setText("");
 		tfFechaIncorporacion.setText("");
 		tfTarjeta.setText("");
-		lblCodigoDuplicado.setVisible(false);
 		lbldocumentoDuplicado.setVisible(false);
 		lbltarjetaDuplicada.setVisible(false);
 		lblValidarApellido.setVisible(false);
@@ -369,11 +332,6 @@ public class FuncionarioABM extends GenericABM {
 	
 	@Override
 	protected void habilitarCampos(boolean e) {
-		if (modificar==true) {
-			tfCodigo.setEnabled(!e);
-		}else {
-			tfCodigo.setEnabled(e);
-		}
 		tfDocumento.setEnabled(e);
 		tfNombre.setEnabled(e);
 		tfApellido.setEnabled(e);
@@ -386,9 +344,6 @@ public class FuncionarioABM extends GenericABM {
 	@Override
 	protected void guardar() {
 		if (campoObligatorio()==true) return;
-		if (modificar==false) {
-			if(verificarCodigo()==true) return;
-		}
 		if(verificarTarjeta()==true) return;
 		if(verificarCi()==true)return;
 		if(validarFecha()==false) return;
@@ -436,6 +391,15 @@ public class FuncionarioABM extends GenericABM {
 		habilitarCampos(false);
 		accionesPrimarias(false);
 	}
+	
+	public void cargarCodigo(){
+		dao= new FuncionarioDao();
+		funcionarios= dao.recuperarTodo();
+		int c = 0, i = 0;
+		i = funcionarios.size()-1; 
+		if (i>=0) c = funcionarios.get(i).getId();
+		tfCodigo.setText(""+(c+1));
+	}
 		
 	//Metodo para eliminar 
 	public void eliminar(){
@@ -463,7 +427,6 @@ public class FuncionarioABM extends GenericABM {
 		funcionario.setApellido(tfApellido.getText());
 		funcionario.setFechaIncorporacion(FechaUtil.dSql(tfFechaIncorporacion.getText()));
 		funcionario.setFechaNacimiento(FechaUtil.dSql(tfFechaNacimiento.getText()));
-		funcionario.setId(Integer.parseInt(tfCodigo.getText()));
 		funcionario.setNoDocumento(Integer.parseInt(tfDocumento.getText()));
 		funcionario.setNombre(tfNombre.getText()); 
 		if(cbSexo.getSelectedIndex() == 0){
@@ -517,25 +480,10 @@ public class FuncionarioABM extends GenericABM {
 				}
 			}
 		}
-		lblCodigoDuplicado.setVisible(false);
+		lbldocumentoDuplicado.setVisible(false);
 		return false;
 	}
-	private boolean verificarCodigo() {
-		if (tfCodigo.getText().isEmpty()) {
-			lblCodigoDuplicado.setVisible(false);
-			return false;
-		}
-		for (int i = 0; i < funcionarios.size(); i++) {
-			if (Integer.parseInt(tfCodigo.getText())==funcionarios.get(i).getId()) {
-				lblCodigoDuplicado.setVisible(true);
-				lblCodigoDuplicado.setText("*Código Duplicado");
-				tfCodigo.requestFocus();
-				return true;
-			}
-		}
-		lblCodigoDuplicado.setVisible(false);
-		return false;
-	}
+
 	private boolean verificarTarjeta() {
 		if (tfTarjeta.getText().isEmpty()) {
 			lbltarjetaDuplicada.setVisible(false);
@@ -566,11 +514,6 @@ public class FuncionarioABM extends GenericABM {
 	}
 	
 	private boolean campoObligatorio() {
-		if(tfCodigo.getText().isEmpty()){
-			JOptionPane.showMessageDialog(null, "Codigo es un campo obligatorio");
-			tfCodigo.requestFocus();
-			return true;
-		}
 		if(tfDocumento.getText().isEmpty()){
 			JOptionPane.showMessageDialog(null, "Documento es un campo obligatorio");
 			tfDocumento.requestFocus();

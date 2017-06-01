@@ -50,7 +50,6 @@ public class OficinaABM extends GenericABM implements InterfazBuscadorBloque {
 	private JCheckBox chckbxInactivos;
 	private PermisoAccesoDao permisoAccesoDao;
 	private List<PermisoAcceso> permisoAccesos;
-	private JLabel lblcdigoDuplicado;
 	
 	public OficinaABM() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(OficinaABM.class.getResource("/py/edu/facitec/rfidsystem/img/oficinas.png")));
@@ -99,32 +98,6 @@ public class OficinaABM extends GenericABM implements InterfazBuscadorBloque {
 		getContentPane().add(lblCodigo);
 		
 		tfCodigo = new JTextField();
-		tfCodigo.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-				char c = e.getKeyChar();
-				if (!Character.isDigit(c) & c!= e.VK_BACK_SPACE & c!=e.VK_ENTER) {
-					e.consume();
-					lblcdigoDuplicado.setText("Solo Numeros");
-					lblcdigoDuplicado.setVisible(true);
-				}else{
-					lblcdigoDuplicado.setVisible(false);
-				}
-			}
-			@Override
-			public void keyPressed(KeyEvent e) {
-				char c = e.getKeyChar();
-				if (c == e.VK_ENTER) {
-					tfDescripcion.requestFocus();
-				}
-			}
-		});
-		tfCodigo.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent arg0) {
-				verificarCodigo();
-			}
-		});
 		tfCodigo.setEnabled(false);
 		tfCodigo.setColumns(10);
 		tfCodigo.setBounds(113, 166, 92, 20);
@@ -239,19 +212,12 @@ public class OficinaABM extends GenericABM implements InterfazBuscadorBloque {
 		});
 		chckbxInactivos.setBounds(581, 133, 97, 23);
 		getContentPane().add(chckbxInactivos);
-		
-		lblcdigoDuplicado = new JLabel("*C\u00F3digo Duplicado");
-		lblcdigoDuplicado.setVisible(false);
-		lblcdigoDuplicado.setForeground(Color.RED);
-		lblcdigoDuplicado.setBounds(113, 186, 128, 14);
-		getContentPane().add(lblcdigoDuplicado);
 		consultarOficina();
 	}
 
 //-------------------Metodos Genericos---------------
 	@Override
 	protected void limpiar() {
-		lblcdigoDuplicado.setVisible(false);
 		tfCodigo.setText("");
 		tfDescripcion.setText("");
 		tfBloque.setText("");
@@ -262,11 +228,6 @@ public class OficinaABM extends GenericABM implements InterfazBuscadorBloque {
 
 	@Override
 	protected void habilitarCampos(boolean e) {
-		if (modificar==true) {
-			tfCodigo.setEnabled(!e);
-		}else {
-			tfCodigo.setEnabled(e);
-		}
 		tfDescripcion.setEnabled(e);
 		btnBuscarBloque.setEnabled(e);
 		cbActivo.setEnabled(e);
@@ -276,7 +237,6 @@ public class OficinaABM extends GenericABM implements InterfazBuscadorBloque {
 	@Override
 	protected void guardar() {
 		if (campoObligatorio()==true) return;
-		if (modificar==false) { if(verificarCodigo()==true)return;}
 		cargarDatos();
 		dao = new OficinaDao();
 		dao.insertarOModificar(oficina);
@@ -314,6 +274,15 @@ public class OficinaABM extends GenericABM implements InterfazBuscadorBloque {
 		accionesPrimarias(false);
 	}
 	
+	public void cargarCodigo(){
+		dao = new OficinaDao();
+		oficinas = dao.recuperarTodo();
+		int c =0, i=0;
+		i= oficinas.size()-1;
+		if (i>=0) c = oficinas.get(i).getId();
+		tfCodigo.setText(""+(c+1));
+	}
+	
 	private void eliminar() {
 		if(verificarRelacion()==false) return;
 		if (table.getSelectedRow()<0) return;
@@ -336,7 +305,6 @@ public class OficinaABM extends GenericABM implements InterfazBuscadorBloque {
 	
 	private void cargarDatos() {
 		if (modificar==false) oficina = new Oficina();
-		oficina.setId(Integer.parseInt(tfCodigo.getText()));
 		oficina.setDescripcion(tfDescripcion.getText());
 		oficina.setBloque(bloque);
 		if (cbActivo.isSelected()==true) oficina.setEstado(true);
@@ -374,11 +342,6 @@ public class OficinaABM extends GenericABM implements InterfazBuscadorBloque {
 	
 //-------------------------------Validaciones----------------
 	private boolean campoObligatorio() {
-		if(tfCodigo.getText().isEmpty()){
-			JOptionPane.showMessageDialog(null, "Código es un campo obligatorio");
-			tfCodigo.requestFocus();
-			return true;
-		}
 		if(tfDescripcion.getText().isEmpty()){
 			JOptionPane.showMessageDialog(null, "Descripción es un campo obligatorio");
 			tfDescripcion.requestFocus();
@@ -415,22 +378,6 @@ public class OficinaABM extends GenericABM implements InterfazBuscadorBloque {
 			}
 		}
 		return true;
-	}
-	private boolean verificarCodigo() {
-		if (tfCodigo.getText().isEmpty()) {
-			lblcdigoDuplicado.setVisible(false);
-			return false;
-		}
-		for (int i = 0; i < oficinas.size(); i++) {
-			if (Integer.parseInt(tfCodigo.getText())==oficinas.get(i).getId()) {
-				lblcdigoDuplicado.setText("Código Duplicado");
-				lblcdigoDuplicado.setVisible(true);
-				tfCodigo.requestFocus();
-				return true;
-			}
-		}
-		lblcdigoDuplicado.setVisible(false);
-		return false;
 	}
 	
 	//Metodo para inicializar los datos

@@ -1,10 +1,11 @@
 package py.edu.facitec.rfidsystem.abm;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.List;
 
 import javax.swing.JLabel;
@@ -21,9 +22,6 @@ import py.edu.facitec.rfidsystem.entidad.Institucion;
 import py.edu.facitec.rfidsystem.entidad.Oficina;
 import py.edu.facitec.rfidsystem.interfaces.InterfazBuscarInstitucion;
 import py.edu.facitec.rfidsystem.tablas.TablaBloque;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.Toolkit;
 
 public class BloqueABM extends GenericABM implements InterfazBuscarInstitucion {
 	private JTextField tfBuscar;
@@ -38,7 +36,6 @@ public class BloqueABM extends GenericABM implements InterfazBuscarInstitucion {
 	private OficinaDao oficinaDao;
 	private List<Oficina> oficinas;
 	private BotonPersonalizadoABM btnBuscarInstitucion;
-	private JLabel lblcdigoDuplicado;
 	
 	public BloqueABM() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(BloqueABM.class.getResource("/py/edu/facitec/rfidsystem/img/bloque.png")));
@@ -86,32 +83,6 @@ public class BloqueABM extends GenericABM implements InterfazBuscarInstitucion {
 		getContentPane().add(lblCodigo);
 		
 		tfCodigo = new JTextField();
-		tfCodigo.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-				char c = e.getKeyChar();
-				if (!Character.isDigit(c) & c!= e.VK_BACK_SPACE & c!=e.VK_ENTER) {
-					e.consume();
-					lblcdigoDuplicado.setText("Solo Numeros");
-					lblcdigoDuplicado.setVisible(true);
-				}else{
-					lblcdigoDuplicado.setVisible(false);
-				}
-			}
-			@Override
-			public void keyPressed(KeyEvent e) {
-				char c = e.getKeyChar();
-				if (c == e.VK_ENTER) {
-					tfDescripcion.requestFocus();
-				}
-			}
-		});
-		tfCodigo.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent arg0) {
-				verificarCodigo();
-			}
-		});
 		tfCodigo.setEnabled(false);
 		tfCodigo.setColumns(10);
 		tfCodigo.setBounds(113, 166, 92, 20);
@@ -165,12 +136,6 @@ public class BloqueABM extends GenericABM implements InterfazBuscarInstitucion {
 		btnBuscarInstitucion.setText("...");
 		btnBuscarInstitucion.setBounds(281, 286, 46, 20);
 		getContentPane().add(btnBuscarInstitucion);
-		
-		lblcdigoDuplicado = new JLabel("*C\u00F3digo Duplicado");
-		lblcdigoDuplicado.setVisible(false);
-		lblcdigoDuplicado.setForeground(Color.RED);
-		lblcdigoDuplicado.setBounds(113, 185, 128, 14);
-		getContentPane().add(lblcdigoDuplicado);
 		consultarBloque();
 		
 	}
@@ -178,7 +143,6 @@ public class BloqueABM extends GenericABM implements InterfazBuscarInstitucion {
 	//---------------Metodos Genericos-------------
 	@Override
 	protected void limpiar() {
-		lblcdigoDuplicado.setVisible(false);
 		tfCodigo.setText("");
 		tfDescripcion.setText("");
 		tfInstitucion.setText("");
@@ -187,11 +151,6 @@ public class BloqueABM extends GenericABM implements InterfazBuscarInstitucion {
 	
 	@Override
 	protected void habilitarCampos(boolean e) {
-		if (modificar==true) {
-			tfCodigo.setEnabled(!e);
-		}else {
-			tfCodigo.setEnabled(e);
-		}
 		tfDescripcion.setEnabled(e);
 		btnBuscarInstitucion.setEnabled(e);
 	}
@@ -199,7 +158,6 @@ public class BloqueABM extends GenericABM implements InterfazBuscarInstitucion {
 	@Override
 	protected void guardar() {
 		if (campoObligatorio()==true) return;
-		if (modificar==false) if(verificarCodigo()==true)return;;
 		cargarDatos();
 		dao = new BloqueDao();
 		dao.insertarOModificar(bloque);
@@ -231,6 +189,15 @@ public class BloqueABM extends GenericABM implements InterfazBuscarInstitucion {
 		accionesPrimarias(false);
 	}
 	
+	public void cargarCodigo(){
+		dao = new BloqueDao();
+		bloques = dao.recuperarTodo();
+		int c =0, i=0;
+		i= bloques.size()-1;
+		if (i>=0) c = bloques.get(i).getId();
+		tfCodigo.setText(""+(c+1));
+	}
+	
 	private void eliminar() {
 		if(verificarRelacion()==false) return;
 		if (table.getSelectedRow()<0) return;
@@ -254,7 +221,6 @@ public class BloqueABM extends GenericABM implements InterfazBuscarInstitucion {
 	
 	private void cargarDatos() {
 		if (modificar==false) bloque = new Bloque();
-		bloque.setId(Integer.parseInt(tfCodigo.getText()));
 		bloque.setNombre(tfDescripcion.getText());
 		bloque.setInstitucion(institucion);
 	}
@@ -287,11 +253,6 @@ public class BloqueABM extends GenericABM implements InterfazBuscarInstitucion {
 	
 	//-----------------------Validaciones-----------------
 	private boolean campoObligatorio() {
-		if(tfCodigo.getText().isEmpty()){
-			JOptionPane.showMessageDialog(null, "Código es un campo obligatorio");
-			tfCodigo.requestFocus();
-			return true;
-		}
 		if(tfDescripcion.getText().isEmpty()){
 			JOptionPane.showMessageDialog(null, "Descripción es un campo obligatorio");
 			tfDescripcion.requestFocus();
@@ -315,22 +276,6 @@ public class BloqueABM extends GenericABM implements InterfazBuscarInstitucion {
 			}
 		}
 		return true;
-	}
-	private boolean verificarCodigo() {
-		if (tfCodigo.getText().isEmpty()) {
-			lblcdigoDuplicado.setVisible(false);
-			return false;
-		}
-		for (int i = 0; i < bloques.size(); i++) {
-			if (Integer.parseInt(tfCodigo.getText())==bloques.get(i).getId()) {
-				lblcdigoDuplicado.setText("Código Duplicado");
-				lblcdigoDuplicado.setVisible(true);
-				tfCodigo.requestFocus();
-				return true;
-			}
-		}
-		lblcdigoDuplicado.setVisible(false);
-		return false;
 	}
 	
 	//Metodo para inicializar los datos

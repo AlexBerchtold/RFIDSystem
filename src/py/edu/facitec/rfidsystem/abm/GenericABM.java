@@ -67,6 +67,7 @@ public abstract class GenericABM extends JDialog {
 				accionesSecundarias(true, false);
 				fechaActual();
 				habilitarCampos(true);
+				cargarCodigo();
 			}
 		});
 		btnNuevo.setText("Nuevo");
@@ -161,5 +162,6 @@ public abstract class GenericABM extends JDialog {
 	protected abstract void guardar();
 	protected abstract void fechaActual();
 	protected abstract void cargarFormulario(int index);
+	protected abstract void cargarCodigo();
 	
 }

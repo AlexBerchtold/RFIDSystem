@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -29,6 +30,7 @@ public class BuscadorPermisoAcceso extends JDialog  {
 	private PermisoAccesoDao dao;
 	private List<PermisoAcceso> permisoAccesos;
 	private InterfazBuscadorPermisoAcceso interfaz;
+	private PermisoAcceso permisoAcceso;
 	
 	public void setInterfaz(InterfazBuscadorPermisoAcceso interfaz) {
 		this.interfaz = interfaz;
@@ -75,10 +77,10 @@ public class BuscadorPermisoAcceso extends JDialog  {
 			}
 		});
 		scrollPane.setViewportView(table);
-		consultarBloque();
+		consultarTodo();
 	}
 	
-	private void consultarBloque() {
+	private void consultarTodo() {
 		dao = new PermisoAccesoDao();
 		permisoAccesos = dao.recuperarTodo();
 		tablaPermisoAcceso.setLista(permisoAccesos);
@@ -87,7 +89,7 @@ public class BuscadorPermisoAcceso extends JDialog  {
 	
 	private void consultarPermisoAcceso() {
 		if (tfBuscador.getText().isEmpty()) {
-			consultarBloque();
+			consultarTodo();
 			return;
 		}
 		dao = new PermisoAccesoDao();
@@ -99,9 +101,22 @@ public class BuscadorPermisoAcceso extends JDialog  {
 	
 	private void seleccionarPermisoAcceso() {
 		if (table.getSelectedRow()<0) return;
-		PermisoAcceso permisoAcceso = permisoAccesos.get(table.getSelectedRow());
+		permisoAcceso = permisoAccesos.get(table.getSelectedRow());
+		if(verificarEstado()==false) return;
 		interfaz.setPermisoAcceso(permisoAcceso);
 		dispose();
 	}
-
+	
+	private boolean verificarEstado(){
+		if (permisoAcceso.getOficina().getEstado()==false){
+			JOptionPane.showMessageDialog(null, "Oficina temporalmente inactiva");
+			return false;
+		}
+		if(permisoAcceso.getPuerta().isEstado()==false){
+			JOptionPane.showMessageDialog(null, "Puerta temporalmente inactiva");
+			return false;
+		}
+		return true;
+	}
+	
 }

@@ -6,13 +6,18 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity(name="Funcionario")
 public class Funcionario {
 	
 	@Id
+	@GenericGenerator(name="fun_generator",strategy="increment")
+	@GeneratedValue(generator="fun_generator")
 	@Column(name="Id", unique=true)
 	private Integer id;
 	

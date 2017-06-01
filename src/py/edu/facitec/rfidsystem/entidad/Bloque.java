@@ -4,14 +4,19 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.GenericGenerator;
+
 @Entity(name="Bloque")
 public class Bloque {
 	@Id
+	@GenericGenerator(name="blo_generator",strategy="increment")
+	@GeneratedValue(generator="blo_generator")
 	@Column(name="Id", unique=true)
 	private Integer id;
 	

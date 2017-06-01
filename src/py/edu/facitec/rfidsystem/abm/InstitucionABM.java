@@ -32,7 +32,6 @@ public class InstitucionABM extends GenericABM {
 	private Institucion institucion;
 	private BloqueDao bloqueDao;
 	private List<Bloque> bloques;
-	private JLabel lblcodigoDuplicado;
 	
 	public InstitucionABM() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(InstitucionABM.class.getResource("/py/edu/facitec/rfidsystem/img/institucion.png")));
@@ -81,32 +80,6 @@ public class InstitucionABM extends GenericABM {
 		getContentPane().add(lblCodigo);
 		
 		tfCodigo = new JTextField();
-		tfCodigo.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-				char c = e.getKeyChar();
-				if (!Character.isDigit(c) & c!= e.VK_BACK_SPACE & c!= e.VK_ENTER) {
-					e.consume();
-					lblcodigoDuplicado.setText("*Solo Numeros");
-					lblcodigoDuplicado.setVisible(true);
-				}else{
-					lblcodigoDuplicado.setVisible(false);
-				}
-			}
-			@Override
-			public void keyPressed(KeyEvent e) {
-				char c = e.getKeyChar();
-				if (c == e.VK_ENTER) {
-					tfDescripcion.requestFocus();
-				}
-			}
-		});
-		tfCodigo.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent arg0) {
-				verificarCodigo();
-			}
-		});
 		tfCodigo.setEnabled(false);
 		tfCodigo.setColumns(10);
 		tfCodigo.setBounds(133, 176, 92, 20);
@@ -129,12 +102,6 @@ public class InstitucionABM extends GenericABM {
 		lblRegistrosDeInstitucin.setFont(new Font("Algerian", Font.PLAIN, 24));
 		lblRegistrosDeInstitucin.setBounds(1, 11, 690, 53);
 		getContentPane().add(lblRegistrosDeInstitucin);
-		
-		lblcodigoDuplicado = new JLabel("*C\u00F3digo Duplicado");
-		lblcodigoDuplicado.setVisible(false);
-		lblcodigoDuplicado.setForeground(Color.RED);
-		lblcodigoDuplicado.setBounds(133, 196, 108, 14);
-		getContentPane().add(lblcodigoDuplicado);
 		consultarInstitucion();
 	}
 	
@@ -143,25 +110,17 @@ public class InstitucionABM extends GenericABM {
 	protected void limpiar() {
 		tfCodigo.setText("");
 		tfDescripcion.setText("");
-		lblcodigoDuplicado.setVisible(false);
 		tfCodigo.requestFocus();
 	}
 
 	@Override
 	protected void habilitarCampos(boolean e) {
-		if (modificar==true) {
-			tfCodigo.setEnabled(!e);
-		}else {
-			tfCodigo.setEnabled(e);
-		}
 		tfDescripcion.setEnabled(e);
-
 	}
 
 	@Override
 	protected void guardar() {
 		if (campoObligatorio()==true) return;
-		if (verificarCodigo()==true) return;
 		cargarDatos();
 		dao=new InstitucionDao();
 		dao.insertarOModificar(institucion);
@@ -193,6 +152,15 @@ public class InstitucionABM extends GenericABM {
 		accionesPrimarias(false);
 	}
 	
+	public void cargarCodigo(){
+		dao = new InstitucionDao();
+		institucions= dao.recuperarTodo();
+		int c =0, i=0;
+		i= institucions.size()-1;
+		if (i>=0) c = institucions.get(i).getId();
+		tfCodigo.setText(""+(c+1));
+	}
+	
 	private void eliminar() {
 		if(verificarRelacion()==false) return;
 		if (table.getSelectedRow()<0) return;
@@ -216,7 +184,6 @@ public class InstitucionABM extends GenericABM {
 
 	private void cargarDatos() {
 		if (modificar==false) institucion = new Institucion();
-		institucion.setId(Integer.parseInt(tfCodigo.getText()));
 		institucion.setDescripcion(tfDescripcion.getText());
 	}
 	
@@ -235,28 +202,7 @@ public class InstitucionABM extends GenericABM {
 	}
 	
 //------------------------Validaciones-----------------
-	private boolean verificarCodigo() {
-		if (tfCodigo.getText().isEmpty()) {
-			lblcodigoDuplicado.setVisible(false);
-			return false;
-		}
-		for (int i = 0; i < institucions.size(); i++) {
-			if (Integer.parseInt(tfCodigo.getText())==institucions.get(i).getId()) {
-				lblcodigoDuplicado.setText("*Código Duplicado");
-				lblcodigoDuplicado.setVisible(true);
-				tfCodigo.requestFocus();
-				return true;
-			}
-		}
-		lblcodigoDuplicado.setVisible(false);
-		return false;
-	}
 	private boolean campoObligatorio() {
-		if(tfCodigo.getText().isEmpty()){
-			JOptionPane.showMessageDialog(null, "Código es un campo obligatorio");
-			tfCodigo.requestFocus();
-			return true;
-		}
 		if(tfDescripcion.getText().isEmpty()){
 			JOptionPane.showMessageDialog(null, "Descripción es un campo obligatorio");
 			tfDescripcion.requestFocus();

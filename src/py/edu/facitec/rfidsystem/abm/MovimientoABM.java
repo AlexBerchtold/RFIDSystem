@@ -40,7 +40,6 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 	private TablaMovimiento tablaMovimiento;
 	private Movimiento movimiento;
 	private JTextField tfBuscador;
-	private JLabel lblCodigoDuplicado;
 	private Date horaYFecha;
 	private JFormattedTextField tfFecha;
 	
@@ -103,32 +102,6 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 		getContentPane().add(lblHora);
 		
 		tfCodigo = new JTextField();
-		tfCodigo.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent arg0) {
-				verificarCodigo();
-			}
-		});
-		tfCodigo.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-				char c = e.getKeyChar();
-				if (!Character.isDigit(c)& c!= e.VK_BACK_SPACE & c!=e.VK_ENTER) {
-					e.consume();
-					lblCodigoDuplicado.setText("*Solo numeros");
-					lblCodigoDuplicado.setVisible(true);
-				}else {
-					lblCodigoDuplicado.setVisible(false);
-				}
-			}
-			@Override
-			public void keyPressed(KeyEvent e) {
-				char c = e.getKeyChar();
-				if (c== e.VK_ENTER) {
-					btnPermisoAcceso.requestFocus();
-				}
-			}
-		});
 		tfCodigo.setEnabled(false);
 		tfCodigo.setColumns(10);
 		tfCodigo.setBounds(133, 170, 92, 20);
@@ -163,12 +136,6 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 		tfBuscador.setBounds(467, 98, 211, 20);
 		getContentPane().add(tfBuscador);
 		
-		lblCodigoDuplicado = new JLabel("New label");
-		lblCodigoDuplicado.setForeground(Color.RED);
-		lblCodigoDuplicado.setVisible(false);
-		lblCodigoDuplicado.setBounds(133, 189, 108, 14);
-		getContentPane().add(lblCodigoDuplicado);
-		
 		JLabel lblFecha = new JLabel("Fecha:");
 		lblFecha.setFont(new Font("Arial", Font.BOLD, 12));
 		lblFecha.setBounds(10, 273, 102, 14);
@@ -188,26 +155,18 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 		tfCodigo.setText("");
 		tfHora.setText("");
 		tfPermisoAcceso.setText("");
-		lblCodigoDuplicado.setVisible(false);
 		tfFecha.setText("");
 		tfCodigo.requestFocus();
 	}
 
 	@Override
 	protected void habilitarCampos(boolean e) {
-		if(modificar==true){
-			tfCodigo.setEnabled(!e);
-		}else {
-			tfCodigo.setEnabled(e);
-//			tfHora.setEnabled(e);
-			timer.start();
-		}
+		if(modificar==false) timer.start();
 		btnPermisoAcceso.setEnabled(e);
 	}
 
 	@Override
 	protected void guardar() {
-		if (modificar==false) {if(verificarCodigo()==true) return;}
 		if(campoObligatorio()==true) return;
 		cargarDatos();
 		dao = new MovimientoDao();
@@ -250,6 +209,15 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 		timer.stop();
 	}
 	
+	public void cargarCodigo(){
+		dao = new MovimientoDao();
+		movimientos = dao.recuperarTodo();
+		int c =0, i=0;
+		i= movimientos.size()-1;
+		if (i>=0) c = movimientos.get(i).getId();
+		tfCodigo.setText(""+(c+1));
+	}
+	
 	private void eliminar() {
 		if (table.getSelectedRow()<0) return;
 		int respuesta = JOptionPane.showConfirmDialog(null, 
@@ -274,7 +242,6 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 	
 	private void cargarDatos() {
 		if(modificar==false) movimiento= new Movimiento();
-		movimiento.setId(Integer.parseInt(tfCodigo.getText()));
 		movimiento.setHora(horaYFecha);
 		movimiento.setPermisoAcceso(permisoAcceso);
 	}
@@ -312,11 +279,6 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 	
 //-----------------------Validaciones-----------------
 	private boolean campoObligatorio(){
-		if(tfCodigo.getText().isEmpty()){
-			JOptionPane.showMessageDialog(null, "Código es un campo obligatorio");
-			tfCodigo.requestFocus();
-			return true;
-		}
 		if(tfHora.getText().isEmpty()){
 			JOptionPane.showMessageDialog(null, "Hora es un campo obligatorio");
 			tfCodigo.requestFocus();
@@ -327,23 +289,6 @@ public class MovimientoABM extends GenericABM implements InterfazBuscadorPermiso
 			tfCodigo.requestFocus();
 			return true;
 		}
-		return false;
-	}
-	
-	private boolean verificarCodigo() {
-		if (tfCodigo.getText().isEmpty()) {
-			lblCodigoDuplicado.setVisible(false);
-			return false;
-		}
-		for (int i = 0; i <movimientos.size(); i++) {
-			if (Integer.parseInt(tfCodigo.getText())==movimientos.get(i).getId()) {
-				lblCodigoDuplicado.setText("*Código Duplicado");
-				lblCodigoDuplicado.setVisible(true);
-				tfCodigo.requestFocus();
-				return true;
-			}
-		}
-		lblCodigoDuplicado.setVisible(false);
 		return false;
 	}
 	

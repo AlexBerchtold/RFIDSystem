@@ -49,7 +49,6 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 	private BotonPersonalizadoABM btnBuscarFuncionario;
 	private BotonPersonalizadoABM btnBuscarOficina;
 	private BotonPersonalizadoABM btnBuscadorPuerta;
-	private JLabel lblCodigoDuplicado;
 	
 	public PermisoAccesoABM() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(PermisoAccesoABM.class.getResource("/py/edu/facitec/rfidsystem/img/acceso.png")));
@@ -93,34 +92,6 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 		getContentPane().add(lblPuerta_1);
 		
 		tfCodigo = new JTextField();
-		tfCodigo.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent arg0) {
-				if (!tfCodigo.getText().isEmpty()) {
-					verificarCodigo();
-				}
-			}
-		});
-		tfCodigo.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-				char c = e.getKeyChar();
-				if (!Character.isDigit(c)& c!= e.VK_BACK_SPACE & c!=e.VK_ENTER) {
-					e.consume();
-					lblCodigoDuplicado.setText("*Solo numeros");
-					lblCodigoDuplicado.setVisible(true);
-				}else{
-					lblCodigoDuplicado.setVisible(false);
-				}
-			}
-			@Override
-			public void keyPressed(KeyEvent e) {
-				char c = e.getKeyChar();
-				if (c== e.VK_ENTER) {
-					btnBuscarFuncionario.requestFocus();
-				}
-			}
-		});
 		tfCodigo.setEnabled(false);
 		tfCodigo.setBounds(111, 163, 86, 20);
 		getContentPane().add(tfCodigo);
@@ -202,12 +173,6 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 		botonPersonalizadoABM.setText("Buscar");
 		botonPersonalizadoABM.setBounds(400, 94, 90, 26);
 		getContentPane().add(botonPersonalizadoABM);
-		
-		lblCodigoDuplicado = new JLabel("*Solo numeros");
-		lblCodigoDuplicado.setVisible(false);
-		lblCodigoDuplicado.setForeground(Color.RED);
-		lblCodigoDuplicado.setBounds(111, 183, 112, 14);
-		getContentPane().add(lblCodigoDuplicado);
 		consultarPermisoAccesos();
 	}
 	
@@ -218,17 +183,11 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 		tfFuncionario.setText("");
 		tfOficina.setText("");
 		tfPuerta.setText("");
-		lblCodigoDuplicado.setVisible(false);
 		tfCodigo.requestFocus();
 	}
 
 	@Override
 	protected void habilitarCampos(boolean e) {
-		if (modificar==true){
-			tfCodigo.setEnabled(!e);
-		}else{
-			tfCodigo.setEnabled(e);
-		}
 		btnBuscadorPuerta.setEnabled(e);
 		btnBuscarOficina.setEnabled(e);
 		btnBuscarFuncionario.setEnabled(e);
@@ -236,7 +195,6 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 
 	@Override
 	protected void guardar() {
-		if (modificar==false) { if(verificarCodigo()==true) return;}
 		if (camposObligatorios()==true) return;
 		cargarDatos();
 		dao = new PermisoAccesoDao();
@@ -274,6 +232,15 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 		accionesPrimarias(false);
 	}
 	
+	public void cargarCodigo(){
+		dao = new PermisoAccesoDao();
+		permisoAccesos = dao.recuperarTodo();
+		int c =0, i=0;
+		i= permisoAccesos.size()-1;
+		if (i>=0) c = permisoAccesos.get(i).getId();
+		tfCodigo.setText(""+(c+1));
+	}
+	
 	private void eliminar() {
 		if(verificarRelacion()==false) return;
 		if (table.getSelectedRow()<0) return;
@@ -296,7 +263,6 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 	
 	private void cargarDatos(){
 		if (modificar==false) permisoAcceso = new PermisoAcceso();
-		permisoAcceso.setId(Integer.parseInt(tfCodigo.getText()));
 		permisoAcceso.setFuncionario(funcionario);
 		permisoAcceso.setOficina(oficina);
 		permisoAcceso.setPuerta(puerta);
@@ -362,11 +328,6 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 	
 	//-----------------------Validaciones-----------------
 	private boolean camposObligatorios() {
-		if (tfCodigo.getText().isEmpty()) {
-			JOptionPane.showMessageDialog(null,"Codigo es un campo obligatorio");
-			tfCodigo.requestFocus();
-			return true;
-		}
 		if (tfFuncionario.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(null,"Funcionario es un campo obligatorio");
 			tfFuncionario.requestFocus();
@@ -395,23 +356,6 @@ public class PermisoAccesoABM extends GenericABM implements InterfazBuscadorFunc
 			}
 		}
 		return true;
-	}
-	
-	private boolean verificarCodigo() {
-		if (tfCodigo.getText().isEmpty()) {
-			lblCodigoDuplicado.setVisible(false);
-			return false;
-		}
-		for (int i = 0; i <permisoAccesos.size(); i++) {
-			if (Integer.parseInt(tfCodigo.getText())==permisoAccesos.get(i).getId()) {
-				lblCodigoDuplicado.setText("*Código Duplicado");
-				lblCodigoDuplicado.setVisible(true);
-				tfCodigo.requestFocus();
-				return true;
-			}
-		}
-		lblCodigoDuplicado.setVisible(false);
-		return false;
 	}
 	
 	private void verificarOficina() {

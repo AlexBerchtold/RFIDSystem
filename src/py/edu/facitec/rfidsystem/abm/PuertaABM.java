@@ -50,7 +50,6 @@ public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 	private JCheckBox chckbxTodos;
 	private JCheckBox chckbxActivos;
 	private JCheckBox chckbxInactivos;
-	private JLabel lblcdigoDuplicado;
 	private JLabel lblnroDePuerta;
 	
 	public PuertaABM() {
@@ -143,32 +142,6 @@ public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 		getContentPane().add(btnBuscar);
 		
 		tfCodigo = new JTextField();
-		tfCodigo.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-				char c = e.getKeyChar();
-				if (!Character.isDigit(c) & c!= e.VK_BACK_SPACE & c!= e.VK_ENTER) {
-					e.consume();
-					lblcdigoDuplicado.setText("*Solo Numeros");
-					lblcdigoDuplicado.setVisible(true);
-				}else{
-					lblcdigoDuplicado.setVisible(false);
-				}
-			}
-			@Override
-			public void keyPressed(KeyEvent e) {
-				char c = e.getKeyChar();
-				if (c == e.VK_ENTER & !tfCodigo.getText().isEmpty()) {
-					btnBuscador.requestFocus();
-				}
-			}
-		});
-		tfCodigo.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusLost(FocusEvent arg0) {
-					verificarCodigo();
-			}
-		});
 		tfCodigo.setEnabled(false);
 		tfCodigo.setBounds(112, 162, 97, 20);
 		getContentPane().add(tfCodigo);
@@ -281,12 +254,6 @@ public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 		chckbxInactivos.setBounds(687, 138, 97, 23);
 		getContentPane().add(chckbxInactivos);
 		
-		lblcdigoDuplicado = new JLabel("*C\u00F3digo Duplicado");
-		lblcdigoDuplicado.setForeground(Color.RED);
-		lblcdigoDuplicado.setVisible(false);
-		lblcdigoDuplicado.setBounds(112, 189, 129, 14);
-		getContentPane().add(lblcdigoDuplicado);
-		
 		lblnroDePuerta = new JLabel("*Nro. de Puerta Duplicado");
 		lblnroDePuerta.setForeground(Color.RED);
 		lblnroDePuerta.setVisible(false);
@@ -298,7 +265,6 @@ public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 	//-------------------------Metodos Genericos----------------------
 	@Override
 	protected void limpiar() {
-		lblcdigoDuplicado.setVisible(false);
 		lblnroDePuerta.setVisible(false);
 		tfCodigo.setText("");
 		tfDescripcion.setText("");
@@ -310,11 +276,6 @@ public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 
 	@Override
 	protected void habilitarCampos(boolean e) {
-		if (modificar==true) {
-			tfCodigo.setEnabled(!e);
-		}else {
-			tfCodigo.setEnabled(e);
-		}
 		tfDescripcion.setEnabled(e);
 		tfNumeroDePuertas.setEnabled(e);
 		chckbxActivo.setEnabled(e);
@@ -325,7 +286,6 @@ public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 	@Override
 	protected void guardar() {
 		if (campoObligatorio()==true) return;
-		if (modificar==false) {if(verificarCodigo()==true)return;}
 		if(verificarNroPuerta()==true)return;
 		cargarDatos();
 		dao = new PuertaDao();
@@ -365,6 +325,15 @@ public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 		accionesPrimarias(false);
 	}
 	
+	public void cargarCodigo(){
+		dao = new PuertaDao();
+		puertas = dao.recuperarTodo();
+		int c =0, i=0;
+		i= puertas.size()-1;
+		if (i>=0) c = puertas.get(i).getId();
+		tfCodigo.setText(""+(c+1));
+	}
+	
 	private void eliminar() {
 		if(verificarRelacion()==false) return;
 		if (table.getSelectedRow()<0) return;
@@ -387,7 +356,6 @@ public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 	
 	private void cargarDatos() {
 		if (modificar==false) puerta = new Puerta();
-		puerta.setId(Integer.parseInt(tfCodigo.getText()));
 		puerta.setDescripcion(tfDescripcion.getText());
 		puerta.setNumeroDePuerta(Integer.parseInt(tfNumeroDePuertas.getText()));
 		puerta.setOficina(oficina);
@@ -428,11 +396,6 @@ public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 
 	//-----------------------Validaciones----------------------
 	private boolean campoObligatorio() {
-		if(tfCodigo.getText().isEmpty()){
-			JOptionPane.showMessageDialog(null, "Codigo es un campo obligatorio");
-			tfCodigo.requestFocus();
-			return true;
-		}
 		if(tfDescripcion.getText().isEmpty()){
 			JOptionPane.showMessageDialog(null, "Descripcion es un campo obligatorio");
 			tfDescripcion.requestFocus();
@@ -464,22 +427,6 @@ public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 		return true;
 	}
 
-	private boolean verificarCodigo() {
-		if (tfCodigo.getText().isEmpty()) {
-			lblcdigoDuplicado.setVisible(false);
-			return false;
-		}
-		for (int i = 0; i < puertas.size(); i++) {
-			if (Integer.parseInt(tfCodigo.getText())==puertas.get(i).getId()) {
-				lblcdigoDuplicado.setText("*Código Duplicado");
-				lblcdigoDuplicado.setVisible(true);
-				tfCodigo.requestFocus();
-				return true;
-			}
-		}
-		lblcdigoDuplicado.setVisible(false);
-		return false;
-	}
 	private boolean verificarNroPuerta() {
 		if (tfNumeroDePuertas.getText().isEmpty()) {
 			lblnroDePuerta.setVisible(false);

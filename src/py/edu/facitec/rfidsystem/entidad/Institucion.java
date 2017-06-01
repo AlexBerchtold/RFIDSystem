@@ -4,12 +4,17 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity(name="Institucion")
 public class Institucion {
 	@Id
+	@GenericGenerator(name="ins_generator",strategy="increment")
+	@GeneratedValue(generator="ins_generator")
 	@Column(name="Id")
 	private Integer id;
 	

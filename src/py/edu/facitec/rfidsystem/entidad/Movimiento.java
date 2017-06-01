@@ -4,13 +4,18 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.GenericGenerator;
+
 @Entity(name="Movimiento")
 public class Movimiento {
 	@Id
+	@GenericGenerator(name="mov_generator",strategy="increment")
+	@GeneratedValue(generator="mov_generator")
 	@Column(name="Id", unique=true)
 	private Integer id;
 	
