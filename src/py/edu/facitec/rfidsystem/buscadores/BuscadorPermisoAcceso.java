@@ -109,11 +109,11 @@ public class BuscadorPermisoAcceso extends JDialog  {
 	
 	private boolean verificarEstado(){
 		if (permisoAcceso.getOficina().getEstado()==false){
-			JOptionPane.showMessageDialog(null, "Oficina temporalmente inactiva");
+			JOptionPane.showMessageDialog(null, "Oficina temporalmente Inactiva", "Atención",JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 		if(permisoAcceso.getPuerta().isEstado()==false){
-			JOptionPane.showMessageDialog(null, "Puerta temporalmente inactiva");
+			JOptionPane.showMessageDialog(null, "Puerta temporalmente Inactiva", "Atención",JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 		return true;
