@@ -64,7 +64,7 @@ public class ConfiguracionABM extends JDialog {
 		getContentPane().add(lblEmailSecundario);
 		
 		JLabel lblTelefono = new JLabel("Telefono:");
-		lblTelefono.setBounds(10, 200, 46, 14);
+		lblTelefono.setBounds(10, 200, 68, 14);
 		getContentPane().add(lblTelefono);
 		
 		JLabel lblCelular = new JLabel("Celular:");

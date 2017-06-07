@@ -332,6 +332,7 @@ public class PuertaABM extends GenericABM implements InterfazBuscardorOficina {
 		i= puertas.size()-1;
 		if (i>=0) c = puertas.get(i).getId();
 		tfCodigo.setText(""+(c+1));
+		tfDescripcion.requestFocus();
 	}
 	
 	private void eliminar() {

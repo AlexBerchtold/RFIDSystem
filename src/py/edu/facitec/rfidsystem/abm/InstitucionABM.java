@@ -159,6 +159,7 @@ public class InstitucionABM extends GenericABM {
 		i= institucions.size()-1;
 		if (i>=0) c = institucions.get(i).getId();
 		tfCodigo.setText(""+(c+1));
+		tfDescripcion.requestFocus();
 	}
 	
 	private void eliminar() {

@@ -367,7 +367,7 @@ public class FuncionarioABM extends GenericABM {
 	protected void fechaActual() {
 		Date date = new Date();
 		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		tfFechaIncorporacion.setText(""+dateFormat.format(date));
+		tfFechaIncorporacion.setValue(dateFormat.format(date));;
 	}
 	
 	//Carag en el formulario el dato que se selecciono en la tabla
@@ -399,6 +399,7 @@ public class FuncionarioABM extends GenericABM {
 		i = funcionarios.size()-1; 
 		if (i>=0) c = funcionarios.get(i).getId();
 		tfCodigo.setText(""+(c+1));
+		tfDocumento.requestFocus();
 	}
 		
 	//Metodo para eliminar 

@@ -53,7 +53,7 @@ public class MovimientoDao extends GenericDao<Movimiento> {
 		}
 		if (order==0) criteriaQuery.orderBy(builder.asc(joinOficina.<Integer>get("descripcion")));
 		if (order==1) criteriaQuery.orderBy(builder.asc(joinFuncionario.<Integer>get("nombre")));
-		if (order==2) criteriaQuery.orderBy(builder.asc(root.<java.sql.Date>get("hora")));
+		if (order==2) criteriaQuery.orderBy(builder.desc(root.<java.sql.Date>get("hora")));
 		lista = session.createQuery(criteriaQuery).getResultList();
 		cerrar();
 		return lista;

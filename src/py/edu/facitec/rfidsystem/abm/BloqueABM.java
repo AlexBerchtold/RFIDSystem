@@ -196,6 +196,7 @@ public class BloqueABM extends GenericABM implements InterfazBuscarInstitucion {
 		i= bloques.size()-1;
 		if (i>=0) c = bloques.get(i).getId();
 		tfCodigo.setText(""+(c+1));
+		tfDescripcion.requestFocus();
 	}
 	
 	private void eliminar() {

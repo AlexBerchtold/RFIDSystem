@@ -281,6 +281,7 @@ public class OficinaABM extends GenericABM implements InterfazBuscadorBloque {
 		i= oficinas.size()-1;
 		if (i>=0) c = oficinas.get(i).getId();
 		tfCodigo.setText(""+(c+1));
+		tfDescripcion.requestFocus();
 	}
 	
 	private void eliminar() {
