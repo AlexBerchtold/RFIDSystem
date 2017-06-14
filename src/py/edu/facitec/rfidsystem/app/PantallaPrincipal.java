@@ -55,22 +55,22 @@ public class PantallaPrincipal extends JFrame implements KeyEventDispatcher {
 	private ConfiguracionDao configuracionDao;
 	public static JPanel jPanelConfig;
 	
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Factory.setUp();
-					PantallaPrincipal frame = new PantallaPrincipal();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	/**
+//	 * Launch the application.
+//	 */
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					Factory.setUp();
+//					PantallaPrincipal frame = new PantallaPrincipal();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the frame.

@@ -28,4 +28,10 @@ public class ConexionReportes<E> {
 		JasperViewer jrViewer = new JasperViewer(print, true);     
 		viewer.getContentPane().add(jrViewer.getContentPane());
 	}
+	
+	public void primeraConexion() throws JRException{
+		InputStream stream = ConexionReportes.class.getResourceAsStream("/py/edu/facitec/rfidsystem/informe/ListadoDeFuncionario.jrxml");
+		JasperReport report= JasperCompileManager.compileReport(stream);
+		JasperPrint print = JasperFillManager.fillReport(report, null,new JRBeanCollectionDataSource(null));
+	}
 }
